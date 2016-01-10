@@ -1,0 +1,5 @@
+Welcome to server.
+
+歡迎來到 伺服器. 
+
+※存檔格式為ANSI

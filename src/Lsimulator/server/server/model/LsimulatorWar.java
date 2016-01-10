@@ -354,7 +354,7 @@ public class LsimulatorWar {
 			target_clan_flag = CheckAttackClan(target_clan_name); // 相手クランに対して攻撃側クランをチェック
 		}
 
-		if ((player_clan_flag == true) && (target_clan_flag == true)) {
+		if ( player_clan_flag && target_clan_flag ) {
 			return true;
 		}
 		else {

@@ -54,7 +54,7 @@ public class S_ChatPacket extends ServerBasePacket {
 		else if (type == 3) { // 世界頻道
 			writeC(opcode);
 			writeC(type);
-			if (pc.isGm() == true) {
+			if ( pc.isGm() ) {
 				writeS("[******] " + chat);
 			}
 			else {

@@ -20,9 +20,9 @@ public class CalcInitHpMp {
 
 	private CalcInitHpMp() {
 	}
-
+                    
 	/**
-	 * 各職業的初始HP返回
+	 * 更新7.6初始hp
 	 * 
 	 * @param pc
 	 * @return hp

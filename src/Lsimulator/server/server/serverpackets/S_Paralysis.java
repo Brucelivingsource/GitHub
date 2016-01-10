@@ -25,14 +25,14 @@ public class S_Paralysis extends ServerBasePacket {
 		writeC(Opcodes.S_OPCODE_PARALYSIS);
 		if (type == TYPE_PARALYSIS) // 体が完全に麻痺しました。
 		{
-			if (flag == true) {
+			if ( flag ) {
 				writeC(2);
 			} else {
 				writeC(3);
 			}
 		} else if (type == TYPE_PARALYSIS2) // 体が完全に麻痺しました。
 		{
-			if (flag == true) {
+			if (flag ) {
 				writeC(4);
 			} else {
 				writeC(5);
@@ -42,28 +42,28 @@ public class S_Paralysis extends ServerBasePacket {
 			writeC(7);
 		} else if (type == TYPE_SLEEP) // 強力な睡魔が襲ってきて、寝てしまいました。
 		{
-			if (flag == true) {
+			if (flag ) {
 				writeC(10);
 			} else {
 				writeC(11);
 			}
 		} else if (type == TYPE_FREEZE) // 体が凍りました。
 		{
-			if (flag == true) {
+			if (flag ) {
 				writeC(12);
 			} else {
 				writeC(13);
 			}
 		} else if (type == TYPE_STUN) // スタン状態です。
 		{
-			if (flag == true) {
+			if (flag ) {
 				writeC(22);
 			} else {
 				writeC(23);
 			}
 		} else if (type == TYPE_BIND) // 足が縛られたように動けません。
 		{
-			if (flag == true) {
+			if (flag ) {
 				writeC(24);
 			} else {
 				writeC(25);

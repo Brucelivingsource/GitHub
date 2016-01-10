@@ -1843,7 +1843,7 @@ public class LsimulatorAttack {
 		 * 損傷しないNPC、素手、損傷しない武器使用、SOF中の場合何もしない。
 		 */
 		if ((_calcType != PC_NPC)
-				|| (_targetNpc.getNpcTemplate().is_hard() == false)
+				||    ! _targetNpc.getNpcTemplate().is_hard()  
 				|| (_weaponType == 0) || (weapon.getItem().get_canbedmg() == 0)
 				|| _pc.hasSkillEffect(SOUL_OF_FLAME)) {
 			return;
@@ -1870,7 +1870,7 @@ public class LsimulatorAttack {
 		// PvP以外、素手、弓、ガントトレット、相手がバウンスアタック未使用、SOF中の場合何もしない
 		if ((_calcType != PC_PC) || (_weaponType == 0) || (_weaponType == 20)
 				|| (_weaponType == 62)
-				|| (_targetPc.hasSkillEffect(BOUNCE_ATTACK) == false)
+				|| ! _targetPc.hasSkillEffect(BOUNCE_ATTACK) 
 				|| _pc.hasSkillEffect(SOUL_OF_FLAME)) {
 			return;
 		}

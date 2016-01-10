@@ -44,7 +44,7 @@ public class S_WhoCharinfo extends ServerBasePacket {
 		String title = "";
 		String clan = "";
 
-		if (pc.getTitle().equalsIgnoreCase("") == false) {
+		if (  ! pc.getTitle().equalsIgnoreCase("") ) {
 			title = pc.getTitle() + " ";
 		}
 

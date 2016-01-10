@@ -1076,7 +1076,7 @@ public class LsimulatorPcInstance extends LsimulatorCharacter {
 			return;
 		}
 
-		if (checkNonPvP(this, attacker) == true) {
+		if ( checkNonPvP(this, attacker)  ) {
 			// 攻撃モーション送信
 			LsimulatorAttack attack_mortion = new LsimulatorAttack(attacker, this, skillId);
 			attack_mortion.action();
@@ -1140,7 +1140,7 @@ public class LsimulatorPcInstance extends LsimulatorCharacter {
 			for (LsimulatorWar war : LsimulatorWorld.getInstance().getWarList()) {
 				if ((pc.getClanid() != 0) && (targetpc.getClanid() != 0)) { // 共にクラン所属中
 					boolean same_war = war.CheckClanInSameWar(pc.getClanname(), targetpc.getClanname());
-					if (same_war == true) { // 同じ戦争に参加中
+					if ( same_war ) { // 同じ戦争に参加中
 						return false;
 					}
 				}
@@ -1254,7 +1254,7 @@ public class LsimulatorPcInstance extends LsimulatorCharacter {
 				}
 			}
 
-			if (isMagicDamage == true) { // 連続魔法ダメージによる軽減
+			if ( isMagicDamage ) { // 連続魔法ダメージによる軽減
 				double nowTime = (double) System.currentTimeMillis();
 				double interval = (20D - (nowTime - _oldTime) / 100D) % 20D;
 
@@ -1439,7 +1439,7 @@ public class LsimulatorPcInstance extends LsimulatorCharacter {
 				}
 
 				boolean sim_ret = simWarResult(lastAttacker); // 模擬戦
-				if (sim_ret == true) { // 模擬戦中ならペナルティなし
+				if ( sim_ret  ) { // 模擬戦中ならペナルティなし
 					return;
 				}
 			}
@@ -1529,7 +1529,7 @@ public class LsimulatorPcInstance extends LsimulatorCharacter {
 			}
 
 			boolean castle_ret = castleWarResult(); // 攻城戦
-			if (castle_ret == true) { // 攻城戦中で旗内なら赤ネームペナルティなし
+			if ( castle_ret ) { // 攻城戦中で旗内なら赤ネームペナルティなし
 				return;
 			}
 
@@ -1554,7 +1554,7 @@ public class LsimulatorPcInstance extends LsimulatorCharacter {
 				player = (LsimulatorPcInstance) lastAttacker;
 			}
 			if (player != null) {
-				if ((getLawful() >= 0) && (isPinkName() == false)) {
+				if ((getLawful() >= 0) && (   ! isPinkName()  )) {
 					boolean isChangePkCount = false;
 					// アライメントが30000未満の場合はPKカウント増加
 					if (player.getLawful() < 30000) {
@@ -1704,7 +1704,7 @@ public class LsimulatorPcInstance extends LsimulatorCharacter {
 			}
 
 			if ((getId() == clan.getLeaderId()) && // 血盟主で模擬戦中
-					(warType == 2) && (isInWar == true)) {
+					(warType == 2) &&  isInWar  ) {
 				enemyClanName = war.GetEnemyClanName(getClanname());
 				if (enemyClanName != null) {
 					war.CeaseWar(getClanname(), enemyClanName); // 終結

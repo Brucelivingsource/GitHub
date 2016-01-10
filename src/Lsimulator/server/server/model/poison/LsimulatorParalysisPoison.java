@@ -57,7 +57,7 @@ public class LsimulatorParalysisPoison extends LsimulatorPoison {
 
 			if (_target instanceof LsimulatorPcInstance) {
 				LsimulatorPcInstance player = (LsimulatorPcInstance) _target;
-				if (player.isDead() == false) {
+				if (  ! player.isDead() ) {
 					player.sendPackets(new S_Paralysis(1, true)); // 麻痺状態にする
 					_timer = new ParalysisTimer();
 					GeneralThreadPool.getInstance().execute(_timer); // 麻痺タイマー開始

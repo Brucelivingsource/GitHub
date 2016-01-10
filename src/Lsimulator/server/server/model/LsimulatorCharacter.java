@@ -1357,7 +1357,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	private int _trueMr = 0; // ● 本当の魔法防御
 
 	public int getMr() {
-		if (hasSkillEffect(153) == true) {
+		if ( hasSkillEffect(153) ) {
 			return _mr / 4;
 		} else {
 			return _mr;

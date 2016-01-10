@@ -251,7 +251,7 @@ public class LsimulatorMagic {
 		else if (_calcType == PC_NPC) { // ターゲットがＮＰＣの場合
 			msg4 = _targetNpc.getName();
 		}
-		if (isSuccess == true) {
+		if ( isSuccess ) {
 			msg3 = "成功";
 		}
 		else {

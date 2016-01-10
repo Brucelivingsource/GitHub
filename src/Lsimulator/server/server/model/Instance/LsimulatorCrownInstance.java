@@ -92,7 +92,7 @@ public class LsimulatorCrownInstance extends LsimulatorNpcInstance {
 				break;
 			}
 		}
-		if (existDefenseClan && (in_war == false)) { // 城主が居て、布告していない場合
+		if (existDefenseClan && (  !in_war )) { // 城主が居て、布告していない場合
 			return;
 		}
 

@@ -146,7 +146,7 @@ public class LsimulatorMobSkillUse {
 		}
 
 		for (int i = 0; (i < getMobSkillTemplate().getSkillSize()) && (getMobSkillTemplate().getType(i) != LsimulatorMobSkill.TYPE_NONE); i++) {
-			if (isSkillUseble(i, isTriRnd) == false) {
+			if (   ! isSkillUseble(i, isTriRnd) ) {
 				continue;
 			}
 			else { // 条件にあうスキルが存在する
@@ -175,25 +175,25 @@ public class LsimulatorMobSkillUse {
 		boolean isUseSkill = false;
 		int type = getMobSkillTemplate().getType(i);
 		if (type == LsimulatorMobSkill.TYPE_PHYSICAL_ATTACK) { // 物理攻撃
-			if (physicalAttack(i) == true) {
+			if ( physicalAttack(i) ) {
 				skillUseCountUp(i);
 				isUseSkill = true;
 			}
 		}
 		else if (type == LsimulatorMobSkill.TYPE_MAGIC_ATTACK) { // 魔法攻撃
-			if (magicAttack(i) == true) {
+			if ( magicAttack(i) ) {
 				skillUseCountUp(i);
 				isUseSkill = true;
 			}
 		}
 		else if (type == LsimulatorMobSkill.TYPE_SUMMON) { // サモンする
-			if (summon(i) == true) {
+			if ( summon(i) ) {
 				skillUseCountUp(i);
 				isUseSkill = true;
 			}
 		}
 		else if (type == LsimulatorMobSkill.TYPE_POLY) { // 強制変身させる
-			if (poly(i) == true) {
+			if ( poly(i) ) {
 				skillUseCountUp(i);
 				isUseSkill = true;
 			}
@@ -256,7 +256,7 @@ public class LsimulatorMobSkillUse {
 			if (pc.isGmInvis()) {
 				continue;
 			}
-			if (_attacker.glanceCheck(pc.getX(), pc.getY()) == false) {
+			if (   ! _attacker.glanceCheck(pc.getX(), pc.getY()) ) {
 				continue; // 射線が通らない
 			}
 
@@ -294,7 +294,7 @@ public class LsimulatorMobSkillUse {
 			return false;
 		}
 
-		if (canUseSkill == true) {
+		if ( canUseSkill ) {
 			if (getMobSkillTemplate().getLeverage(idx) > 0) {
 				skillUse.setLeverage(getMobSkillTemplate().getLeverage(idx));
 			}

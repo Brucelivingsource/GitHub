@@ -248,7 +248,7 @@ public class HpRegeneration extends TimerTask {
 	 */
 	private static boolean isPlayerInLifeStream(LsimulatorPcInstance pc) {
 		for (LsimulatorObject object : pc.getKnownObjects()) {
-			if (object instanceof LsimulatorEffectInstance == false) {
+			if ( ! (object instanceof LsimulatorEffectInstance ) ) {
 				continue;
 			}
 			LsimulatorEffectInstance effect = (LsimulatorEffectInstance) object;

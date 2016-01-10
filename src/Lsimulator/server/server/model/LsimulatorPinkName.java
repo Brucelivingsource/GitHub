@@ -87,7 +87,7 @@ public class LsimulatorPinkName {
 		if ((pc.getLawful() >= 0) && // pc, attacker共に青ネーム
 				!pc.isPinkName() && (attacker.getLawful() >= 0) && !attacker.isPinkName()) {
 			if ((pc.getZoneType() == 0) && // 共にノーマルゾーンで、戦争時間内で旗内でない
-					(attacker.getZoneType() == 0) && (isNowWar == false)) {
+					(attacker.getZoneType() == 0) && (  !isNowWar )) {
 				attacker.setPinkName(true);
 				attacker.sendPackets(new S_PinkName(attacker.getId(), 180));
 				if (!attacker.isGmInvis()) {

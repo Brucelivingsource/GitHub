@@ -253,7 +253,7 @@ public class C_ItemUSe extends ClientBasePacket {
 				delay_id = ((LsimulatorEtcItem) l1iteminstance.getItem()).get_delayid();
 			}
 			if (delay_id != 0) { // ディレイ設定あり
-				if (pc.hasItemDelay(delay_id) == true) {
+				if (  pc.hasItemDelay(delay_id)  ) {
 					return;
 				}
 			}
@@ -1324,7 +1324,7 @@ public class C_ItemUSe extends ClientBasePacket {
 									}
 								}
 							}
-							if ((target.getCurrentHp() == 0) && (target.isDead() == true)) {
+							if ((target.getCurrentHp() == 0) && ( target.isDead()  )) {
 								if (pc.getMap().isUseResurrection()) {
 									target.setTempID(pc.getId());
 									if (itemId == 40089) {
@@ -1646,7 +1646,7 @@ public class C_ItemUSe extends ClientBasePacket {
 						boolean castle_area = LsimulatorCastleLocation.checkInAllWarArea(
 						// いずれかの城エリア
 								partner.getX(), partner.getY(), partner.getMapId());
-						if (((partner.getMapId() == 0) || (partner.getMapId() == 4) || (partner.getMapId() == 304)) && (castle_area == false)) {
+						if (((partner.getMapId() == 0) || (partner.getMapId() == 4) || (partner.getMapId() == 304)) && ( !castle_area  )) {
 							LsimulatorTeleport.teleport(pc, partner.getX(), partner.getY(), partner.getMapId(), 5, true);
 						}
 						else {
@@ -2228,7 +2228,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "diegodiary"));
 				}
 				else if (itemId == 40641) { // 說話卷軸
-					if (Config.ALT_TALKINGSCROLLQUEST == true) {
+					if ( Config.ALT_TALKINGSCROLLQUEST ) {
 						if (pc.getQuest().get_step(LsimulatorQuest.QUEST_TOSCROLL) == 0) {
 							pc.sendPackets(new S_NPCTalkReturn(pc.getId(), "tscrolla"));
 						}
@@ -4990,7 +4990,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		if (user.getId() == target.getId()) {
 			return 0; // 目標為自身
 		}
-		if (user.glanceCheck(target.getX(), target.getY()) == false) {
+		if ( !user.glanceCheck(target.getX(), target.getY())) {
 			return 0; // 有障礙物
 		}
 
@@ -5003,7 +5003,7 @@ public class C_ItemUSe extends ClientBasePacket {
 			if (pc.getMap().isSafetyZone(pc.getLocation()) || user.checkNonPvP(user, pc)) {
 				return 0;
 			}
-			if ((pc.hasSkillEffect(50) == true) || (pc.hasSkillEffect(78) == true) || (pc.hasSkillEffect(157) == true)) {
+			if (  pc.hasSkillEffect(50)  ||  pc.hasSkillEffect(78)  ||  pc.hasSkillEffect(157)  ) {
 				return 0;
 			}
 

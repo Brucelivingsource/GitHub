@@ -107,8 +107,8 @@ public class HouseTable {
 			pstm.setInt(2, house.getHouseArea());
 			pstm.setString(3, house.getLocation());
 			pstm.setInt(4, house.getKeeperId());
-			pstm.setInt(5, house.isOnSale() == true ? 1 : 0);
-			pstm.setInt(6, house.isPurchaseBasement() == true ? 1 : 0);
+			pstm.setInt(5, house.isOnSale() ? 1 : 0);
+			pstm.setInt(6, house.isPurchaseBasement()  ? 1 : 0);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			String fm = sdf.format(house.getTaxDeadline().getTime());
 			pstm.setString(7, fm);

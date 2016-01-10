@@ -134,11 +134,11 @@ public class LsimulatorTowerInstance extends LsimulatorNpcInstance {
 					break;
 				}
 			}
-			if ((existDefenseClan == true) && (isProclamation == false)) { // 城主が居て、布告していない場合
+			if (  existDefenseClan &&   ! isProclamation ) { // 城主が居て、布告していない場合
 				return;
 			}
 
-			if ((getCurrentHp() > 0) && !isDead()) {
+			if ((getCurrentHp() > 0) && ! isDead() ) {
 				int newHp = getCurrentHp() - damage;
 				if ((newHp <= 0) && !isDead()) {
 					setCurrentHpDirect(0);

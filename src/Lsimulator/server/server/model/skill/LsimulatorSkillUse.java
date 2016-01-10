@@ -472,7 +472,7 @@ public class LsimulatorSkillUse {
 				return false;
 			}
 
-			if ((isItemConsume() == false) && !_player.isGm()) { // 法術消耗道具判斷。
+			if ((   ! isItemConsume()  ) && !_player.isGm()) { // 法術消耗道具判斷。
 				_player.sendPackets(new S_ServerMessage(299)); // \f1施放魔法所需材料不足。
 				return false;
 			}
@@ -673,7 +673,7 @@ public class LsimulatorSkillUse {
 
 		// スキル使用者がPCで、PKモードではない場合、自分のサモン・ペットは対象外
 		if ((_user instanceof LsimulatorPcInstance) && (_skill.getTarget().equals("attack") || (_skill.getType() == LsimulatorSkills.TYPE_ATTACK))
-				&& (_isPK == false)) {
+				&& (  !_isPK  )) {
 			if (cha instanceof LsimulatorSummonInstance) {
 				LsimulatorSummonInstance summon = (LsimulatorSummonInstance) cha;
 				if (_player.getId() == summon.getMaster().getId()) {
@@ -689,7 +689,7 @@ public class LsimulatorSkillUse {
 		}
 
 		if ((_skill.getTarget().equals("attack") || (_skill.getType() == LsimulatorSkills.TYPE_ATTACK)) && !(cha instanceof LsimulatorMonsterInstance)
-				&& (_isPK == false) && (_target instanceof LsimulatorPcInstance)) {
+				&& (  !_isPK ) && (_target instanceof LsimulatorPcInstance)) {
 			LsimulatorPcInstance enemy = (LsimulatorPcInstance) cha;
 			// カウンターディテクション
 			if ((_skillId == COUNTER_DETECTION) && (enemy.getZoneType() != 1)
@@ -712,7 +712,7 @@ public class LsimulatorSkillUse {
 			return false; // 攻撃スキルでPKモードじゃない場合
 		}
 
-		if ((_user.glanceCheck(cha.getX(), cha.getY()) == false) && (_skill.isThrough() == false)) {
+		if ((   ! _user.glanceCheck(cha.getX(), cha.getY())  ) && (   ! _skill.isThrough() )) {
 			// エンチャント、復活スキルは障害物の判定をしない
 			if (!((_skill.getType() == LsimulatorSkills.TYPE_CHANGE) || (_skill.getType() == LsimulatorSkills.TYPE_RESTORE))) {
 				_isGlanceCheckFail = true;
@@ -752,7 +752,7 @@ public class LsimulatorSkillUse {
 			return false; // 目標已死亡 法術非復活類
 		}
 
-		if ((cha.isDead() == false)
+		if ((   ! cha.isDead()  )
 				&& ((_skillId == CREATE_ZOMBIE) || (_skillId == RESURRECTION) || (_skillId == GREATER_RESURRECTION) || (_skillId == CALL_OF_NATURE))) {
 			return false; // 目標未死亡 法術復活類
 		}
@@ -861,7 +861,7 @@ public class LsimulatorSkillUse {
 				}
 			}
 
-			if ((isTarget(_target) == false) && !(_skill.getTarget().equals("none"))) {
+			if ((   ! isTarget(_target) ) && !(_skill.getTarget().equals("none"))) {
 				// 対象が違うのでスキルが発動しない。
 				return;
 			}
@@ -877,7 +877,7 @@ public class LsimulatorSkillUse {
 						continue;
 					}
 					LsimulatorCharacter cha = (LsimulatorCharacter) tgobj;
-					if (isTarget(cha) == false) {
+					if (  ! isTarget(cha)  ) {
 						continue;
 					}
 					_targetList.add(new TargetStatus(cha));
@@ -2096,7 +2096,7 @@ public class LsimulatorSkillUse {
 								if (pc.getMap().isEscapable() || pc.isGm()) {
 									boolean castle_area = LsimulatorCastleLocation.checkInAllWarArea(
 												clanPc.getX(), clanPc.getY(), clanPc.getMapId());
-									if (((clanPc.getMapId() == 0) || (clanPc.getMapId() == 4) || (clanPc.getMapId() == 304)) && (castle_area == false)) {
+									if (((clanPc.getMapId() == 0) || (clanPc.getMapId() == 4) || (clanPc.getMapId() == 304)) && ( !castle_area )) {
 										LsimulatorTeleport.teleport(pc, clanPc.getX(), clanPc.getY(), clanPc.getMapId(), 5, true);
 									}
 									else {
@@ -2474,9 +2474,9 @@ public class LsimulatorSkillUse {
 		 * 成功除外条件４：マナドレインが成功したが、モンスター以外の場合
 		 */
 		if (((_skillId == TURN_UNDEAD) && ((undeadType == 0) || (undeadType == 2)))
-				|| ((_skillId == TURN_UNDEAD) && (isTU == false))
-				|| (((_skillId == ERASE_MAGIC) || (_skillId == SLOW) || (_skillId == MANA_DRAIN) || (_skillId == MASS_SLOW) || (_skillId == ENTANGLE) || (_skillId == WIND_SHACKLE)) && (isErase == false))
-				|| ((_skillId == MANA_DRAIN) && (isManaDrain == false))) {
+				|| ((_skillId == TURN_UNDEAD) && (  ! isTU ))
+				|| (((_skillId == ERASE_MAGIC) || (_skillId == SLOW) || (_skillId == MANA_DRAIN) || (_skillId == MASS_SLOW) || (_skillId == ENTANGLE) || (_skillId == WIND_SHACKLE)) && (  ! isErase ))
+				|| ((_skillId == MANA_DRAIN) && (   ! isManaDrain ))) {
 			return true;
 		}
 		return false;

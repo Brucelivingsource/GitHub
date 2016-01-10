@@ -98,8 +98,8 @@ public class CalcStat {
 	}
 
 	/**
-	 * 各クラスのLVUP時のHP上昇値を返す
-	 * 
+	 * 等級上升HP上升值 ver7.6
+	 * 2016 01 10
 	 * @param charType
 	 * @param baseMaxHp
 	 * @param baseCon
@@ -108,53 +108,41 @@ public class CalcStat {
 	 */
 	public static short calcStatHp(int charType, int baseMaxHp, byte baseCon,
 			int originalHpup) {
-		short randomhp = 0;
-		if (baseCon > 15) {
-			randomhp = (short) (baseCon - 15);
-		}
-		if (charType == 0) { // プリンス
-			randomhp += (short) (11 + Random.nextInt(2)); // 初期値分追加
-
-			if (baseMaxHp + randomhp > Config.PRINCE_MAX_HP) {
-				randomhp = (short) (Config.PRINCE_MAX_HP - baseMaxHp);
-			}
-		} else if (charType == 1) { // ナイト
-			randomhp += (short) (17 + Random.nextInt(2)); // 初期値分追加
-
-			if (baseMaxHp + randomhp > Config.KNIGHT_MAX_HP) {
-				randomhp = (short) (Config.KNIGHT_MAX_HP - baseMaxHp);
-			}
-		} else if (charType == 2) { // エルフ
-			randomhp += (short) (10 + Random.nextInt(2)); // 初期値分追加
-
-			if (baseMaxHp + randomhp > Config.ELF_MAX_HP) {
-				randomhp = (short) (Config.ELF_MAX_HP - baseMaxHp);
-			}
-		} else if (charType == 3) { // ウィザード
-			randomhp += (short) (7 + Random.nextInt(2)); // 初期値分追加
-
-			if (baseMaxHp + randomhp > Config.WIZARD_MAX_HP) {
-				randomhp = (short) (Config.WIZARD_MAX_HP - baseMaxHp);
-			}
-		} else if (charType == 4) { // ダークエルフ
-			randomhp += (short) (10 + Random.nextInt(2)); // 初期値分追加
-
-			if (baseMaxHp + randomhp > Config.DARKELF_MAX_HP) {
-				randomhp = (short) (Config.DARKELF_MAX_HP - baseMaxHp);
-			}
-		} else if (charType == 5) { // ドラゴンナイト
-			randomhp += (short) (13 + Random.nextInt(2)); // 初期値分追加
-
-			if (baseMaxHp + randomhp > Config.DRAGONKNIGHT_MAX_HP) {
-				randomhp = (short) (Config.DRAGONKNIGHT_MAX_HP - baseMaxHp);
-			}
-		} else if (charType == 6) { // イリュージョニスト
-			randomhp += (short) (9 + Random.nextInt(2)); // 初期値分追加
-
-			if (baseMaxHp + randomhp > Config.ILLUSIONIST_MAX_HP) {
-				randomhp = (short) (Config.ILLUSIONIST_MAX_HP - baseMaxHp);
-			}
-		}
+		short randomhp = (short)(Random.nextInt(2));
+                                    //按照職業熱門比例排序　妖精　法師　黑妖　騎士　龍騎　幻術　王族
+		if (charType == 2) { // 妖精
+                                           randomhp += baseCon -2 ;  
+                                            if (baseMaxHp + randomhp > Config.ELF_MAX_HP) 
+                                                    randomhp = (short) (Config.ELF_MAX_HP - baseMaxHp);
+                                     } else if (charType == 3) { // 法師
+                                            randomhp += baseCon -5 ;  
+                                            if (baseMaxHp + randomhp > Config.WIZARD_MAX_HP) 
+			randomhp = (short) (Config.WIZARD_MAX_HP - baseMaxHp);
+                                     }else if (charType == 4) { // 黑妖
+                                            randomhp += baseCon -1 ;  
+                                            if (baseMaxHp + randomhp > Config.DARKELF_MAX_HP) 
+			randomhp = (short) (Config.DARKELF_MAX_HP - baseMaxHp);
+                                     } else if (charType == 1) { // 騎士
+                                           randomhp += baseCon + 5;  
+                                            if (baseMaxHp + randomhp > Config.KNIGHT_MAX_HP) 
+                                                    randomhp = (short) (Config.KNIGHT_MAX_HP - baseMaxHp);
+		} else if (charType == 5) { // 龍騎士
+                                            randomhp += baseCon +1 ;  
+                                            if (baseMaxHp + randomhp > Config.DRAGONKNIGHT_MAX_HP) 
+                                                    randomhp = (short) (Config.DRAGONKNIGHT_MAX_HP - baseMaxHp);	
+		} else if (charType == 6) { // 幻術師
+                                            randomhp += baseCon -3 ;  
+                                            if (baseMaxHp + randomhp > Config.ILLUSIONIST_MAX_HP)
+			randomhp = (short) (Config.ILLUSIONIST_MAX_HP - baseMaxHp);
+		}else if (charType == 0) { // 王族
+                                            if ( baseCon <= 12 ) 
+                                                    randomhp+= 12; 
+                                            else
+                                                    randomhp += baseCon;  
+                                            if (baseMaxHp + randomhp > Config.PRINCE_MAX_HP) 
+                                                    randomhp = (short) (Config.PRINCE_MAX_HP - baseMaxHp);
+                                            
+                                    }
 
 		randomhp += originalHpup;
 
@@ -163,9 +151,9 @@ public class CalcStat {
 		}
 		return randomhp;
 	}
-
-	/**
-	 * 各クラスのLVUP時のMP上昇値を返す
+                   
+	/**2016 01 10
+	 * 等級上升MP上升值 ver7.6 後面可能不準
 	 * 
 	 * @param charType
 	 * @param baseMaxMp
@@ -176,79 +164,42 @@ public class CalcStat {
 	public static short calcStatMp(int charType, int baseMaxMp, byte baseWis,
 			int originalMpup) {
 		int randommp = 0;
-		int seedY = 0;
-		int seedZ = 0;
-		if (baseWis < 9 || baseWis > 9 && baseWis < 12) {
-			seedY = 2;
-		} else if (baseWis == 9 || baseWis >= 12 && baseWis <= 17) {
-			seedY = 3;
-		} else if (baseWis >= 18 && baseWis <= 23 || baseWis == 25
-				|| baseWis == 26 || baseWis == 29 || baseWis == 30
-				|| baseWis == 33 || baseWis == 34) {
-			seedY = 4;
-		} else if (baseWis == 24 || baseWis == 27 || baseWis == 28
-				|| baseWis == 31 || baseWis == 32 || baseWis >= 35) {
-			seedY = 5;
-		}
-
-		if (baseWis >= 7 && baseWis <= 9) {
-			seedZ = 0;
-		} else if (baseWis >= 10 && baseWis <= 14) {
-			seedZ = 1;
-		} else if (baseWis >= 15 && baseWis <= 20) {
-			seedZ = 2;
-		} else if (baseWis >= 21 && baseWis <= 24) {
-			seedZ = 3;
-		} else if (baseWis >= 25 && baseWis <= 28) {
-			seedZ = 4;
-		} else if (baseWis >= 29 && baseWis <= 32) {
-			seedZ = 5;
-		} else if (baseWis >= 33) {
-			seedZ = 6;
-		}
-
-		randommp = Random.nextInt(seedY) + 1 + seedZ;
-
-		if (charType == 0) { // プリンス
-			if (baseMaxMp + randommp > Config.PRINCE_MAX_MP) {
-				randommp = Config.PRINCE_MAX_MP - baseMaxMp;
-			}
-		} else if (charType == 1) { // ナイト
-			randommp = (int) (randommp * 2 / 3);
-			if (baseMaxMp + randommp > Config.KNIGHT_MAX_MP) {
-				randommp = Config.KNIGHT_MAX_MP - baseMaxMp;
-			}
-		} else if (charType == 2) { // エルフ
-			randommp = (int) (randommp * 1.5);
-
-			if (baseMaxMp + randommp > Config.ELF_MAX_MP) {
-				randommp = Config.ELF_MAX_MP - baseMaxMp;
-			}
-		} else if (charType == 3) { // ウィザード
-			randommp *= 2;
-
-			if (baseMaxMp + randommp > Config.WIZARD_MAX_MP) {
-				randommp = Config.WIZARD_MAX_MP - baseMaxMp;
-			}
-		} else if (charType == 4) { // ダークエルフ
-			randommp = (int) (randommp * 1.5);
-
-			if (baseMaxMp + randommp > Config.DARKELF_MAX_MP) {
-				randommp = Config.DARKELF_MAX_MP - baseMaxMp;
-			}
-		} else if (charType == 5) { // ドラゴンナイト
-			randommp = (int) (randommp * 2 / 3);
-
-			if (baseMaxMp + randommp > Config.DRAGONKNIGHT_MAX_MP) {
-				randommp = Config.DRAGONKNIGHT_MAX_MP - baseMaxMp;
-			}
-		} else if (charType == 6) { // イリュージョニスト
-			randommp = (int) (randommp * 5 / 3);
-
-			if (baseMaxMp + randommp > Config.ILLUSIONIST_MAX_MP) {
-				randommp = Config.ILLUSIONIST_MAX_MP - baseMaxMp;
-			}
-		}
+		 if (charType == 2) { // 妖精
+                                     // 整數除以浮點數就變浮點數
+                                            randommp = (int) (Random.nextInt( (int)(baseWis/3.0*1.5) - (int)(baseWis/5.0*1.5) )  + (int)(baseWis/5.0*1.5));
+                                            if (baseMaxMp + randommp > Config.ELF_MAX_MP) 
+			randommp = Config.ELF_MAX_MP - baseMaxMp;
+		} else if (charType == 3) { // 法師
+                                            randommp = Random.nextInt( baseWis*2/3 +2 - (baseWis/5 +1)*2 )  + baseWis*2/3 +2  ;
+                                            if (baseMaxMp + randommp > Config.WIZARD_MAX_MP) 
+			randommp = Config.WIZARD_MAX_MP - baseMaxMp;
+			
+		} else if (charType == 4) { //黑妖
+                                            randommp = (int) (Random.nextInt( (int)(baseWis/3.0*1.5) - (int)(baseWis/5.0*1.5) )  + (int)(baseWis/5.0*1.5));
+                                            if (baseMaxMp + randommp > Config.DARKELF_MAX_MP) 
+			randommp = Config.DARKELF_MAX_MP - baseMaxMp;
+		
+		}else if (charType == 1) { // 騎
+                                            randommp = Random.nextInt( 2 )  + baseWis/10;
+                                            if (baseMaxMp + randommp > Config.KNIGHT_MAX_MP)
+                                                    randommp = Config.KNIGHT_MAX_MP - baseMaxMp;
+                                     	
+		} else if (charType == 5) { //龍騎
+                                            randommp =  Random.nextInt(  baseWis/3-1  - baseWis/5  )  + baseWis/5 ;
+                                            if (baseMaxMp + randommp > Config.DRAGONKNIGHT_MAX_MP)
+			randommp = Config.DRAGONKNIGHT_MAX_MP - baseMaxMp;
+			
+		} else if (charType == 6) { // 幻術　有點誤差
+                                            randommp =  Random.nextInt(  baseWis*2/3 - 1  - baseWis/5 * 2  )  + baseWis/5 * 2 ;
+                                            if (baseMaxMp + randommp > Config.ILLUSIONIST_MAX_MP)
+			randommp = Config.ILLUSIONIST_MAX_MP - baseMaxMp;
+		
+                                    }else if (charType == 0) { // 王
+                                            randommp = Random.nextInt( baseWis/5 -  baseWis/3 )  + baseWis/5+1;
+                                            if (baseMaxMp + randommp > Config.PRINCE_MAX_MP)
+                                                    randommp = Config.PRINCE_MAX_MP - baseMaxMp;
+		
+		} 
 
 		randommp += originalMpup;
 

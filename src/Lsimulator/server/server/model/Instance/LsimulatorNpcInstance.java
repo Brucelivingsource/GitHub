@@ -417,7 +417,7 @@ public class LsimulatorNpcInstance extends LsimulatorCharacter {
 		if (getAtkspeed() == 0) { // 逃げるキャラ
 			if (getPassispeed() > 0) { // 移動できるキャラ
 				int escapeDistance = 15;
-				if (hasSkillEffect(40) == true) {
+				if ( hasSkillEffect(40) ) {
 					escapeDistance = 1;
 				}
 				if (getLocation().getTileLineDistance(target.getLocation()) > escapeDistance) { // ターゲットから逃げるの終了
@@ -456,9 +456,9 @@ public class LsimulatorNpcInstance extends LsimulatorCharacter {
 					// 移動できるキャラ
 					int distance = getLocation().getTileDistance(
 							target.getLocation());
-					if ((firstFound == true) && getNpcTemplate().is_teleport()
+					if (  firstFound  && getNpcTemplate().is_teleport()
 							&& (distance > 3) && (distance < 15)) {
-						if (nearTeleport(target.getX(), target.getY()) == true) {
+						if ( nearTeleport(target.getX(), target.getY())  ) {
 							firstFound = false;
 							return;
 						}
@@ -468,7 +468,7 @@ public class LsimulatorNpcInstance extends LsimulatorCharacter {
 							&& (20 > Random.nextInt(100))
 							&& (getCurrentMp() >= 10) && (distance > 6)
 							&& (distance < 15)) { // テレポート移動
-						if (nearTeleport(target.getX(), target.getY()) == true) {
+						if ( nearTeleport(target.getX(), target.getY()) ) {
 							return;
 						}
 					}
@@ -1552,7 +1552,7 @@ public class LsimulatorNpcInstance extends LsimulatorCharacter {
 	// 目標までの距離に応じて最適と思われるルーチンで進む方向を返す
 	public int moveDirection(int x, int y, double d) { // 目標点Ｘ 目標点Ｙ 目標までの距離
 		int dir = 0;
-		if ((hasSkillEffect(40) == true) && (d >= 2D)) { // ダークネスが掛かっていて、距離が2以上の場合追跡終了
+		if ( hasSkillEffect(40)   && (d >= 2D)) { // ダークネスが掛かっていて、距離が2以上の場合追跡終了
 			return -1;
 		} else if (d > 30D) { // 距離が激しく遠い場合は追跡終了
 			return -1;

@@ -95,12 +95,12 @@ public class WarTimeController implements Runnable {
 			}
 		}
 	}
-
+                   //2016 01 10 小整理
 	private void checkWarTime() {
-		for (int i = 0; i < 8; i++) {
+                                    for (int i = 0; i < 8; i++) {
 			if (_war_start_time[i].before(getRealTime()) // 攻城開始
-					&& _war_end_time[i].after(getRealTime())) {
-				if (_is_now_war[i] == false) {
+			&& _war_end_time[i].after(getRealTime())) {
+				if ( !_is_now_war[i]) {
 					_is_now_war[i] = true;
 					// 招出攻城的旗子
 					LsimulatorWarSpawn warspawn = new LsimulatorWarSpawn();
@@ -129,7 +129,7 @@ public class WarTimeController implements Runnable {
 					}
 				}
 			} else if (_war_end_time[i].before(getRealTime())) { // 攻城結束
-				if (_is_now_war[i] == true) {
+				if (_is_now_war[i]) {
 					_is_now_war[i] = false;
 					LsimulatorWorld.getInstance().broadcastPacketToAll(
 							new S_PacketBox(S_PacketBox.MSG_WAR_END, i + 1)); // %sの攻城戦が終了しました。

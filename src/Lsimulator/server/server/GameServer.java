@@ -148,10 +148,6 @@ public class GameServer extends Thread {
 			System.out.println(LsimulatorMessage.setporton + _port);
 		}
 
-		System.out.println("┌───────────────────────────────┐");
-		System.out.println("│     " + LsimulatorMessage.ver + "\t" + "\t" + "│");
-		System.out.println("└───────────────────────────────┘" + "\n");
-
 		System.out.println(LsimulatorMessage.settingslist + "\n");
 		System.out.println("┌" + LsimulatorMessage.exp + ": " + (rateXp) + LsimulatorMessage.x
 				+ "\n\r├" + LsimulatorMessage.justice + ": " + (LA) + LsimulatorMessage.x
@@ -171,10 +167,6 @@ public class GameServer extends Thread {
 		int maxOnlineUsers = Config.MAX_ONLINE_USERS;
 		System.out.println(LsimulatorMessage.maxplayer + (maxOnlineUsers)
 				+ LsimulatorMessage.player);
-
-		System.out.println("┌───────────────────────────────┐");
-		System.out.println("│     " + LsimulatorMessage.ver + "\t" + "\t" + "│");
-		System.out.println("└───────────────────────────────┘" + "\n");
 
 		IdFactory.getInstance();
 		LsimulatorWorldMap.getInstance();

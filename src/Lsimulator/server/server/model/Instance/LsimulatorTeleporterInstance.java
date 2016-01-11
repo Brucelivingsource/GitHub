@@ -237,7 +237,14 @@ public class LsimulatorTeleporterInstance extends LsimulatorNpcInstance {
 			LsimulatorNpcHtml html = new LsimulatorNpcHtml(talking.getTeleportURLA());
 			player.sendPackets(new S_NPCTalkReturn(objid, html));
 		}
-		if (action.startsWith("teleport ")) {
+		if (action.charAt(0) == 't'
+                                        &&action.charAt(1) == 'e'
+                                        &&action.charAt(2) == 'l'
+                                        &&action.charAt(3) == 'e'
+                                        &&action.charAt(4) == 'p'
+                                        &&action.charAt(5) == 'o'
+                                        &&action.charAt(6) == 'r'
+                                        &&action.charAt(7) == 't' ) {
 			_log.finest((new StringBuilder()).append("Setting action to : ")
 					.append(action).toString());
 			doFinalAction(player, action);

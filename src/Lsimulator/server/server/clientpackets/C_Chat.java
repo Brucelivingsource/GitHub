@@ -65,7 +65,8 @@ public class C_Chat extends ClientBasePacket {
 				return;
 			}
 			// GM指令
-			if (chatText.startsWith(".") && (pc.isGm() || pc.isMonitor())) {
+                                                       // charAt比較快
+			if (chatText.charAt(0) == '.'  && (pc.isGm() || pc.isMonitor())) {
 				String cmd = chatText.substring(1);
 				GMCommands.getInstance().handleCommands(pc, cmd);
 				return;
@@ -73,7 +74,7 @@ public class C_Chat extends ClientBasePacket {
 
 			// 交易頻道
 			// 本来はchatType==12になるはずだが、行頭の$が送信されない
-			if (chatText.startsWith("$")) {
+			if (chatText.charAt(0) == '$' ) {
 				String text = chatText.substring(1);
 				chatWorld(pc, text, 12);
 				if (!pc.isGm()) {

@@ -30,6 +30,7 @@ import Lsimulator.server.server.model.shop.LsimulatorShop;
 import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
 import Lsimulator.server.server.templates.LsimulatorItem;
 import Lsimulator.server.server.templates.LsimulatorShopItem;
+import java.util.StringTokenizer;
 
 public class S_ShopSellList extends ServerBasePacket {
 
@@ -69,8 +70,9 @@ public class S_ShopSellList extends ServerBasePacket {
 				writeS(item.getName() + " (" + shopItem.getPackCount() + ")");
 			} else {
 				if (item.getItemId() == 40309) {// 食人妖精RaceTicket
+                                                                                            
 					String[] temp = item.getName().split(" ");
-					String buf = temp[temp.length - 1];
+					String buf = temp[temp.length - 1]; 
 					temp = buf.split("-");
 					writeS(buf + " $"
 							+ (1212 + Integer.parseInt(temp[temp.length - 1])));

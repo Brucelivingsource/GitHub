@@ -108,37 +108,36 @@ public class CalcStat {
 	 */
 	public static short calcStatHp(int charType, int baseMaxHp, byte baseCon,
 			int originalHpup) {
-		short randomhp = (short)(Random.nextInt(2));
+		short randomhp = (short) ((short)(Random.nextInt(2)) + baseCon);
+                
                                     //按照職業熱門比例排序　妖精　法師　黑妖　騎士　龍騎　幻術　王族
 		if (charType == 2) { // 妖精
-                                           randomhp += baseCon -2 ;  
+                                           randomhp -= 2 ;  
                                             if (baseMaxHp + randomhp > Config.ELF_MAX_HP) 
                                                     randomhp = (short) (Config.ELF_MAX_HP - baseMaxHp);
                                      } else if (charType == 3) { // 法師
-                                            randomhp += baseCon -5 ;  
+                                            randomhp  -= 5 ;  
                                             if (baseMaxHp + randomhp > Config.WIZARD_MAX_HP) 
 			randomhp = (short) (Config.WIZARD_MAX_HP - baseMaxHp);
                                      }else if (charType == 4) { // 黑妖
-                                            randomhp += baseCon -1 ;  
+                                            randomhp  -= 1 ;  
                                             if (baseMaxHp + randomhp > Config.DARKELF_MAX_HP) 
 			randomhp = (short) (Config.DARKELF_MAX_HP - baseMaxHp);
                                      } else if (charType == 1) { // 騎士
-                                           randomhp += baseCon + 5;  
+                                           randomhp += 5;  
                                             if (baseMaxHp + randomhp > Config.KNIGHT_MAX_HP) 
                                                     randomhp = (short) (Config.KNIGHT_MAX_HP - baseMaxHp);
 		} else if (charType == 5) { // 龍騎士
-                                            randomhp += baseCon +1 ;  
+                                            randomhp += 1 ;  
                                             if (baseMaxHp + randomhp > Config.DRAGONKNIGHT_MAX_HP) 
                                                     randomhp = (short) (Config.DRAGONKNIGHT_MAX_HP - baseMaxHp);	
 		} else if (charType == 6) { // 幻術師
-                                            randomhp += baseCon -3 ;  
+                                            randomhp  -= 3 ;  
                                             if (baseMaxHp + randomhp > Config.ILLUSIONIST_MAX_HP)
 			randomhp = (short) (Config.ILLUSIONIST_MAX_HP - baseMaxHp);
 		}else if (charType == 0) { // 王族
                                             if ( baseCon <= 12 ) 
-                                                    randomhp+= 12; 
-                                            else
-                                                    randomhp += baseCon;  
+                                                    randomhp = (short) ((short)(Random.nextInt(2)) + 12 );
                                             if (baseMaxHp + randomhp > Config.PRINCE_MAX_HP) 
                                                     randomhp = (short) (Config.PRINCE_MAX_HP - baseMaxHp);
                                             
@@ -170,7 +169,7 @@ public class CalcStat {
                                             if (baseMaxMp + randommp > Config.ELF_MAX_MP) 
 			randommp = Config.ELF_MAX_MP - baseMaxMp;
 		} else if (charType == 3) { // 法師
-                                            randommp = Random.nextInt( baseWis*2/3 +2 - (baseWis/5 +1)*2 )  + baseWis*2/3 +2  ;
+                                            randommp = Random.nextInt( ( baseWis<<1 ) /3 +2 - ( ( baseWis/5 +1) <<1) )  + ( baseWis<<1 )/3 +2  ;
                                             if (baseMaxMp + randommp > Config.WIZARD_MAX_MP) 
 			randommp = Config.WIZARD_MAX_MP - baseMaxMp;
 			
@@ -190,7 +189,7 @@ public class CalcStat {
 			randommp = Config.DRAGONKNIGHT_MAX_MP - baseMaxMp;
 			
 		} else if (charType == 6) { // 幻術　有點誤差
-                                            randommp =  Random.nextInt(  baseWis*2/3 - 1  - baseWis/5 * 2  )  + baseWis/5 * 2 ;
+                                            randommp =  Random.nextInt(  (baseWis<<1 )/3 - 1  - ( (baseWis/5) << 1 )  )  + ( ( baseWis/5) <<1 ) ;
                                             if (baseMaxMp + randommp > Config.ILLUSIONIST_MAX_MP)
 			randommp = Config.ILLUSIONIST_MAX_MP - baseMaxMp;
 		

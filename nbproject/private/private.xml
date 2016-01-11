@@ -3,25 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/data/xml/NpcActions/Quest.xml</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/data/xml/Item/TreasureBox.xml</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/data/xml/NpcActions/ItemMaking.xml</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/FileLogFormatter.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/server/templates/LsimulatorNpc.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/Config.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/server/utils/Internationalization/messages_en_US.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/server/utils/Internationalization/messages_zh_CN.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/data/xml/NpcActions/SingleItemMaking.xml</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/server/datatables/NpcTable.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/server/utils/Internationalization/messages_zh_TW.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/config/java.properties</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/data/announcements.txt</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/server/utils/Internationalization/messages.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/server/storage/mysql/MysqlAutoBackup.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/data/xml/NpcActions/Teleporter.xml</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/server/utils/Weather.java</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/config/server.properties</file>
-            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/MyServerJGitHub/MyServerJ/src/Lsimulator/server/server/model/Instance/LsimulatorScarecrowInstance.java</file>
+            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/GitHub/src/Lsimulator/server/Server.java</file>
+            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/GitHub/src/Lsimulator/server/server/AnnouncementsCycle.java</file>
+            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/GitHub/src/Lsimulator/server/LsimulatorMessage.java</file>
+            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/GitHub/src/Lsimulator/server/server/utils/CalcStat.java</file>
+            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/GitHub/src/Lsimulator/server/server/ClientThread.java</file>
+            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/GitHub/src/Lsimulator/server/Config.java</file>
+            <file>file:/C:/Users/Kuan-Ju/Documents/NetBeansProjects/GitHub/src/Lsimulator/server/server/model/game/LsimulatorBugBearRace.java</file>
         </group>
     </open-files>
 </project-private>

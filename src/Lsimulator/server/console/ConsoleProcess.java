@@ -20,6 +20,7 @@ import Lsimulator.server.Config;
 import Lsimulator.server.server.GameServer;
 import Lsimulator.server.server.model.LsimulatorWorld;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
+import java.util.StringTokenizer;
 
 /**
  * cmd 互動命令 處理程序
@@ -93,13 +94,13 @@ public class ConsoleProcess extends Thread {
 	@Override
 	public void run() {
 		while (onStarup && stillrun) {
-			String action = UserInput.nextLine();
-			String word[] = action.split(" ");
-			if (word.length == 1) {
-				execute(word[0]);
+                                                       // split不好 使用 StringTokenizer 取代
+                                                       StringTokenizer st = new StringTokenizer( UserInput.nextLine()  , " ");
+			if ( st.countTokens() == 1) {
+				execute( st.nextToken() );
 			}
-			if (word.length == 2) {
-				execute(word[0], word[1]);
+			if ( st.countTokens() == 2) { // 連取兩個token
+				execute( st.nextToken() ,  st.nextToken());
 			}
 		}
 		System.out.println("→提示: 互動指令聽取中..." + "\n" + ">");

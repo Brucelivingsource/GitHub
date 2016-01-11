@@ -46,7 +46,10 @@ public class LsimulatorFavorite implements LsimulatorCommandExecutor {
 				_faviCom.put(pc.getId(), "");
 			}
 			String faviCom = _faviCom.get(pc.getId());
-			if (arg.startsWith("set")) {
+			if (arg.charAt(0) == 's'
+                                                         &&arg.charAt(1) == 'e'
+                                                         &&arg.charAt(2) == 't'
+                                                        ) {
 				// コマンドの登録
 				StringTokenizer st = new StringTokenizer(arg);
 				st.nextToken();
@@ -68,7 +71,10 @@ public class LsimulatorFavorite implements LsimulatorCommandExecutor {
 				_faviCom.put(pc.getId(), faviCom);
 				pc.sendPackets(new S_SystemMessage(faviCom + " 被登記在好友名單。"));
 			}
-			else if (arg.startsWith("show")) {
+			else if (arg.charAt(0) == 's'
+                                                         &&arg.charAt(1) == 'h'
+                                                         &&arg.charAt(2) == 'o'
+                                                         &&arg.charAt(2) == 'w' ) {
 				pc.sendPackets(new S_SystemMessage("目前登記的指令: " + faviCom));
 			}
 			else if (faviCom.isEmpty()) {
@@ -80,7 +86,7 @@ public class LsimulatorFavorite implements LsimulatorCommandExecutor {
 				StringTokenizer st2 = new StringTokenizer(faviCom);
 				while (st2.hasMoreTokens()) {
 					String temp = st2.nextToken();
-					if (temp.startsWith("%")) {
+					if (temp.charAt(0) =='%') {
 						cmd.append(st.nextToken() + " ");
 					}
 					else {

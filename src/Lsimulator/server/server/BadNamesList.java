@@ -50,7 +50,7 @@ public class BadNamesList {
 
 			String line = null;
 			while ((line = lnr.readLine()) != null) {
-				if ((line.trim().length() == 0) || line.startsWith("#")) {
+				if ((line.trim().length() == 0) || line.charAt(0)=='#' ) {
 					continue;
 				}
 				StringTokenizer st = new StringTokenizer(line, ";");

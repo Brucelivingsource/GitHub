@@ -78,7 +78,7 @@ public class TextMapReader extends MapReader {
 		int y = 0;
 		String line;
 		while ((line = in.readLine()) != null) {
-			if ((line.trim().length() == 0) || line.startsWith("#")) {
+			if ((line.trim().length() == 0) || line.charAt(0)=='#' ) {
 				continue; // 跳過空行與註解
 			}
 

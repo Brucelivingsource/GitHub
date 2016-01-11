@@ -24,8 +24,8 @@ import Lsimulator.server.server.datatables.NpcTable;
 import Lsimulator.server.server.model.LsimulatorLocation;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.map.LsimulatorMap;
 import Lsimulator.server.server.storage.TrapStorage;
 import Lsimulator.server.server.templates.LsimulatorNpc;
@@ -75,7 +75,7 @@ public class LsimulatorMonsterTrap extends LsimulatorTrap {
 		return Class.forName("Lsimulator.server.server.model.Instance." + npc.getImpl() + "Instance").getConstructors()[0];
 	}
 
-	private LsimulatorNpcInstance createNpc() throws Exception {
+	private NpcInstance createNpc() throws Exception {
 		if (_npcTemp == null) {
 			_npcTemp = NpcTable.getInstance().getTemplate(_npcId);
 		}
@@ -83,12 +83,12 @@ public class LsimulatorMonsterTrap extends LsimulatorTrap {
 			_constructor = getConstructor(_npcTemp);
 		}
 
-		return (LsimulatorNpcInstance) _constructor.newInstance(new Object[]
+		return (NpcInstance) _constructor.newInstance(new Object[]
 		{ _npcTemp });
 	}
 
 	private void spawn(LsimulatorLocation loc) throws Exception {
-		LsimulatorNpcInstance npc = createNpc();
+		NpcInstance npc = createNpc();
 		npc.setId(IdFactory.getInstance().nextId());
 		npc.getLocation().set(loc);
 		npc.setHomeX(loc.getX());
@@ -98,11 +98,11 @@ public class LsimulatorMonsterTrap extends LsimulatorTrap {
 
 		npc.onNpcAI();
 		npc.turnOnOffLight();
-		npc.startChat(LsimulatorNpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
+		npc.startChat(NpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
 	}
 
 	@Override
-	public void onTrod(LsimulatorPcInstance trodFrom, LsimulatorObject trapObj) {
+	public void onTrod(PcInstance trodFrom, LsimulatorObject trapObj) {
 		sendEffect(trapObj);
 
 		List<Point> points = getSpawnablePoints(trapObj.getLocation(), 5);

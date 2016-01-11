@@ -16,8 +16,8 @@ package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.serverpackets.S_PetInventory;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -33,13 +33,13 @@ public class C_PetMenu extends ClientBasePacket {
 	public C_PetMenu(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
 		
 		int petId = readD();
-		LsimulatorPetInstance pet = (LsimulatorPetInstance) LsimulatorWorld.getInstance().findObject(petId);
+		PetInstance pet = (PetInstance) LsimulatorWorld.getInstance().findObject(petId);
 
 		if ((pet != null) && (pc != null)) {
 			pc.sendPackets(new S_PetInventory(pet));

@@ -15,14 +15,14 @@
 package Lsimulator.server.server.serverpackets;
 
 import static Lsimulator.server.server.Opcodes.S_OPCODE_LOGINTOGAME;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * 由3.0的S_Unkown1改名
  * 正式命名為LoginGame
  */
 public class S_LoginGame extends ServerBasePacket {
-	public S_LoginGame(LsimulatorPcInstance pc) {
+	public S_LoginGame(PcInstance pc) {
 		/*
 		 * 【Server】 id:223 size:8 time:1134908599
 		 *  0000:  df 03 c1 55 b5 6e d1 dc

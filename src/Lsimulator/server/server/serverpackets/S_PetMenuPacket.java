@@ -15,23 +15,23 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 
 public class S_PetMenuPacket extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_PetMenuPacket(LsimulatorNpcInstance npc, int exppercet) {
+	public S_PetMenuPacket(NpcInstance npc, int exppercet) {
 		buildpacket(npc, exppercet);
 	}
 
-	private void buildpacket(LsimulatorNpcInstance npc, int exppercet) {
+	private void buildpacket(NpcInstance npc, int exppercet) {
 		writeC(Opcodes.S_OPCODE_SHOWHTML);
 
-		if (npc instanceof LsimulatorPetInstance) { // ペット
-			LsimulatorPetInstance pet = (LsimulatorPetInstance) npc;
+		if (npc instanceof PetInstance) { // ペット
+			PetInstance pet = (PetInstance) npc;
 			writeD(pet.getId());
 			writeS("anicom");
 			writeC(0x00);
@@ -86,8 +86,8 @@ public class S_PetMenuPacket extends ServerBasePacket {
 			writeS(s); // 飽食度
 			writeS(Integer.toString(exppercet)); // 経験値
 			writeS(Integer.toString(pet.getLawful())); // アライメント
-		} else if (npc instanceof LsimulatorSummonInstance) { // サモンモンスター
-			LsimulatorSummonInstance summon = (LsimulatorSummonInstance) npc;
+		} else if (npc instanceof SummonInstance) { // サモンモンスター
+			SummonInstance summon = (SummonInstance) npc;
 			writeD(summon.getId());
 			writeS("moncom");
 			writeC(0x00);

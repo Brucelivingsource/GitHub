@@ -23,11 +23,11 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.IdFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.SQLUtil;
 
 // Referenced classes of package Lsimulator.server.server.model:
-// LsimulatorPcInstance
+// PcInstance
 
 public class Beginner {
 
@@ -45,7 +45,7 @@ public class Beginner {
 	private Beginner() {
 	}
 
-	public int GiveItem(LsimulatorPcInstance pc) {
+	public int GiveItem(PcInstance pc) {
 		Connection con = null;
 		PreparedStatement pstm1 = null;
 		ResultSet rs = null;

@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
 
 import Lsimulator.server.server.model.LsimulatorPolyMorph;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
@@ -31,13 +31,13 @@ public class LsimulatorPoly implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer st = new StringTokenizer(arg);
 			String name = st.nextToken();
 			int polyid = Integer.parseInt(st.nextToken());
 
-			LsimulatorPcInstance tg = LsimulatorWorld.getInstance().getPlayer(name);
+			PcInstance tg = LsimulatorWorld.getInstance().getPlayer(name);
 
 			if (tg == null) {
 				pc.sendPackets(new S_ServerMessage(73, name)); // \f1%0はゲームをしていません。

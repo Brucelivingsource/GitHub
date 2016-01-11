@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Message_YN;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.utils.FaceToFace;
@@ -35,18 +35,18 @@ public class C_JoinClan extends ClientBasePacket {
 	public C_JoinClan(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if ((pc == null) || pc.isGhost()) {
 			return;
 		}
 
-		LsimulatorPcInstance target = FaceToFace.faceToFace(pc, true);
+		PcInstance target = FaceToFace.faceToFace(pc, true);
 		if (target != null) {
 			JoinClan(pc, target);
 		}
 	}
 
-	private void JoinClan(LsimulatorPcInstance player, LsimulatorPcInstance target) {
+	private void JoinClan(PcInstance player, PcInstance target) {
 		// 如果面對的對象不是王族或守護騎士
 		if (!target.isCrown() && (target.getClanRank() != LsimulatorClan.CLAN_RANK_GUARDIAN)) {
 			player.sendPackets(new S_ServerMessage(92, target.getName())); // \f1%0はプリンスやプリンセスではありません。

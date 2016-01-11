@@ -18,8 +18,8 @@ import static Lsimulator.server.server.model.skill.LsimulatorSkillId.AWAKEN_ANTH
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.AWAKEN_FAFURION;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.AWAKEN_VALAKAS;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.SHAPE_CHANGE;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ChangeShape;
 import Lsimulator.server.server.serverpackets.S_HPUpdate;
 import Lsimulator.server.server.serverpackets.S_OwnCharAttrDef;
@@ -33,7 +33,7 @@ public class LsimulatorAwake {
 	private LsimulatorAwake() {
 	}
 
-	public static void start(LsimulatorPcInstance pc, int skillId) {
+	public static void start(PcInstance pc, int skillId) {
 		if (skillId == pc.getAwakeSkillId()) { // 再次咏唱時解除覺醒狀態
 			stop(pc);
 		}
@@ -74,7 +74,7 @@ public class LsimulatorAwake {
 		}
 	}
 
-	public static void stop(LsimulatorPcInstance pc) {
+	public static void stop(PcInstance pc) {
 		int skillId = pc.getAwakeSkillId();
 		if (skillId == AWAKEN_ANTHARAS) { // 覺醒：安塔瑞斯
 			pc.addMaxHp(-127);
@@ -109,12 +109,12 @@ public class LsimulatorAwake {
 	}
 
 	// 變身
-	public static void doPoly(LsimulatorPcInstance pc) {
+	public static void doPoly(PcInstance pc) {
 		int polyId = 6894;
 		if (pc.hasSkillEffect(SHAPE_CHANGE)) {
 			pc.killSkillEffectTimer(SHAPE_CHANGE);
 		}
-		LsimulatorItemInstance weapon = pc.getWeapon();
+		ItemInstance weapon = pc.getWeapon();
 		boolean weaponTakeoff = (weapon != null && !LsimulatorPolyMorph.isEquipableWeapon(polyId, weapon.getItem().getType()));
 		if (weaponTakeoff) { // 解除武器時
 			pc.setCurrentWeapon(0);
@@ -131,7 +131,7 @@ public class LsimulatorAwake {
 	}
 
 	// 解除變身
-	public static void undoPoly(LsimulatorPcInstance pc) {
+	public static void undoPoly(PcInstance pc) {
 		int classId = pc.getClassId();
 		pc.setTempCharGfx(classId);
 		if (!pc.isDead()) {

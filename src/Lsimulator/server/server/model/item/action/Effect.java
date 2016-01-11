@@ -16,8 +16,8 @@ package Lsimulator.server.server.model.item.action;
 
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.*;
 
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_OwnCharAttrDef;
 import Lsimulator.server.server.serverpackets.S_OwnCharStatus2;
@@ -30,7 +30,7 @@ import Lsimulator.server.server.serverpackets.S_SPMR;
 
 public class Effect {
 
-	public static void useEffectItem(LsimulatorPcInstance pc, LsimulatorItemInstance item) {
+	public static void useEffectItem(PcInstance pc, ItemInstance item) {
 		boolean isMagicStone = false;
 		boolean deteleItem = true;
 
@@ -140,7 +140,7 @@ public class Effect {
 		}
 	}
 
-	public static void useEffect(LsimulatorPcInstance pc, int skillId, int time) {
+	public static void useEffect(PcInstance pc, int skillId, int time) {
 		if (!pc.hasSkillEffect(skillId)) {
 			switch(skillId) {
 			case EFFECT_BLESS_OF_MAZU: // 媽祖的祝福
@@ -223,7 +223,7 @@ public class Effect {
 	}
 
 	// 設定不可重複的魔法狀態 
-	public static void deleteRepeatedSkills(LsimulatorPcInstance pc, int skillId) {
+	public static void deleteRepeatedSkills(PcInstance pc, int skillId) {
 		final int[][] repeatedSkills =
 		{
 				// 經驗加成狀態
@@ -262,7 +262,7 @@ public class Effect {
 	}
 
 	// 將重複的狀態刪除
-	private static void stopSkillList(LsimulatorPcInstance pc, int _skillId, int[] repeat_skill) {
+	private static void stopSkillList(PcInstance pc, int _skillId, int[] repeat_skill) {
 		for (int skillId : repeat_skill) {
 			if (skillId != _skillId) {
 				pc.removeSkillEffect(skillId);
@@ -270,7 +270,7 @@ public class Effect {
 		}
 	}
 
-	public static void magicStoneEffect(LsimulatorPcInstance pc, int skillId, int time) {
+	public static void magicStoneEffect(PcInstance pc, int skillId, int time) {
 		byte type = 0;
 		if (!pc.hasSkillEffect(skillId)) {
 			switch(skillId) {

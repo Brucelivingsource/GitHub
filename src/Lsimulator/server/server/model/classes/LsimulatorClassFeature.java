@@ -14,36 +14,36 @@
  */
 package Lsimulator.server.server.model.classes;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public abstract class LsimulatorClassFeature {
 	public static LsimulatorClassFeature newClassFeature(int classId) {
-		if (classId == LsimulatorPcInstance.CLASSID_PRINCE
-				|| classId == LsimulatorPcInstance.CLASSID_PRINCESS) {
+		if (classId == PcInstance.CLASSID_PRINCE
+				|| classId == PcInstance.CLASSID_PRINCESS) {
 			return new LsimulatorRoyalClassFeature();
 		}
-		if (classId == LsimulatorPcInstance.CLASSID_ELF_MALE
-				|| classId == LsimulatorPcInstance.CLASSID_ELF_FEMALE) {
+		if (classId == PcInstance.CLASSID_ELF_MALE
+				|| classId == PcInstance.CLASSID_ELF_FEMALE) {
 			return new LsimulatorElfClassFeature();
 		}
-		if (classId == LsimulatorPcInstance.CLASSID_KNIGHT_MALE
-				|| classId == LsimulatorPcInstance.CLASSID_KNIGHT_FEMALE) {
+		if (classId == PcInstance.CLASSID_KNIGHT_MALE
+				|| classId == PcInstance.CLASSID_KNIGHT_FEMALE) {
 			return new LsimulatorKnightClassFeature();
 		}
-		if (classId == LsimulatorPcInstance.CLASSID_WIZARD_MALE
-				|| classId == LsimulatorPcInstance.CLASSID_WIZARD_FEMALE) {
+		if (classId == PcInstance.CLASSID_WIZARD_MALE
+				|| classId == PcInstance.CLASSID_WIZARD_FEMALE) {
 			return new LsimulatorWizardClassFeature();
 		}
-		if (classId == LsimulatorPcInstance.CLASSID_DARK_ELF_MALE
-				|| classId == LsimulatorPcInstance.CLASSID_DARK_ELF_FEMALE) {
+		if (classId == PcInstance.CLASSID_DARK_ELF_MALE
+				|| classId == PcInstance.CLASSID_DARK_ELF_FEMALE) {
 			return new LsimulatorDarkElfClassFeature();
 		}
-		if (classId == LsimulatorPcInstance.CLASSID_DRAGON_KNIGHT_MALE
-				|| classId == LsimulatorPcInstance.CLASSID_DRAGON_KNIGHT_FEMALE) {
+		if (classId == PcInstance.CLASSID_DRAGON_KNIGHT_MALE
+				|| classId == PcInstance.CLASSID_DRAGON_KNIGHT_FEMALE) {
 			return new LsimulatorDragonKnightClassFeature();
 		}
-		if (classId == LsimulatorPcInstance.CLASSID_ILLUSIONIST_MALE
-				|| classId == LsimulatorPcInstance.CLASSID_ILLUSIONIST_FEMALE) {
+		if (classId == PcInstance.CLASSID_ILLUSIONIST_MALE
+				|| classId == PcInstance.CLASSID_ILLUSIONIST_FEMALE) {
 			return new LsimulatorIllusionistClassFeature();
 		}
 		throw new IllegalArgumentException();

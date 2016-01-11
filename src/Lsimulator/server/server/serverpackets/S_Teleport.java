@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -26,7 +26,7 @@ public class S_Teleport extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_Teleport(LsimulatorPcInstance pc) {
+	public S_Teleport(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_TELEPORT);
 		writeC(0x00);
 		writeC(0x40);

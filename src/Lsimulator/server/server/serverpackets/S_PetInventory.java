@@ -17,8 +17,8 @@ package Lsimulator.server.server.serverpackets;
 import java.util.List;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -29,8 +29,8 @@ public class S_PetInventory extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_PetInventory(LsimulatorPetInstance pet) {
-		List<LsimulatorItemInstance> itemList = pet.getInventory().getItems();
+	public S_PetInventory(PetInstance pet) {
+		List<ItemInstance> itemList = pet.getInventory().getItems();
 
 		writeC(Opcodes.S_OPCODE_SHOWRETRIEVELIST);
 		writeD(pet.getId());
@@ -38,7 +38,7 @@ public class S_PetInventory extends ServerBasePacket {
 		writeC(0x0b);
 
 		for (Object itemObject : itemList) {
-			LsimulatorItemInstance petItem = (LsimulatorItemInstance) itemObject;
+			ItemInstance petItem = (ItemInstance) itemObject;
 			if (petItem == null) {
 				continue;
 			}

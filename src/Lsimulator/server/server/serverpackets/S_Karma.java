@@ -15,13 +15,13 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_Karma extends ServerBasePacket {
 
 	private static final String S_KARMA = "[S] S_Karma";
 
-	public S_Karma(LsimulatorPcInstance pc) {
+	public S_Karma(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
 		writeC(0x57);
 		writeD(pc.getKarma());

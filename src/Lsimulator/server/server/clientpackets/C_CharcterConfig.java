@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.Config;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.CharacterConfigTable;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
 // ClientBasePacket, C_RequestDoors
@@ -32,7 +32,7 @@ public class C_CharcterConfig extends ClientBasePacket {
 	public C_CharcterConfig(byte abyte0[], ClientThread client) throws Exception {
 		super(abyte0);
 		if (Config.CHARACTER_CONFIG_IN_SERVER_SIDE) {
-			LsimulatorPcInstance pc = client.getActiveChar();
+			PcInstance pc = client.getActiveChar();
 			if (pc == null) {
 				return;
 			}

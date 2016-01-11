@@ -18,11 +18,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import Lsimulator.server.server.ActionCodes;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
 
 public class LsimulatorNpcDeleteTimer extends TimerTask {
-	public LsimulatorNpcDeleteTimer(LsimulatorNpcInstance npc, int timeMillis) {
+	public LsimulatorNpcDeleteTimer(NpcInstance npc, int timeMillis) {
 		_npc = npc;
 		_timeMillis = timeMillis;
 	}
@@ -53,7 +53,7 @@ public class LsimulatorNpcDeleteTimer extends TimerTask {
 		timer.schedule(this, _timeMillis);
 	}
 
-	private final LsimulatorNpcInstance _npc;
+	private final NpcInstance _npc;
 
 	private final int _timeMillis;
 }

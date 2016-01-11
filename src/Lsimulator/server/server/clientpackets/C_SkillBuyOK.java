@@ -16,7 +16,7 @@ package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.SkillsTable;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_AddSkill;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -36,7 +36,7 @@ public class C_SkillBuyOK extends ClientBasePacket {
 	public C_SkillBuyOK(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if ((pc == null) || pc.isGhost()) {
 			return;
 		}

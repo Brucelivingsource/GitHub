@@ -18,7 +18,7 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.ClanMembersTable;
 import Lsimulator.server.server.datatables.ClanTable;
 import Lsimulator.server.server.model.LsimulatorClan;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 import Lsimulator.server.server.serverpackets.S_Pledge;
 
@@ -30,7 +30,7 @@ public class C_PledgeContent extends ClientBasePacket {
 
 	public C_PledgeContent(byte[] decrypt, ClientThread client) {
 		super(decrypt);
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

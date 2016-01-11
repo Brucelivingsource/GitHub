@@ -19,8 +19,8 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_AttackPacket;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -35,7 +35,7 @@ public class C_PickUpItem extends ClientBasePacket {
 	public C_PickUpItem(byte decrypt[], ClientThread client) throws Exception {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if ((pc == null) || pc.isDead() || pc.isGhost()) {
 			return;
 		}
@@ -60,7 +60,7 @@ public class C_PickUpItem extends ClientBasePacket {
 		LsimulatorObject object = groundInventory.getItem(objectId);
 
 		if ((object != null) && !pc.isDead()) {
-			LsimulatorItemInstance item = (LsimulatorItemInstance) object;
+			ItemInstance item = (ItemInstance) object;
 			if ((item.getItemOwnerId() != 0) && (pc.getId() != item.getItemOwnerId())) {
 				pc.sendPackets(new S_ServerMessage(623)); // アイテムが拾えませんでした。
 				return;
@@ -70,7 +70,7 @@ public class C_PickUpItem extends ClientBasePacket {
 			}
 
 			if (item.getItem().getItemId() == LsimulatorItemId.ADENA) {
-				LsimulatorItemInstance inventoryItem = pc.getInventory().findItemId(LsimulatorItemId.ADENA);
+				ItemInstance inventoryItem = pc.getInventory().findItemId(LsimulatorItemId.ADENA);
 				int inventoryItemCount = 0;
 				if (inventoryItem != null) {
 					inventoryItemCount = inventoryItem.getCount();

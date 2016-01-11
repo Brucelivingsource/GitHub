@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_Party extends ServerBasePacket {
 
@@ -42,7 +42,7 @@ public class S_Party extends ServerBasePacket {
 		writeS(partymembers);
 	}
 
-	public S_Party(int type, LsimulatorPcInstance pc) {// 3.3C 組隊系統
+	public S_Party(int type, PcInstance pc) {// 3.3C 組隊系統
 		switch (type) {
 		case 104:
 			newMember(pc);
@@ -65,9 +65,9 @@ public class S_Party extends ServerBasePacket {
 	 * 
 	 * @param pc
 	 */
-	public void newMember(LsimulatorPcInstance pc) {
-		LsimulatorPcInstance leader = pc.getParty().getLeader();
-		LsimulatorPcInstance member[] = pc.getParty().getMembers();
+	public void newMember(PcInstance pc) {
+		PcInstance leader = pc.getParty().getLeader();
+		PcInstance member[] = pc.getParty().getMembers();
 		double nowhp = 0.0d;
 		double maxhp = 0.0d;
 		if (pc.getParty() == null) {
@@ -105,7 +105,7 @@ public class S_Party extends ServerBasePacket {
 	 * 
 	 * @param pc
 	 */
-	public void oldMember(LsimulatorPcInstance pc) {
+	public void oldMember(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
 		writeC(S_PacketBox.PATRY_UPDATE_MEMBER);
 		writeD(pc.getId());
@@ -120,7 +120,7 @@ public class S_Party extends ServerBasePacket {
 	 * 
 	 * @param pc
 	 */
-	public void changeLeader(LsimulatorPcInstance pc) {
+	public void changeLeader(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
 		writeC(S_PacketBox.PATRY_SET_MASTER);
 		writeD(pc.getId());
@@ -132,8 +132,8 @@ public class S_Party extends ServerBasePacket {
 	 * 
 	 * @param pc
 	 */
-	public void refreshParty(LsimulatorPcInstance pc) {
-		LsimulatorPcInstance member[] = pc.getParty().getMembers();
+	public void refreshParty(PcInstance pc) {
+		PcInstance member[] = pc.getParty().getMembers();
 		if (pc.getParty() == null) {
 			return;
 		} else {

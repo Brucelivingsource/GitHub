@@ -22,6 +22,6 @@ class LsimulatorWizardClassFeature extends LsimulatorClassFeature {
 
 	@Override
 	public int getMagicLevel(int playerLevel) {
-		return Math.min(10, playerLevel / 4);
+		return Math.min(10, playerLevel >> 2 );
 	}
 }

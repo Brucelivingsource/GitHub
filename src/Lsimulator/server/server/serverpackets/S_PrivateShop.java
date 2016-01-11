@@ -18,8 +18,8 @@ import java.util.List;
 
 import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorPrivateShopBuyList;
 import Lsimulator.server.server.templates.LsimulatorPrivateShopSellList;
 
@@ -28,8 +28,8 @@ import Lsimulator.server.server.templates.LsimulatorPrivateShopSellList;
 
 public class S_PrivateShop extends ServerBasePacket {
 
-	public S_PrivateShop(LsimulatorPcInstance pc, int objectId, int type) {
-		LsimulatorPcInstance shopPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(objectId);
+	public S_PrivateShop(PcInstance pc, int objectId, int type) {
+		PcInstance shopPc = (PcInstance) LsimulatorWorld.getInstance().findObject(objectId);
 
 		if (shopPc == null) {
 			return;
@@ -49,7 +49,7 @@ public class S_PrivateShop extends ServerBasePacket {
 				int itemObjectId = pssl.getItemObjectId();
 				int count = pssl.getSellTotalCount() - pssl.getSellCount();
 				int price = pssl.getSellPrice();
-				LsimulatorItemInstance item = shopPc.getInventory().getItem(itemObjectId);
+				ItemInstance item = shopPc.getInventory().getItem(itemObjectId);
 				if (item != null) {
 					writeC(i);
 					writeC(item.getBless());
@@ -70,8 +70,8 @@ public class S_PrivateShop extends ServerBasePacket {
 				int itemObjectId = psbl.getItemObjectId();
 				int count = psbl.getBuyTotalCount();
 				int price = psbl.getBuyPrice();
-				LsimulatorItemInstance item = shopPc.getInventory().getItem(itemObjectId);
-				for (LsimulatorItemInstance pcItem : pc.getInventory().getItems()) {
+				ItemInstance item = shopPc.getInventory().getItem(itemObjectId);
+				for (ItemInstance pcItem : pc.getInventory().getItems()) {
 					if ((item.getItemId() == pcItem.getItemId()) && (item.getEnchantLevel() == pcItem.getEnchantLevel())) {
 						writeC(i);
 						writeD(pcItem.getId());

@@ -29,9 +29,9 @@ import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorNpcDeleteTimer;
 import Lsimulator.server.server.model.LsimulatorTeleport;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_CharVisualUpdate;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
 import Lsimulator.server.server.serverpackets.S_MapID;
@@ -76,7 +76,7 @@ public class LsimulatorDragonSlayer {
 	public static final int STATUS_SPAWN = 2;
 
 	private static class DragonSlayer {
-		private ArrayList<LsimulatorPcInstance> _members = new ArrayList<LsimulatorPcInstance>();
+		private ArrayList<PcInstance> _members = new ArrayList<PcInstance>();
 	}
 
 	private static final Map<Integer, DragonSlayer> _dataMap = Maps.newMap();
@@ -121,13 +121,13 @@ public class LsimulatorDragonSlayer {
 	}
 
 	// 龍之門扉物件
-	private LsimulatorNpcInstance[] _portal = new LsimulatorNpcInstance[12];
+	private NpcInstance[] _portal = new NpcInstance[12];
 
-	public LsimulatorNpcInstance[] portalPack() {
+	public NpcInstance[] portalPack() {
 		return _portal;
 	}
 
-	public void setPortalPack(int number, LsimulatorNpcInstance portal) {
+	public void setPortalPack(int number, NpcInstance portal) {
 		_portal[number] = portal;
 	}
 
@@ -154,7 +154,7 @@ public class LsimulatorDragonSlayer {
 	}
 
 	// 加入玩家
-	public void addPlayerList(LsimulatorPcInstance pc, int portalNum) {
+	public void addPlayerList(PcInstance pc, int portalNum) {
 		if (_dataMap.containsKey(portalNum)) {
 			if (!_dataMap.get(portalNum)._members.contains(pc)) {
 				_dataMap.get(portalNum)._members.add(pc);
@@ -163,7 +163,7 @@ public class LsimulatorDragonSlayer {
 	}
 
 	// 移除玩家
-	public void removePlayer(LsimulatorPcInstance pc, int portalNum) {
+	public void removePlayer(PcInstance pc, int portalNum) {
 		if (_dataMap.containsKey(portalNum)) {
 			if (_dataMap.get(portalNum)._members.contains(pc)) {
 				_dataMap.get(portalNum)._members.remove(pc);
@@ -188,8 +188,8 @@ public class LsimulatorDragonSlayer {
 		return _dataMap.get(num)._members.size();
 	}
 
-	private LsimulatorPcInstance[] getPlayersArray(int num) {
-		return _dataMap.get(num)._members.toArray(new LsimulatorPcInstance[_dataMap.get(num)._members.size()]);
+	private PcInstance[] getPlayersArray(int num) {
+		return _dataMap.get(num)._members.toArray(new PcInstance[_dataMap.get(num)._members.size()]);
 	}
 
 	// 開始第一階段
@@ -420,8 +420,8 @@ public class LsimulatorDragonSlayer {
 	// 訊息發送
 	public void sendMessage(int portalNum, int type, String msg) {
 		short mapId = (short) (1005 + portalNum);
-		LsimulatorPcInstance[] temp = getPlayersArray(portalNum);
-		for (LsimulatorPcInstance element : temp) {
+		PcInstance[] temp = getPlayersArray(portalNum);
+		for (PcInstance element : temp) {
 			if ((element.getMapId() == mapId)
 					&& (element.getX() >= 32740 && element.getX() <= 32827)
 					&& (element.getY() >= 32652 && element.getY() <= 32727)
@@ -442,8 +442,8 @@ public class LsimulatorDragonSlayer {
 
 		for (Object obj : LsimulatorWorld.getInstance().getVisibleObjects(mapId).values()) {
 			// 將玩家傳出副本地圖
-			if (obj instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) obj;
+			if (obj instanceof PcInstance) {
+				PcInstance pc = (PcInstance) obj;
 				if (pc != null) {
 					if (pc.isDead()) {
 						reStartPlayer(pc);
@@ -455,13 +455,13 @@ public class LsimulatorDragonSlayer {
 				}
 			}
 			// 門關閉
-			else if (obj instanceof LsimulatorDoorInstance) {
-				LsimulatorDoorInstance door = (LsimulatorDoorInstance) obj;
+			else if (obj instanceof DoorInstance) {
+				DoorInstance door = (DoorInstance) obj;
 				door.close();
 			}
 			// 刪除副本內的怪物
-			else if (obj instanceof LsimulatorNpcInstance) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) obj;
+			else if (obj instanceof NpcInstance) {
+				NpcInstance npc = (NpcInstance) obj;
 				if ((npc.getMaster() == null)
 						&& (npc.getNpcTemplate().get_npcId() < 81301 && npc.getNpcTemplate().get_npcId() > 81306)) {
 					npc.deleteMe();
@@ -479,7 +479,7 @@ public class LsimulatorDragonSlayer {
 	}
 
 	// 副本內死亡的玩家重新開始
-	private void reStartPlayer(LsimulatorPcInstance pc) {
+	private void reStartPlayer(PcInstance pc) {
 		pc.stopPcDeleteTimer();
 
 		int[] loc = Getback.GetBack_Location(pc, true);
@@ -511,7 +511,7 @@ public class LsimulatorDragonSlayer {
 	public void spawn(int npcId, int portalNumber, int X, int Y, short mapId, int randomRange,
 			int timeMillisToDelete) {
 		try {
-			LsimulatorNpcInstance npc = NpcTable.getInstance().newNpcInstance(npcId);
+			NpcInstance npc = NpcTable.getInstance().newNpcInstance(npcId);
 			npc.setId(IdFactory.getInstance().nextId());
 			npc.setMap(mapId);
 
@@ -549,8 +549,8 @@ public class LsimulatorDragonSlayer {
 					|| npc.getGfxId() == 7554 || npc.getGfxId() == 7585
 					|| npc.getGfxId() == 7539 || npc.getGfxId() == 7557 || npc.getGfxId() == 7558
 					|| npc.getGfxId() == 7864 || npc.getGfxId() == 7869 || npc.getGfxId() == 7870) {
-				npc.npcSleepTime(ActionCodes.ACTION_AxeWalk, LsimulatorNpcInstance.ATTACK_SPEED);
-				for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(npc)) {
+				npc.npcSleepTime(ActionCodes.ACTION_AxeWalk, NpcInstance.ATTACK_SPEED);
+				for (PcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(npc)) {
 					npc.onPerceive(pc);
 					S_DoActionGFX gfx = new S_DoActionGFX(npc.getId(), ActionCodes.ACTION_AxeWalk);
 					pc.sendPackets(gfx);
@@ -558,7 +558,7 @@ public class LsimulatorDragonSlayer {
 			}
 
 			npc.turnOnOffLight();
-			npc.startChat(LsimulatorNpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
+			npc.startChat(NpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
 			
 			if (0 < timeMillisToDelete) {
 				LsimulatorNpcDeleteTimer timer = new LsimulatorNpcDeleteTimer(npc,

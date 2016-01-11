@@ -18,11 +18,11 @@ import Lsimulator.server.Config;
 import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.WarTimeController;
 import Lsimulator.server.server.datatables.SkillsTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.serverpackets.S_SkillSound;
@@ -45,13 +45,13 @@ public class LsimulatorMagic {
 
 	private LsimulatorCharacter _target = null;
 
-	private LsimulatorPcInstance _pc = null;
+	private PcInstance _pc = null;
 
-	private LsimulatorPcInstance _targetPc = null;
+	private PcInstance _targetPc = null;
 
-	private LsimulatorNpcInstance _npc = null;
+	private NpcInstance _npc = null;
 
-	private LsimulatorNpcInstance _targetNpc = null;
+	private NpcInstance _targetNpc = null;
 
 	private int _leverage = 10; // 1/10倍で表現する。
 
@@ -66,28 +66,28 @@ public class LsimulatorMagic {
 	public LsimulatorMagic(LsimulatorCharacter attacker, LsimulatorCharacter target) {
 		_target = target;
 
-		if (attacker instanceof LsimulatorPcInstance) {
-			if (target instanceof LsimulatorPcInstance) {
+		if (attacker instanceof PcInstance) {
+			if (target instanceof PcInstance) {
 				_calcType = PC_PC;
-				_pc = (LsimulatorPcInstance) attacker;
-				_targetPc = (LsimulatorPcInstance) target;
+				_pc = (PcInstance) attacker;
+				_targetPc = (PcInstance) target;
 			}
 			else {
 				_calcType = PC_NPC;
-				_pc = (LsimulatorPcInstance) attacker;
-				_targetNpc = (LsimulatorNpcInstance) target;
+				_pc = (PcInstance) attacker;
+				_targetNpc = (NpcInstance) target;
 			}
 		}
 		else {
-			if (target instanceof LsimulatorPcInstance) {
+			if (target instanceof PcInstance) {
 				_calcType = NPC_PC;
-				_npc = (LsimulatorNpcInstance) attacker;
-				_targetPc = (LsimulatorPcInstance) target;
+				_npc = (NpcInstance) attacker;
+				_targetPc = (PcInstance) target;
 			}
 			else {
 				_calcType = NPC_NPC;
-				_npc = (LsimulatorNpcInstance) attacker;
-				_targetNpc = (LsimulatorNpcInstance) target;
+				_npc = (NpcInstance) attacker;
+				_targetNpc = (NpcInstance) target;
 			}
 		}
 	}
@@ -306,8 +306,8 @@ public class LsimulatorMagic {
 		else {
 			defenseLevel = _targetNpc.getLevel();
 			if (skillId == RETURN_TO_NATURE) {
-				if (_targetNpc instanceof LsimulatorSummonInstance) {
-					LsimulatorSummonInstance summon = (LsimulatorSummonInstance) _targetNpc;
+				if (_targetNpc instanceof SummonInstance) {
+					SummonInstance summon = (SummonInstance) _targetNpc;
 					defenseLevel = summon.getMaster().getLevel();
 				}
 			}
@@ -321,16 +321,16 @@ public class LsimulatorMagic {
 
 			// オリジナルINTによる魔法命中
 			if ((_calcType == PC_PC) || (_calcType == PC_NPC)) {
-				probability += 2 * _pc.getOriginalMagicHit();
+				probability += ( _pc.getOriginalMagicHit() << 1 );
 			}
 		}
 		else if (skillId == SHOCK_STUN) {
 			// 成功確率は 基本確率 + LV差1毎に+-2%
-			probability = l1skills.getProbabilityValue() + (attackLevel - defenseLevel) * 2;
+			probability = l1skills.getProbabilityValue() + ( (attackLevel - defenseLevel) << 1 );
 
 			// オリジナルINTによる魔法命中
 			if ((_calcType == PC_PC) || (_calcType == PC_NPC)) {
-				probability += 2 * _pc.getOriginalMagicHit();
+				probability += ( _pc.getOriginalMagicHit() << 1 );
 			}
 		}
 		else if (skillId == COUNTER_BARRIER) {
@@ -339,7 +339,7 @@ public class LsimulatorMagic {
 
 			// オリジナルINTによる魔法命中
 			if ((_calcType == PC_PC) || (_calcType == PC_NPC)) {
-				probability += 2 * _pc.getOriginalMagicHit();
+				probability += ( _pc.getOriginalMagicHit() << 1 );
 			}
 		}
 		else if ((skillId == GUARD_BRAKE) || (skillId == RESIST_FEAR) || (skillId == HORROR_OF_DEATH)) {
@@ -360,7 +360,7 @@ public class LsimulatorMagic {
 
 			// オリジナルINTによる魔法命中
 			if ((_calcType == PC_PC) || (_calcType == PC_NPC)) {
-				probability += 2 * _pc.getOriginalMagicHit();
+				probability += ( _pc.getOriginalMagicHit() << 1 );
 			}
 
 			if (probability >= getTargetMr()) {
@@ -398,20 +398,20 @@ public class LsimulatorMagic {
 
 			// オリジナルINTによる魔法命中
 			if ((_calcType == PC_PC) || (_calcType == PC_NPC)) {
-				probability += 2 * _pc.getOriginalMagicHit();
+				probability += ( _pc.getOriginalMagicHit() << 1 );
 			}
 
 			probability -= getTargetMr();
 
 			if (skillId == TAMING_MONSTER) {
 				double probabilityRevision = 1;
-				if ((_targetNpc.getMaxHp() * 1 / 4) > _targetNpc.getCurrentHp()) {
+				if ((_targetNpc.getMaxHp() >> 2 ) > _targetNpc.getCurrentHp()) {
 					probabilityRevision = 1.3;
 				}
-				else if ((_targetNpc.getMaxHp() * 2 / 4) > _targetNpc.getCurrentHp()) {
+				else if ((_targetNpc.getMaxHp()  >> 1 ) > _targetNpc.getCurrentHp()) {
 					probabilityRevision = 1.2;
 				}
-				else if ((_targetNpc.getMaxHp() * 3 / 4) > _targetNpc.getCurrentHp()) {
+				else if ( ( (_targetNpc.getMaxHp() * 3) >> 2 ) > _targetNpc.getCurrentHp()) {
 					probabilityRevision = 1.1;
 				}
 				probability *= probabilityRevision;
@@ -426,7 +426,7 @@ public class LsimulatorMagic {
 		}
 		else if (skillId == SHOCK_STUN) {
 			if ((_calcType == PC_PC) || (_calcType == NPC_PC)) {
-				probability -= 2 * _targetPc.getRegistStun();
+				probability -= ( _targetPc.getRegistStun() << 1 );
 			}
 		}
 		else if (skillId == CURSE_PARALYZE) {
@@ -635,20 +635,20 @@ public class LsimulatorMagic {
 				isNowWar = WarTimeController.getInstance().isNowWar(castleId);
 			}
 			if (!isNowWar) {
-				if (_npc instanceof LsimulatorPetInstance) {
-					dmg /= 8;
+				if (_npc instanceof PetInstance) {
+					dmg = (int) dmg >> 3 ;
 				}
-				if (_npc instanceof LsimulatorSummonInstance) {
-					LsimulatorSummonInstance summon = (LsimulatorSummonInstance) _npc;
+				if (_npc instanceof SummonInstance) {
+					SummonInstance summon = (SummonInstance) _npc;
 					if (summon.isExsistMaster()) {
-						dmg /= 8;
+						dmg = (int) dmg >> 3 ;
 					}
 				}
 			}
 		}
 
-		if (_targetPc.hasSkillEffect(IMMUNE_TO_HARM)) {
-			dmg /= 2;
+		if (_targetPc.hasSkillEffect(IMMUNE_TO_HARM)) { // 傷害減半
+			dmg = (int) dmg >> 1 ;
 		}
 		// 疼痛的歡愉傷害：(最大血量 - 目前血量 /5)
 		if (skillId == JOY_OF_PAIN) {
@@ -679,7 +679,7 @@ public class LsimulatorMagic {
 		}
 
 		if (_calcType == NPC_PC) {
-			if ((_npc instanceof LsimulatorPetInstance) || (_npc instanceof LsimulatorSummonInstance)) {
+			if ((_npc instanceof PetInstance) || (_npc instanceof SummonInstance)) {
 				// 目標在安區、攻擊者在安區、NOPVP
 				if ((_targetPc.getZoneType() == 1) || (_npc.getZoneType() == 1)
 						|| (_targetPc.checkNonPvP(_targetPc, _npc))) {
@@ -774,25 +774,22 @@ public class LsimulatorMagic {
 				isNowWar = WarTimeController.getInstance().isNowWar(castleId);
 			}
 			if (!isNowWar) {
-				if (_targetNpc instanceof LsimulatorPetInstance) {
-					dmg /= 8;
+				if (_targetNpc instanceof PetInstance) {
+					dmg = (int) dmg >> 3 ;
 				}
-				if (_targetNpc instanceof LsimulatorSummonInstance) {
-					LsimulatorSummonInstance summon = (LsimulatorSummonInstance) _targetNpc;
+				if (_targetNpc instanceof SummonInstance) {
+					SummonInstance summon = (SummonInstance) _targetNpc;
 					if (summon.isExsistMaster()) {
-						dmg /= 8;
+						dmg = (int) dmg >> 3 ;
 					}
 				}
 			}
 		}
-
-		if (_targetNpc.hasSkillEffect(ICE_LANCE)) {
-			dmg = 0;
-		} else if (_targetNpc.hasSkillEffect(FREEZING_BLIZZARD)) {
-			dmg = 0;
-		} else if (_targetNpc.hasSkillEffect(FREEZING_BREATH)) {
-			dmg = 0;
-		} else if (_targetNpc.hasSkillEffect(EARTH_BIND)) {
+                                    // 可整合
+		if (_targetNpc.hasSkillEffect(ICE_LANCE)
+                                     || _targetNpc.hasSkillEffect(FREEZING_BLIZZARD) 
+                                     || _targetNpc.hasSkillEffect(FREEZING_BREATH) 
+                                     || _targetNpc.hasSkillEffect(EARTH_BIND)) {
 			dmg = 0;
 		}
 
@@ -803,8 +800,8 @@ public class LsimulatorMagic {
 			}
 		}
 		if (_calcType == NPC_NPC) {
-			if (((_npc instanceof LsimulatorPetInstance) || (_npc instanceof LsimulatorSummonInstance))
-					&& ((_targetNpc instanceof LsimulatorPetInstance) || (_targetNpc instanceof LsimulatorSummonInstance))) {
+			if (((_npc instanceof PetInstance) || (_npc instanceof SummonInstance))
+					&& ((_targetNpc instanceof PetInstance) || (_targetNpc instanceof SummonInstance))) {
 				// 目標在安區、攻擊者在安區
 				if ((_targetNpc.getZoneType() == 1) || (_npc.getZoneType() == 1)) {
 					dmg = 0;
@@ -831,7 +828,7 @@ public class LsimulatorMagic {
 
 		if ((_calcType == PC_PC) || (_calcType == PC_NPC)) {
 			int weaponAddDmg = 0; // 武器による追加ダメージ
-			LsimulatorItemInstance weapon = _pc.getWeapon();
+			ItemInstance weapon = _pc.getWeapon();
 			if (weapon != null) {
 				weaponAddDmg = weapon.getItem().getMagicDmgModifier();
 			}
@@ -917,7 +914,7 @@ public class LsimulatorMagic {
 		double mrFloor = 0;
 		if ((_calcType == PC_PC) || (_calcType == PC_NPC)) {
 			if (mr <= 100) {
-				mrFloor = Math.floor((mr - _pc.getOriginalMagicHit()) / 2);
+				mrFloor = Math.floor(   (mr - _pc.getOriginalMagicHit()) >> 1 );
 			}
 			else if (mr >= 100) {
 				mrFloor = Math.floor((mr - _pc.getOriginalMagicHit()) / 10);
@@ -934,7 +931,7 @@ public class LsimulatorMagic {
 		else if ((_calcType == NPC_PC) || (_calcType == NPC_NPC)) {
 			int rnd = Random.nextInt(100) + 1;
 			if (mr >= rnd) {
-				dmg /= 2;
+				dmg >>= 1;
 			}
 		}
 

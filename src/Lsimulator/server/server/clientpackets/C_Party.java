@@ -16,7 +16,7 @@ package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorParty;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Party;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -33,7 +33,7 @@ public class C_Party extends ClientBasePacket {
 	public C_Party(byte abyte0[], ClientThread clientthread) {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if ((pc == null) || pc.isGhost()) {
 			return;
 		}

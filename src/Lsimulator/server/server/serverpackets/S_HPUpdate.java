@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.IntRange;
 
 public class S_HPUpdate extends ServerBasePacket {
@@ -25,7 +25,7 @@ public class S_HPUpdate extends ServerBasePacket {
 		buildPacket(currentHp, maxHp);
 	}
 
-	public S_HPUpdate(LsimulatorPcInstance pc) {
+	public S_HPUpdate(PcInstance pc) {
 		buildPacket(pc.getCurrentHp(), pc.getMaxHp());
 	}
 

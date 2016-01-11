@@ -27,12 +27,12 @@ import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.WarTimeController;
 import Lsimulator.server.server.datatables.SkillsTable;
 import Lsimulator.server.server.datatables.WeaponSkillTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.model.skill.LsimulatorSkillUse;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
 import Lsimulator.server.server.serverpackets.S_EffectLocation;
@@ -44,7 +44,7 @@ import Lsimulator.server.server.templates.LsimulatorSkills;
 import Lsimulator.server.server.utils.Random;
 
 // Referenced classes of package Lsimulator.server.server.model:
-// LsimulatorPcInstance
+// PcInstance
 
 public class LsimulatorWeaponSkill {
 
@@ -130,7 +130,7 @@ public class LsimulatorWeaponSkill {
 		return _attr;
 	}
 
-	public static double getWeaponSkillDamage(LsimulatorPcInstance pc, LsimulatorCharacter cha,
+	public static double getWeaponSkillDamage(PcInstance pc, LsimulatorCharacter cha,
 			int weaponId) {
 		LsimulatorWeaponSkill weaponSkill = WeaponSkillTable.getInstance().getTemplate(
 				weaponId);
@@ -200,17 +200,17 @@ public class LsimulatorWeaponSkill {
 
 				// 攻撃対象がMOBの場合は、範囲内のMOBにのみ当たる
 				// 攻撃対象がPC,Summon,Petの場合は、範囲内のPC,Summon,Pet,MOBに当たる
-				if (cha instanceof LsimulatorMonsterInstance) {
-					if (!(object instanceof LsimulatorMonsterInstance)) {
+				if (cha instanceof MonsterInstance) {
+					if (!(object instanceof MonsterInstance)) {
 						continue;
 					}
 				}
-				if ((cha instanceof LsimulatorPcInstance)
-						|| (cha instanceof LsimulatorSummonInstance)
-						|| (cha instanceof LsimulatorPetInstance)) {
-					if (!((object instanceof LsimulatorPcInstance)
-							|| (object instanceof LsimulatorSummonInstance)
-							|| (object instanceof LsimulatorPetInstance) || (object instanceof LsimulatorMonsterInstance))) {
+				if ((cha instanceof PcInstance)
+						|| (cha instanceof SummonInstance)
+						|| (cha instanceof PetInstance)) {
+					if (!((object instanceof PcInstance)
+							|| (object instanceof SummonInstance)
+							|| (object instanceof PetInstance) || (object instanceof MonsterInstance))) {
 						continue;
 					}
 				}
@@ -223,15 +223,15 @@ public class LsimulatorWeaponSkill {
 				}
 				if (!isNowWar) { // 非攻城戰區域
 					// 對象不是怪物 且在安全區 不會打到
-					if ( !(object instanceof LsimulatorMonsterInstance) && ((LsimulatorCharacter)object).getZoneType()== 1 ) 
+					if ( !(object instanceof MonsterInstance) && ((LsimulatorCharacter)object).getZoneType()== 1 ) 
 						continue;
 					// 寵物減傷
-					if (object instanceof LsimulatorPetInstance)
-						damage /= 8;
-					else if (object instanceof LsimulatorSummonInstance) {
-						LsimulatorSummonInstance summon = (LsimulatorSummonInstance) object;
+					if (object instanceof PetInstance)
+						damage = (int) damage >> 3;
+					else if (object instanceof SummonInstance) {
+						SummonInstance summon = (SummonInstance) object;
 						if (summon.isExsistMaster())
-							damage /= 8;
+                                                                                                                    damage = (int) damage >> 3;
 					}
 				}
 				
@@ -240,17 +240,17 @@ public class LsimulatorWeaponSkill {
 				if (damage <= 0) {
 					continue;
 				}
-				if (object instanceof LsimulatorPcInstance) {
-					LsimulatorPcInstance targetPc = (LsimulatorPcInstance) object;
+				if (object instanceof PcInstance) {
+					PcInstance targetPc = (PcInstance) object;
 					targetPc.sendPackets(new S_DoActionGFX(targetPc.getId(),
 							ActionCodes.ACTION_Damage));
 					targetPc.broadcastPacket(new S_DoActionGFX(
 							targetPc.getId(), ActionCodes.ACTION_Damage));
 					targetPc.receiveDamage(pc, (int) damage, false);
-				} else if ((object instanceof LsimulatorSummonInstance)
-						|| (object instanceof LsimulatorPetInstance)
-						|| (object instanceof LsimulatorMonsterInstance)) {
-					LsimulatorNpcInstance targetNpc = (LsimulatorNpcInstance) object;
+				} else if ((object instanceof SummonInstance)
+						|| (object instanceof PetInstance)
+						|| (object instanceof MonsterInstance)) {
+					NpcInstance targetNpc = (NpcInstance) object;
 					targetNpc.broadcastPacket(new S_DoActionGFX(targetNpc
 							.getId(), ActionCodes.ACTION_Damage));
 					targetNpc.receiveDamage(pc, (int) damage);
@@ -261,7 +261,7 @@ public class LsimulatorWeaponSkill {
 		return calcDamageReduction(pc, cha, damage, weaponSkill.getAttr());
 	}
 
-	public static double getBaphometStaffDamage(LsimulatorPcInstance pc, LsimulatorCharacter cha) {
+	public static double getBaphometStaffDamage(PcInstance pc, LsimulatorCharacter cha) {
 		double dmg = 0;
 		int chance = Random.nextInt(100) + 1;
 		if (14 >= chance) {
@@ -282,12 +282,12 @@ public class LsimulatorWeaponSkill {
 	}
 
 	/** 骰子匕首 */
-	public static double getDiceDaggerDamage(LsimulatorPcInstance pc, LsimulatorCharacter cha,
-			LsimulatorItemInstance weapon) {
+	public static double getDiceDaggerDamage(PcInstance pc, LsimulatorCharacter cha,
+			ItemInstance weapon) {
 		double dmg = 0;
 		int chance = Random.nextInt(100) + 1;
 		if (2 >= chance) {
-			dmg = cha.getCurrentHp() * 2 / 3;
+			dmg = ( cha.getCurrentHp() << 1 ) / 3;
 			if (cha.getCurrentHp() - dmg < 0) {
 				dmg = 0;
 			}
@@ -299,7 +299,7 @@ public class LsimulatorWeaponSkill {
 		return dmg;
 	}
 
-	public static double getKiringkuDamage(LsimulatorPcInstance pc, LsimulatorCharacter cha) {
+	public static double getKiringkuDamage(PcInstance pc, LsimulatorCharacter cha) {
 		int dmg = 0;
 		int dice = 5;
 		int diceCount = 2;
@@ -346,7 +346,7 @@ public class LsimulatorWeaponSkill {
 		return calcDamageReduction(pc, cha, dmg, 0);
 	}
 
-	public static double getAreaSkillWeaponDamage(LsimulatorPcInstance pc,
+	public static double getAreaSkillWeaponDamage(PcInstance pc,
 			LsimulatorCharacter cha, int weaponId) {
 		double dmg = 0;
 		int probability = 0;
@@ -407,17 +407,17 @@ public class LsimulatorWeaponSkill {
 
 				// 攻撃対象がMOBの場合は、範囲内のMOBにのみ当たる
 				// 攻撃対象がPC,Summon,Petの場合は、範囲内のPC,Summon,Pet,MOBに当たる
-				if (cha instanceof LsimulatorMonsterInstance) {
-					if (!(object instanceof LsimulatorMonsterInstance)) {
+				if (cha instanceof MonsterInstance) {
+					if (!(object instanceof MonsterInstance)) {
 						continue;
 					}
 				}
-				if ((cha instanceof LsimulatorPcInstance)
-						|| (cha instanceof LsimulatorSummonInstance)
-						|| (cha instanceof LsimulatorPetInstance)) {
-					if (!((object instanceof LsimulatorPcInstance)
-							|| (object instanceof LsimulatorSummonInstance)
-							|| (object instanceof LsimulatorPetInstance) || (object instanceof LsimulatorMonsterInstance))) {
+				if ((cha instanceof PcInstance)
+						|| (cha instanceof SummonInstance)
+						|| (cha instanceof PetInstance)) {
+					if (!((object instanceof PcInstance)
+							|| (object instanceof SummonInstance)
+							|| (object instanceof PetInstance) || (object instanceof MonsterInstance))) {
 						continue;
 					}
 				}
@@ -426,17 +426,17 @@ public class LsimulatorWeaponSkill {
 				if (dmg <= 0) {
 					continue;
 				}
-				if (object instanceof LsimulatorPcInstance) {
-					LsimulatorPcInstance targetPc = (LsimulatorPcInstance) object;
+				if (object instanceof PcInstance) {
+					PcInstance targetPc = (PcInstance) object;
 					targetPc.sendPackets(new S_DoActionGFX(targetPc.getId(),
 							ActionCodes.ACTION_Damage));
 					targetPc.broadcastPacket(new S_DoActionGFX(
 							targetPc.getId(), ActionCodes.ACTION_Damage));
 					targetPc.receiveDamage(pc, (int) dmg, false);
-				} else if ((object instanceof LsimulatorSummonInstance)
-						|| (object instanceof LsimulatorPetInstance)
-						|| (object instanceof LsimulatorMonsterInstance)) {
-					LsimulatorNpcInstance targetNpc = (LsimulatorNpcInstance) object;
+				} else if ((object instanceof SummonInstance)
+						|| (object instanceof PetInstance)
+						|| (object instanceof MonsterInstance)) {
+					NpcInstance targetNpc = (NpcInstance) object;
 					targetNpc.broadcastPacket(new S_DoActionGFX(targetNpc
 							.getId(), ActionCodes.ACTION_Damage));
 					targetNpc.receiveDamage(pc, (int) dmg);
@@ -446,7 +446,7 @@ public class LsimulatorWeaponSkill {
 		return calcDamageReduction(pc, cha, dmg, attr);
 	}
 
-	public static double getLightningEdgeDamage(LsimulatorPcInstance pc, LsimulatorCharacter cha) {
+	public static double getLightningEdgeDamage(PcInstance pc, LsimulatorCharacter cha) {
 		double dmg = 0;
 		int chance = Random.nextInt(100) + 1;
 		if (4 >= chance) {
@@ -456,7 +456,7 @@ public class LsimulatorWeaponSkill {
 			if (pc.hasSkillEffect(BERSERKERS)) {
 				bsk = 0.2;
 			}
-			dmg = (intel + sp) * (2 + bsk) + Random.nextInt(intel + sp) * 2;
+			dmg = (intel + sp) * (2 + bsk) + ( Random.nextInt(intel + sp) << 1 ) ;
 
 			pc.sendPackets(new S_SkillSound(cha.getId(), 10));
 			pc.broadcastPacket(new S_SkillSound(cha.getId(), 10));
@@ -464,7 +464,7 @@ public class LsimulatorWeaponSkill {
 		return calcDamageReduction(pc, cha, dmg, LsimulatorSkills.ATTR_WIND);
 	}
 
-	public static void giveArkMageDiseaseEffect(LsimulatorPcInstance pc, LsimulatorCharacter cha) {
+	public static void giveArkMageDiseaseEffect(PcInstance pc, LsimulatorCharacter cha) {
 		int chance = Random.nextInt(1000) + 1;
 		int probability = (5 - ((cha.getMr() / 10) * 5)) * 10;
 		if (probability == 0) {
@@ -477,7 +477,7 @@ public class LsimulatorWeaponSkill {
 		}
 	}
 
-	public static void giveFettersEffect(LsimulatorPcInstance pc, LsimulatorCharacter cha) {
+	public static void giveFettersEffect(PcInstance pc, LsimulatorCharacter cha) {
 		int fettersTime = 8000;
 		if (isFreeze(cha)) { // 凍結状態orカウンターマジック中
 			return;
@@ -485,18 +485,18 @@ public class LsimulatorWeaponSkill {
 		if ((Random.nextInt(100) + 1) <= 2) {
 			LsimulatorEffectSpawn.getInstance().spawnEffect(81182, fettersTime,
 					cha.getX(), cha.getY(), cha.getMapId());
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance targetPc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance targetPc = (PcInstance) cha;
 				targetPc.setSkillEffect(STATUS_FREEZE, fettersTime);
 				targetPc.sendPackets(new S_SkillSound(targetPc.getId(), 4184));
 				targetPc.broadcastPacket(new S_SkillSound(targetPc.getId(),
 						4184));
 				targetPc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_BIND,
 						true));
-			} else if ((cha instanceof LsimulatorMonsterInstance)
-					|| (cha instanceof LsimulatorSummonInstance)
-					|| (cha instanceof LsimulatorPetInstance)) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			} else if ((cha instanceof MonsterInstance)
+					|| (cha instanceof SummonInstance)
+					|| (cha instanceof PetInstance)) {
+				NpcInstance npc = (NpcInstance) cha;
 				npc.setSkillEffect(STATUS_FREEZE, fettersTime);
 				npc.broadcastPacket(new S_SkillSound(npc.getId(), 4184));
 				npc.setParalyzed(true);
@@ -504,7 +504,7 @@ public class LsimulatorWeaponSkill {
 		}
 	}
 
-	public static double calcDamageReduction(LsimulatorPcInstance pc, LsimulatorCharacter cha,
+	public static double calcDamageReduction(PcInstance pc, LsimulatorCharacter cha,
 			double dmg, int attr) {
 		// 凍結状態orカウンターマジック中
 		if (isFreeze(cha)) {
@@ -515,7 +515,7 @@ public class LsimulatorWeaponSkill {
 		int mr = cha.getMr();
 		double mrFloor = 0;
 		if (mr <= 100) {
-			mrFloor = Math.floor((mr - pc.getOriginalMagicHit()) / 2);
+			mrFloor = Math.floor( (mr - pc.getOriginalMagicHit()) >> 1 );
 		} else if (mr >= 100) {
 			mrFloor = Math.floor((mr - pc.getOriginalMagicHit()) / 10);
 		}
@@ -576,8 +576,8 @@ public class LsimulatorWeaponSkill {
 			int castgfx = SkillsTable.getInstance().getTemplate(COUNTER_MAGIC)
 					.getCastGfx();
 			cha.broadcastPacket(new S_SkillSound(cha.getId(), castgfx));
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillSound(pc.getId(), castgfx));
 			}
 			return true;

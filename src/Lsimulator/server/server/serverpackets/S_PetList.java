@@ -17,10 +17,10 @@ package Lsimulator.server.server.serverpackets;
 import java.util.List;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.utils.collections.Lists;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
@@ -32,14 +32,14 @@ public class S_PetList extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_PetList(int npcObjId, LsimulatorPcInstance pc) {
+	public S_PetList(int npcObjId, PcInstance pc) {
 		buildPacket(npcObjId, pc);
 	}
 
-	private void buildPacket(int npcObjId, LsimulatorPcInstance pc) {
-		List<LsimulatorItemInstance> amuletList = Lists.newList();
+	private void buildPacket(int npcObjId, PcInstance pc) {
+		List<ItemInstance> amuletList = Lists.newList();
 		// 判斷身上是否有寵物項圈！
-		for (LsimulatorItemInstance item : pc.getInventory().getItems()) {
+		for (ItemInstance item : pc.getInventory().getItems()) {
 			if ((item.getItem().getItemId() == 40314) || (item.getItem().getItemId() == 40316)) {
 				if (!isWithdraw(pc, item)) {
 					amuletList.add(item);
@@ -52,7 +52,7 @@ public class S_PetList extends ServerBasePacket {
 			writeD(npcObjId);
 			writeH(amuletList.size());
 			writeC(0x0c);
-			for (LsimulatorItemInstance item : amuletList) {
+			for (ItemInstance item : amuletList) {
 				writeD(item.getId());
 				writeC(0x00);
 				writeH(item.get_gfxid());
@@ -67,10 +67,10 @@ public class S_PetList extends ServerBasePacket {
 		writeD(0x00000073); // Price
 	}
 
-	private boolean isWithdraw(LsimulatorPcInstance pc, LsimulatorItemInstance item) {
-		for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-			if (petNpc instanceof LsimulatorPetInstance) {
-				LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+	private boolean isWithdraw(PcInstance pc, ItemInstance item) {
+		for (NpcInstance petNpc : pc.getPetList().values()) {
+			if (petNpc instanceof PetInstance) {
+				PetInstance pet = (PetInstance) petNpc;
 				if (item.getId() == pet.getItemObjId()) {
 					return true;
 				}

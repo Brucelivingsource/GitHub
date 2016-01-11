@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.server.datatables.NpcTable;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.templates.LsimulatorNpc;
 import Lsimulator.server.server.utils.LsimulatorSpawnUtil;
@@ -35,7 +35,7 @@ public class LsimulatorSpawnCmd implements LsimulatorCommandExecutor {
 		return new LsimulatorSpawnCmd();
 	}
 
-	private void sendErrorMessage(LsimulatorPcInstance pc, String cmdName) {
+	private void sendErrorMessage(PcInstance pc, String cmdName) {
 		String errorMsg = "請輸入: " + cmdName + " npcid|name [數量] [範圍] 。";
 		pc.sendPackets(new S_SystemMessage(errorMsg));
 	}
@@ -51,7 +51,7 @@ public class LsimulatorSpawnCmd implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer tok = new StringTokenizer(arg);
 			String nameId = tok.nextToken();

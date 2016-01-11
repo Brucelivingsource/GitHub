@@ -18,9 +18,9 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorPcInventory;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -36,7 +36,7 @@ public class C_SelectList extends ClientBasePacket {
 	public C_SelectList(byte abyte0[], ClientThread clientthread) {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -49,8 +49,8 @@ public class C_SelectList extends ClientBasePacket {
 		if (npcObjectId != 0) { // 武器的修理
 			LsimulatorObject obj = LsimulatorWorld.getInstance().findObject(npcObjectId);
 			if (obj != null) {
-				if (obj instanceof LsimulatorNpcInstance) {
-					LsimulatorNpcInstance npc = (LsimulatorNpcInstance) obj;
+				if (obj instanceof NpcInstance) {
+					NpcInstance npc = (NpcInstance) obj;
 					int difflocx = Math.abs(pc.getX() - npc.getX());
 					int difflocy = Math.abs(pc.getY() - npc.getY());
 					// 3格以上的距離視為無效請求
@@ -61,7 +61,7 @@ public class C_SelectList extends ClientBasePacket {
 			}
 
 			LsimulatorPcInventory pcInventory = pc.getInventory();
-			LsimulatorItemInstance item = pcInventory.getItem(itemObjectId);
+			ItemInstance item = pcInventory.getItem(itemObjectId);
 			int cost = item.get_durability() * 200;
 			if (!pc.getInventory().consumeItem(LsimulatorItemId.ADENA, cost)) {
 				return;

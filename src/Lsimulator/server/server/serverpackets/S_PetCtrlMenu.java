@@ -16,10 +16,10 @@ package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.model.LsimulatorCharacter;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 
 public class S_PetCtrlMenu extends ServerBasePacket {
-	public S_PetCtrlMenu(LsimulatorCharacter cha, LsimulatorNpcInstance npc, boolean open) {
+	public S_PetCtrlMenu(LsimulatorCharacter cha, NpcInstance npc, boolean open) {
 		writeC(Opcodes.S_OPCODE_CHARRESET); // 3.80C 更動
 		writeC(0x0c);
 

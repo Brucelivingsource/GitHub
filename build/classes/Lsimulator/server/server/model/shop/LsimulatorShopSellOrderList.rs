@@ -1,2 +1,0 @@
-Lsimulator.server.server.model.shop.LsimulatorShopSellOrder
-Lsimulator.server.server.model.shop.LsimulatorShopSellOrderList

@@ -22,8 +22,8 @@ import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.datatables.MobGroupTable;
 import Lsimulator.server.server.datatables.NpcTable;
 import Lsimulator.server.server.model.LsimulatorMobGroupInfo;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 import Lsimulator.server.server.templates.LsimulatorMobGroup;
 import Lsimulator.server.server.templates.LsimulatorNpcCount;
 
@@ -51,7 +51,7 @@ public class LsimulatorMobGroupSpawn {
 		return _instance;
 	}
 
-	public void doSpawn(LsimulatorNpcInstance leader, int groupId,
+	public void doSpawn(NpcInstance leader, int groupId,
 			boolean isRespawnScreen, boolean isInitSpawn) {
 
 		LsimulatorMobGroup mobGroup = MobGroupTable.getInstance().getTemplate(groupId);
@@ -59,7 +59,7 @@ public class LsimulatorMobGroupSpawn {
 			return;
 		}
 
-		LsimulatorNpcInstance mob;
+		NpcInstance mob;
 		_isRespawnScreen = isRespawnScreen;
 		_isInitSpawn = isInitSpawn;
 
@@ -81,8 +81,8 @@ public class LsimulatorMobGroupSpawn {
 		}
 	}
 
-	private LsimulatorNpcInstance spawn(LsimulatorNpcInstance leader, int npcId) {
-		LsimulatorNpcInstance mob = null;
+	private NpcInstance spawn(NpcInstance leader, int npcId) {
+		NpcInstance mob = null;
 		try {
 			mob = NpcTable.getInstance().newNpcInstance(npcId);
 
@@ -103,37 +103,37 @@ public class LsimulatorMobGroupSpawn {
 			mob.setHomeX(mob.getX());
 			mob.setHomeY(mob.getY());
 
-			if (mob instanceof LsimulatorMonsterInstance) {
-				((LsimulatorMonsterInstance) mob).initHideForMinion(leader);
+			if (mob instanceof MonsterInstance) {
+				((MonsterInstance) mob).initHideForMinion(leader);
 			}
 
 			mob.setSpawn(leader.getSpawn());
 			mob.setreSpawn(leader.isReSpawn());
 			mob.setSpawnNumber(leader.getSpawnNumber());
 
-			if (mob instanceof LsimulatorMonsterInstance) {
+			if (mob instanceof MonsterInstance) {
 				if (mob.getMapId() == 666) {
-					((LsimulatorMonsterInstance) mob).set_storeDroped(true);
+					((MonsterInstance) mob).set_storeDroped(true);
 				}
 			}
 
 			LsimulatorWorld.getInstance().storeObject(mob);
 			LsimulatorWorld.getInstance().addVisibleObject(mob);
 
-			if (mob instanceof LsimulatorMonsterInstance) {
+			if (mob instanceof MonsterInstance) {
 				if (!_isInitSpawn && mob.getHiddenStatus() == 0) {
 					mob.onNpcAI(); // モンスターのＡＩを開始
 				}
 			}
 			mob.turnOnOffLight();
-			mob.startChat(LsimulatorNpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
+			mob.startChat(NpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
 		} catch (Exception e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 		return mob;
 	}
 
-	private boolean canSpawn(LsimulatorNpcInstance mob) {
+	private boolean canSpawn(NpcInstance mob) {
 		if (mob.getMap().isInMap(mob.getLocation())
 				&& mob.getMap().isPassable(mob.getLocation())) {
 			if (_isRespawnScreen) {

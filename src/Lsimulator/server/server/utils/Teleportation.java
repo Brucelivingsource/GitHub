@@ -23,11 +23,11 @@ import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorDragonSlayer;
 import Lsimulator.server.server.model.LsimulatorLocation;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.model.map.LsimulatorMap;
 import Lsimulator.server.server.model.map.LsimulatorWorldMap;
 import Lsimulator.server.server.serverpackets.S_CharVisualUpdate;
@@ -46,7 +46,7 @@ public class Teleportation {
 	private Teleportation() {
 	}
 
-	public static void actionTeleportation(final LsimulatorPcInstance pc) {
+	public static void actionTeleportation(final PcInstance pc) {
 		if (pc.isDead() || pc.isTeleport()) {
 			return;
 		}
@@ -106,13 +106,13 @@ public class Teleportation {
 		 * 各ペット毎にUpdateObjectを行う方がコード上ではスマートだが、
 		 * ネットワーク負荷が大きくなる為、一旦Setへ格納して最後にまとめてUpdateObjectする。
 		 */
-		final HashSet<LsimulatorPcInstance> subjects = new HashSet<LsimulatorPcInstance>();
+		final HashSet<PcInstance> subjects = new HashSet<PcInstance>();
 		subjects.add(pc);
 
 		if (!pc.isGhost()) {
 			if (pc.getMap().isTakePets()) {
 				// ペットとサモンも一緒に移動させる。
-				for (final LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
+				for (final NpcInstance petNpc : pc.getPetList().values()) {
 					// テレポート先の設定
 					final LsimulatorLocation loc = pc.getLocation().randomLocation(3, false);
 					int nx = loc.getX();
@@ -123,16 +123,16 @@ public class Teleportation {
 						ny = 32864 + Random.nextInt(5) - 3;
 					}
 					teleport(petNpc, nx, ny, mapId, head);
-					if (petNpc instanceof LsimulatorSummonInstance) { // サモンモンスター
-						final LsimulatorSummonInstance summon = (LsimulatorSummonInstance) petNpc;
+					if (petNpc instanceof SummonInstance) { // サモンモンスター
+						final SummonInstance summon = (SummonInstance) petNpc;
 						pc.sendPackets(new S_SummonPack(summon, pc));
 					}
-					else if (petNpc instanceof LsimulatorPetInstance) { // ペット
-						final LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+					else if (petNpc instanceof PetInstance) { // ペット
+						final PetInstance pet = (PetInstance) petNpc;
 						pc.sendPackets(new S_PetPack(pet, pc));
 					}
 
-					for (final LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(petNpc)) {
+					for (final PcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(petNpc)) {
 						// テレポート元と先に同じPCが居た場合、正しく更新されない為、一度removeする。
 						visiblePc.removeKnownObject(petNpc);
 						subjects.add(visiblePc);
@@ -140,7 +140,7 @@ public class Teleportation {
 				}
 
 				// マジックドールも一緒に移動させる。
-				for (final LsimulatorDollInstance doll : pc.getDollList().values()) {
+				for (final DollInstance doll : pc.getDollList().values()) {
 					// テレポート先の設定
 					final LsimulatorLocation loc = pc.getLocation().randomLocation(3, false);
 					final int nx = loc.getX();
@@ -149,7 +149,7 @@ public class Teleportation {
 					teleport(doll, nx, ny, mapId, head);
 					pc.sendPackets(new S_DollPack(doll));
 
-					for (final LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(doll)) {
+					for (final PcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(doll)) {
 						// テレポート元と先に同じPCが居た場合、正しく更新されない為、一度removeする。
 						visiblePc.removeKnownObject(doll);
 						subjects.add(visiblePc);
@@ -157,7 +157,7 @@ public class Teleportation {
 				}
 			}
 			else {
-				for (final LsimulatorDollInstance doll : pc.getDollList().values()) {
+				for (final DollInstance doll : pc.getDollList().values()) {
 					// テレポート先の設定
 					final LsimulatorLocation loc = pc.getLocation().randomLocation(3, false);
 					final int nx = loc.getX();
@@ -166,7 +166,7 @@ public class Teleportation {
 					teleport(doll, nx, ny, mapId, head);
 					pc.sendPackets(new S_DollPack(doll));
 
-					for (final LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(doll)) {
+					for (final PcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(doll)) {
 						// テレポート元と先に同じPCが居た場合、正しく更新されない為、一度removeする。
 						visiblePc.removeKnownObject(doll);
 						subjects.add(visiblePc);
@@ -175,7 +175,7 @@ public class Teleportation {
 			}
 		}
 
-		for (final LsimulatorPcInstance updatePc : subjects) {
+		for (final PcInstance updatePc : subjects) {
 			updatePc.updateObject();
 		}
 
@@ -197,7 +197,7 @@ public class Teleportation {
 		}
 	}
 
-	private static void teleport(LsimulatorNpcInstance npc, int x, int y, short map, int head) {
+	private static void teleport(NpcInstance npc, int x, int y, short map, int head) {
 		LsimulatorWorld.getInstance().moveVisibleObject(npc, map);
 		LsimulatorWorldMap.getInstance().getMap(npc.getMapId()).setPassable(npc.getX(), npc.getY(), true);
 		npc.setX(x);

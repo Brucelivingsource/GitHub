@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.command.executor;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 
 public class LsimulatorPatrol implements LsimulatorCommandExecutor {
@@ -26,7 +26,7 @@ public class LsimulatorPatrol implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		pc.sendPackets(new S_PacketBox(S_PacketBox.CALL_SOMETHING));
 	}
 }

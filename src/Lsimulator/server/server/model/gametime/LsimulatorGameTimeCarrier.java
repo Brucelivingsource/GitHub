@@ -17,15 +17,15 @@ package Lsimulator.server.server.model.gametime;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTimeClock;
 import Lsimulator.server.server.serverpackets.S_GameTime;
 
 public class LsimulatorGameTimeCarrier extends TimerTask {
 	private static final Timer _timer = new Timer();
-	private LsimulatorPcInstance _pc;
+	private PcInstance _pc;
 
-	public LsimulatorGameTimeCarrier(LsimulatorPcInstance pc) {
+	public LsimulatorGameTimeCarrier(PcInstance pc) {
 		_pc = pc;
 	}
 

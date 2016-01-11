@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import java.util.logging.Logger;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ChangeHeading;
 
 /**
@@ -31,7 +31,7 @@ public class C_ChangeHeading extends ClientBasePacket {
 	public C_ChangeHeading(byte[] decrypt, ClientThread client) {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

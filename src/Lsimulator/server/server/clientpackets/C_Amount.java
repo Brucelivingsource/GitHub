@@ -30,9 +30,9 @@ import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.datatables.NpcActionTable;
 import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.model.npc.LsimulatorNpcHtml;
 import Lsimulator.server.server.model.npc.action.LsimulatorNpcAction;
@@ -56,7 +56,7 @@ public class C_Amount extends ClientBasePacket {
 	public C_Amount(byte[] decrypt, ClientThread client) throws Exception {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -67,7 +67,7 @@ public class C_Amount extends ClientBasePacket {
 		String s = readS();
 
 		
-		LsimulatorNpcInstance npc = (LsimulatorNpcInstance) LsimulatorWorld.getInstance().findObject(objectId);
+		NpcInstance npc = (NpcInstance) LsimulatorWorld.getInstance().findObject(objectId);
 		if (npc == null) {
 			return;
 		}
@@ -104,7 +104,7 @@ public class C_Amount extends ClientBasePacket {
 					boardTable.updateAuctionBoard(board);
 					if (nowBidderId != 0) {
 						// 將金幣退還給投標者
-						LsimulatorPcInstance bidPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(nowBidderId);
+						PcInstance bidPc = (PcInstance) LsimulatorWorld.getInstance().findObject(nowBidderId);
 						if (bidPc != null) { // 玩家在線上
 							bidPc.getInventory().storeItem(LsimulatorItemId.ADENA,
 									nowPrice);
@@ -113,7 +113,7 @@ public class C_Amount extends ClientBasePacket {
 							bidPc.sendPackets(new S_ServerMessage(525, String
 									.valueOf(nowPrice)));
 						} else { // 玩家離線中
-							LsimulatorItemInstance item = ItemTable.getInstance().createItem(LsimulatorItemId.ADENA);
+							ItemInstance item = ItemTable.getInstance().createItem(LsimulatorItemId.ADENA);
 							item.setCount(nowPrice);
 							CharactersItemStorage storage = CharactersItemStorage.create();
 							storage.storeItem(nowBidderId, item);
@@ -170,9 +170,9 @@ public class C_Amount extends ClientBasePacket {
 							}
 						}
 						// 租用時間 4小時
-						Timestamp ts = new Timestamp(System.currentTimeMillis() + (60 * 60 * 4 * 1000));
+						Timestamp ts = new Timestamp(System.currentTimeMillis() + ( (60 * 60 * 1000) << 2)  );
 						// 登入旅館資料
-						LsimulatorItemInstance item = ItemTable.getInstance().createItem(40312); // 旅館鑰匙
+						ItemInstance item = ItemTable.getInstance().createItem(40312); // 旅館鑰匙
 						if (item != null) {
 							item.setKeyId(item.getId()); // 鑰匙編號
 							item.setInnNpcId(npcId); // 旅館NPC

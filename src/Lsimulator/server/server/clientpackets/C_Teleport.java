@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.Teleportation;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -31,7 +31,7 @@ public class C_Teleport extends ClientBasePacket {
 	public C_Teleport(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}

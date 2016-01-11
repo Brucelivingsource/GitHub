@@ -17,11 +17,11 @@ package Lsimulator.server.server.serverpackets;
 import java.io.IOException;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_RetrieveElfList extends ServerBasePacket {
-	public S_RetrieveElfList(int objid, LsimulatorPcInstance pc) {
+	public S_RetrieveElfList(int objid, PcInstance pc) {
 		if (pc.getInventory().getSize() < 180) {
 			int size = pc.getDwarfForElfInventory().getSize();
 			if (size > 0) {
@@ -30,7 +30,7 @@ public class S_RetrieveElfList extends ServerBasePacket {
 				writeH(size);
 				writeC(9); // エルフ倉庫
 				for (Object itemObject : pc.getDwarfForElfInventory().getItems()) {
-					LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+					ItemInstance item = (ItemInstance) itemObject;
 					writeD(item.getId());
 					writeC(0);
 					writeH(item.get_gfxid());

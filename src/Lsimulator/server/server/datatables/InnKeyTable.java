@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 import Lsimulator.server.server.utils.SQLUtil;
 
 public class InnKeyTable {
@@ -32,7 +32,7 @@ public class InnKeyTable {
 	private InnKeyTable() {
 	}
 
-	public static void StoreKey(LsimulatorItemInstance item) {
+	public static void StoreKey(ItemInstance item) {
 		java.sql.Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -53,7 +53,7 @@ public class InnKeyTable {
 		}
 	}
 
-	public static void DeleteKey(LsimulatorItemInstance item) {
+	public static void DeleteKey(ItemInstance item) {
 		java.sql.Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -70,7 +70,7 @@ public class InnKeyTable {
 		}
 	}
 
-	public static boolean checkey(LsimulatorItemInstance item) {
+	public static boolean checkey(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;

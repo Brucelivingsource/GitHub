@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 public class S_ItemColor extends ServerBasePacket {
 
@@ -24,14 +24,14 @@ public class S_ItemColor extends ServerBasePacket {
 	/**
 	 * アイテムの色を変更する。祝福・呪い、封印状態が変化した時などに送る
 	 */
-	public S_ItemColor(LsimulatorItemInstance item) {
+	public S_ItemColor(ItemInstance item) {
 		if (item == null) {
 			return;
 		}
 		buildPacket(item);
 	}
 
-	private void buildPacket(LsimulatorItemInstance item) {
+	private void buildPacket(ItemInstance item) {
 		writeC(Opcodes.S_OPCODE_ITEMCOLOR);
 		writeD(item.getId());
 		// 0:祝福 1:通常 2:呪い 3:未鑑定

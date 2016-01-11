@@ -16,7 +16,7 @@ package Lsimulator.server.server.model.map;
 
 import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.datatables.DoorTable;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
 import Lsimulator.server.server.types.Point;
 
 public class LsimulatorV1Map extends LsimulatorMap {
@@ -500,7 +500,7 @@ public class LsimulatorV1Map extends LsimulatorMap {
 
 	@Override
 	public boolean isExistDoor(int x, int y) {
-		for (LsimulatorDoorInstance door : DoorTable.getInstance().getDoorList()) {
+		for (DoorInstance door : DoorTable.getInstance().getDoorList()) {
 			if (_mapId != door.getMapId()) {
 				continue;
 			}

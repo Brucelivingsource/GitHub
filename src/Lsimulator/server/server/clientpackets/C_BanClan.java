@@ -22,7 +22,7 @@ import Lsimulator.server.server.datatables.CharacterTable;
 import Lsimulator.server.server.datatables.ClanMembersTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -39,7 +39,7 @@ public class C_BanClan extends ClientBasePacket {
 	public C_BanClan(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -56,7 +56,7 @@ public class C_BanClan extends ClientBasePacket {
 						return;
 					}
 				}
-				LsimulatorPcInstance tempPc = LsimulatorWorld.getInstance().getPlayer(s);
+				PcInstance tempPc = LsimulatorWorld.getInstance().getPlayer(s);
 				if (tempPc != null) { // 玩家在線上
 					if (tempPc.getClanid() == pc.getClanid()) { // 確定同血盟
 						tempPc.setClanid(0);
@@ -73,7 +73,7 @@ public class C_BanClan extends ClientBasePacket {
 					}
 				} else { // 玩家離線中
 					try {
-						LsimulatorPcInstance restorePc = CharacterTable.getInstance().restoreCharacter(s);
+						PcInstance restorePc = CharacterTable.getInstance().restoreCharacter(s);
 						if (restorePc != null&& restorePc.getClanid() == pc.getClanid()) { // 確定同血盟
 							restorePc.setClanid(0);
 							restorePc.setClanname("");

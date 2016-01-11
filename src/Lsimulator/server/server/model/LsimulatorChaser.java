@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.GeneralThreadPool;
 import Lsimulator.server.server.model.LsimulatorCharacter;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
 import Lsimulator.server.server.serverpackets.S_EffectLocation;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.*;
@@ -36,10 +36,10 @@ public class LsimulatorChaser extends TimerTask {
 	private int _timeCounter = 0;
 	private final int _attr;
 	private final int _gfxid;
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 	private final LsimulatorCharacter _cha;
 
-	public LsimulatorChaser(LsimulatorPcInstance pc, LsimulatorCharacter cha, int attr, int gfxid) {
+	public LsimulatorChaser(PcInstance pc, LsimulatorCharacter cha, int attr, int gfxid) {
 		_cha = cha;
 		_pc = pc;
 		_attr = attr;
@@ -109,22 +109,22 @@ public class LsimulatorChaser extends TimerTask {
 		}
 		_pc.sendPackets(packet);
 		_pc.broadcastPacket(packet);
-		if (_cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) _cha;
+		if (_cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) _cha;
 			pc.sendPackets(new S_DoActionGFX(pc.getId(),
 					ActionCodes.ACTION_Damage));
 			pc.broadcastPacket(new S_DoActionGFX(pc.getId(),
 					ActionCodes.ACTION_Damage));
 			pc.receiveDamage(_pc, damage, false);
-		} else if (_cha instanceof LsimulatorNpcInstance) {
-			LsimulatorNpcInstance npc = (LsimulatorNpcInstance) _cha;
+		} else if (_cha instanceof NpcInstance) {
+			NpcInstance npc = (NpcInstance) _cha;
 			npc.broadcastPacket(new S_DoActionGFX(npc.getId(),
 					ActionCodes.ACTION_Damage));
 			npc.receiveDamage(_pc, (int) damage);
 		}
 	}
 
-	public double getDamage(LsimulatorPcInstance pc, LsimulatorCharacter cha) {
+	public double getDamage(PcInstance pc, LsimulatorCharacter cha) {
 		double dmg = 0;
 		int spByItem = pc.getSp() - pc.getTrueSp();
 		int intel = pc.getInt();
@@ -151,7 +151,7 @@ public class LsimulatorChaser extends TimerTask {
 				* coefficientC * 2.0;
 		dmg = LsimulatorWeaponSkill.calcDamageReduction(pc, cha, dmg, _attr);
 		if (cha.hasSkillEffect(IMMUNE_TO_HARM)) {
-			dmg /= 2.0;
+			dmg = (int) dmg >> 1 ;
 		}
 		return dmg;
 	}

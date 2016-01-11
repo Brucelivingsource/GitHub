@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket, S_SendInvOnLogin
@@ -27,7 +27,7 @@ public class S_OwnCharStatus2 extends ServerBasePacket {
 	 * @param pc 
 	 * @param type 0:不檢查重複的屬性  1:檢查重複的屬性次數
 	 */
-	public S_OwnCharStatus2(LsimulatorPcInstance pc, int type) {
+	public S_OwnCharStatus2(PcInstance pc, int type) {
 		if (type == 0) {
 			buildPacket(pc);
 		} else if (type == 1) {
@@ -42,7 +42,7 @@ public class S_OwnCharStatus2 extends ServerBasePacket {
 	}
 
 	/** 更新六項能力值以及負重 */
-	private void buildPacket(LsimulatorPcInstance pc) {
+	private void buildPacket(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_OWNCHARSTATUS2);
 		writeC(pc.getStr());
 		writeC(pc.getInt());

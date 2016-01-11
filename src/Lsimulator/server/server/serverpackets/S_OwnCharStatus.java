@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTimeClock;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
@@ -26,7 +26,7 @@ public class S_OwnCharStatus extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_OwnCharStatus(LsimulatorPcInstance pc) {
+	public S_OwnCharStatus(PcInstance pc) {
 		int time = LsimulatorGameTimeClock.getInstance().currentTime().getSeconds();
 		time = time - (time % 300);
 		writeC(Opcodes.S_OPCODE_OWNCHARSTATUS);

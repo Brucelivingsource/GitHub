@@ -23,7 +23,7 @@ import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.model.LsimulatorLocation;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
 import Lsimulator.server.server.templates.LsimulatorDoorGfx;
 import Lsimulator.server.server.templates.LsimulatorDoorSpawn;
 import Lsimulator.server.server.utils.collections.Lists;
@@ -33,8 +33,8 @@ public class DoorTable {
 	private static Logger _log = Logger.getLogger(DoorTable.class.getName());
 	private static DoorTable _instance;
 
-	private final Map<LsimulatorLocation, LsimulatorDoorInstance> _doors = Maps.newConcurrentHashMap();
-	private final Map<LsimulatorLocation, LsimulatorDoorInstance> _doorDirections = Maps.newConcurrentHashMap();
+	private final Map<LsimulatorLocation, DoorInstance> _doors = Maps.newConcurrentHashMap();
+	private final Map<LsimulatorLocation, DoorInstance> _doorDirections = Maps.newConcurrentHashMap();
 
 	public static void initialize() {
 		_instance = new DoorTable();
@@ -59,19 +59,19 @@ public class DoorTable {
 		}
 	}
 
-	private void putDirections(LsimulatorDoorInstance door) {
+	private void putDirections(DoorInstance door) {
 		for (LsimulatorLocation key : makeDirectionsKeys(door)) {
 			_doorDirections.put(key, door);
 		}
 	}
 
-	private void removeDirections(LsimulatorDoorInstance door) {
+	private void removeDirections(DoorInstance door) {
 		for (LsimulatorLocation key : makeDirectionsKeys(door)) {
 			_doorDirections.remove(key);
 		}
 	}
 
-	private List<LsimulatorLocation> makeDirectionsKeys(LsimulatorDoorInstance door) {
+	private List<LsimulatorLocation> makeDirectionsKeys(DoorInstance door) {
 		List<LsimulatorLocation> keys = Lists.newArrayList();
 		int left = door.getLeftEdgeLocation();
 		int right = door.getRightEdgeLocation();
@@ -87,12 +87,12 @@ public class DoorTable {
 		return keys;
 	}
 
-	public LsimulatorDoorInstance createDoor(int doorId, LsimulatorDoorGfx gfx, LsimulatorLocation loc,
+	public DoorInstance createDoor(int doorId, LsimulatorDoorGfx gfx, LsimulatorLocation loc,
 			int hp, int keeper, boolean isOpening) {
 		if (_doors.containsKey(loc)) {
 			return null;
 		}
-		LsimulatorDoorInstance door = new LsimulatorDoorInstance(doorId, gfx, loc, hp, keeper, isOpening);
+		DoorInstance door = new DoorInstance(doorId, gfx, loc, hp, keeper, isOpening);
 
 		door.setId(IdFactory.getInstance().nextId());
 
@@ -105,7 +105,7 @@ public class DoorTable {
 	}
 
 	public void deleteDoorByLocation(LsimulatorLocation loc) {
-		LsimulatorDoorInstance door = _doors.remove(loc);
+		DoorInstance door = _doors.remove(loc);
 		if (door != null) {
 			removeDirections(door);
 			door.deleteMe();
@@ -113,15 +113,15 @@ public class DoorTable {
 	}
 
 	public int getDoorDirection(LsimulatorLocation loc) {
-		LsimulatorDoorInstance door = _doorDirections.get(loc);
+		DoorInstance door = _doorDirections.get(loc);
 		if (door == null || door.getOpenStatus() == ActionCodes.ACTION_Open) {
 			return -1;
 		}
 		return door.getDirection();
 	}
 
-	public LsimulatorDoorInstance findByDoorId(int doorId) {
-		for (LsimulatorDoorInstance door : _doors.values()) {
+	public DoorInstance findByDoorId(int doorId) {
+		for (DoorInstance door : _doors.values()) {
 			if (door.getDoorId() == doorId) {
 				return door;
 			}
@@ -129,7 +129,7 @@ public class DoorTable {
 		return null;
 	}
 
-	public LsimulatorDoorInstance[] getDoorList() {
-		return _doors.values().toArray(new LsimulatorDoorInstance[_doors.size()]);
+	public DoorInstance[] getDoorList() {
+		return _doors.values().toArray(new DoorInstance[_doors.size()]);
 	}
 }

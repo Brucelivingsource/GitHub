@@ -14,8 +14,8 @@
  */
 package Lsimulator.server.server.model.item.action;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_CurseBlind;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -32,7 +32,7 @@ import static Lsimulator.server.server.model.skill.LsimulatorSkillId.*;
 
 public class Potion {
 	/** 2段加速效果 **/
-	public static void Brave(LsimulatorPcInstance pc, LsimulatorItemInstance item, int item_id) {
+	public static void Brave(PcInstance pc, ItemInstance item, int item_id) {
 		if (pc.hasSkillEffect(DECAY_POTION)) { // 藥水霜化術狀態
 			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
 			return;
@@ -86,7 +86,7 @@ public class Potion {
 		}
 	}
 
-	private static void buff_brave(LsimulatorPcInstance pc, int skillId, byte type,
+	private static void buff_brave(PcInstance pc, int skillId, byte type,
 			int timeMillis) {
 		// 消除重複狀態
 		if (pc.hasSkillEffect(STATUS_BRAVE)) { // 勇敢藥水類 1.33倍
@@ -120,7 +120,7 @@ public class Potion {
 	}
 
 	/** 3段加速效果 **/
-	public static void ThirdSpeed(LsimulatorPcInstance pc, LsimulatorItemInstance item, int time) {
+	public static void ThirdSpeed(PcInstance pc, ItemInstance item, int time) {
 		if (pc.hasSkillEffect(DECAY_POTION)) { // 藥水霜化術狀態
 			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
 			return;
@@ -140,7 +140,7 @@ public class Potion {
 		pc.getInventory().removeItem(item, 1);
 	}
 
-	public static void UseHeallingPotion(LsimulatorPcInstance pc, LsimulatorItemInstance item, int healHp, int gfxid) {
+	public static void UseHeallingPotion(PcInstance pc, ItemInstance item, int healHp, int gfxid) {
 		if (pc.hasSkillEffect(DECAY_POTION)) { // 藥水霜化術狀態
 			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
 			return;
@@ -151,13 +151,13 @@ public class Potion {
 		pc.sendPackets(new S_ServerMessage(77)); // \f1你覺得舒服多了。
 		healHp *= ((new java.util.Random()).nextGaussian() / 5.0D) + 1.0D;
 		if (pc.hasSkillEffect(POLLUTE_WATER)) { // 汙濁之水 - 效果減半
-			healHp /= 2;
+			healHp >>= 1;
 		}
 		pc.setCurrentHp(pc.getCurrentHp() + healHp);
 		pc.getInventory().removeItem(item, 1);
 	}
 
-	public static void UseMpPotion(LsimulatorPcInstance pc, LsimulatorItemInstance item, int mp, int i) {
+	public static void UseMpPotion(PcInstance pc, ItemInstance item, int mp, int i) {
 		if (pc.hasSkillEffect(DECAY_POTION)) { // 藥水霜化術狀態
 			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
 			return;
@@ -176,7 +176,7 @@ public class Potion {
 		pc.getInventory().removeItem(item, 1);
 	}
 
-	public static void useGreenPotion(LsimulatorPcInstance pc, LsimulatorItemInstance item, int itemId) {
+	public static void useGreenPotion(PcInstance pc, ItemInstance item, int itemId) {
 		if (pc.hasSkillEffect(DECAY_POTION)) { // 藥水霜化術狀態
 			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
 			return;
@@ -258,7 +258,7 @@ public class Potion {
 		pc.getInventory().removeItem(item, 1);
 	}
 
-	public static void useBluePotion(LsimulatorPcInstance pc, LsimulatorItemInstance item, int item_id) {
+	public static void useBluePotion(PcInstance pc, ItemInstance item, int item_id) {
 		if (pc.hasSkillEffect(DECAY_POTION)) { // 藥水霜化術狀態
 			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
 			return;
@@ -285,7 +285,7 @@ public class Potion {
 		pc.getInventory().removeItem(item, 1);
 	}
 
-	public static void useWisdomPotion(LsimulatorPcInstance pc, LsimulatorItemInstance item, int item_id) {
+	public static void useWisdomPotion(PcInstance pc, ItemInstance item, int item_id) {
 		if (pc.hasSkillEffect(DECAY_POTION)) { // 藥水霜化術狀態
 			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
 			return;
@@ -306,7 +306,7 @@ public class Potion {
 			pc.killSkillEffectTimer(STATUS_WISDOM_POTION);
 		}
 
-		pc.sendPackets(new S_SkillIconWisdomPotion((time / 4))); // 狀態圖示
+		pc.sendPackets(new S_SkillIconWisdomPotion(time >> 2 ) ); // 狀態圖示
 		pc.sendPackets(new S_SkillSound(pc.getId(), 750));
 		pc.broadcastPacket(new S_SkillSound(pc.getId(), 750));
 
@@ -314,7 +314,7 @@ public class Potion {
 		pc.getInventory().removeItem(item, 1);
 	}
 
-	public static void useBlessOfEva(LsimulatorPcInstance pc, LsimulatorItemInstance item, int item_id) {
+	public static void useBlessOfEva(PcInstance pc, ItemInstance item, int item_id) {
 		if (pc.hasSkillEffect(DECAY_POTION)) { // 藥水霜化術狀態
 			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
 			return;
@@ -346,7 +346,7 @@ public class Potion {
 		pc.getInventory().removeItem(item, 1);
 	}
 
-	public static void useBlindPotion(LsimulatorPcInstance pc, LsimulatorItemInstance item) {
+	public static void useBlindPotion(PcInstance pc, ItemInstance item) {
 		if (pc.hasSkillEffect(DECAY_POTION)) { // 藥水霜化術狀態
 			pc.sendPackets(new S_ServerMessage(698)); // 喉嚨灼熱，無法喝東西。
 			return;

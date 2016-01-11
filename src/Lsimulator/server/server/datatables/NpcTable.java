@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 import Lsimulator.server.server.templates.LsimulatorNpc;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Maps;
@@ -182,7 +182,7 @@ public class NpcTable {
 		return _npcs.get(id);
 	}
 
-	public LsimulatorNpcInstance newNpcInstance(int id) {
+	public NpcInstance newNpcInstance(int id) {
 		LsimulatorNpc npcTemp = getTemplate(id);
 		if (npcTemp == null) {
 			throw new IllegalArgumentException(String.format("NpcTemplate: %d not found", id));
@@ -190,10 +190,10 @@ public class NpcTable {
 		return newNpcInstance(npcTemp);
 	}
 
-	public LsimulatorNpcInstance newNpcInstance(LsimulatorNpc template) {
+	public NpcInstance newNpcInstance(LsimulatorNpc template) {
 		try {
 			Constructor<?> con = _constructorCache.get(template.getImpl());
-			return (LsimulatorNpcInstance) con.newInstance(new Object[]
+			return (NpcInstance) con.newInstance(new Object[]
 			{ template });
 		}
 		catch (Exception e) {

@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.command.executor;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * コマンド実行処理インターフェース
@@ -35,5 +35,5 @@ public interface LsimulatorCommandExecutor {
 	 * @param arg
 	 *            引數
 	 */
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg);
+	public void execute(PcInstance pc, String cmdName, String arg);
 }

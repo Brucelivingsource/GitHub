@@ -15,14 +15,14 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
 
 public class S_Resurrection extends ServerBasePacket {
 
-	public S_Resurrection(LsimulatorPcInstance target, LsimulatorPcInstance use, int type) {
+	public S_Resurrection(PcInstance target, PcInstance use, int type) {
 		writeC(Opcodes.S_OPCODE_RESURRECTION);
 		writeD(target.getId());
 		writeC(type);

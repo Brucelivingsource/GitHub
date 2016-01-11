@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.command.executor;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.trap.LsimulatorWorldTraps;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
@@ -27,7 +27,7 @@ public class LsimulatorResetTrap implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		LsimulatorWorldTraps.getInstance().resetAllTraps();
 		pc.sendPackets(new S_SystemMessage("陷阱已被重新分配"));
 	}

@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.datatables.InnKeyTable;
 import Lsimulator.server.server.datatables.ItemTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorItem;
 import Lsimulator.server.server.utils.SQLUtil;
 
@@ -35,7 +35,7 @@ public class LsimulatorDwarfForElfInventory extends LsimulatorInventory {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public LsimulatorDwarfForElfInventory(LsimulatorPcInstance owner) {
+	public LsimulatorDwarfForElfInventory(PcInstance owner) {
 		_owner = owner;
 	}
 
@@ -54,7 +54,7 @@ public class LsimulatorDwarfForElfInventory extends LsimulatorInventory {
 			rs = pstm.executeQuery();
 
 			while (rs.next()) {
-				LsimulatorItemInstance item = new LsimulatorItemInstance();
+				ItemInstance item = new ItemInstance();
 				int objectId = rs.getInt("id");
 				item.setId(objectId);
 				LsimulatorItem itemTemplate = ItemTable.getInstance().getTemplate(
@@ -100,7 +100,7 @@ public class LsimulatorDwarfForElfInventory extends LsimulatorInventory {
 
 	// ＤＢのcharacter_elf_warehouseへ登録
 	@Override
-	public void insertItem(LsimulatorItemInstance item) {
+	public void insertItem(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -143,7 +143,7 @@ public class LsimulatorDwarfForElfInventory extends LsimulatorInventory {
 
 	// ＤＢのcharacter_elf_warehouseを更新
 	@Override
-	public void updateItem(LsimulatorItemInstance item) {
+	public void updateItem(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -163,7 +163,7 @@ public class LsimulatorDwarfForElfInventory extends LsimulatorInventory {
 
 	// ＤＢのcharacter_elf_warehouseから削除
 	@Override
-	public void deleteItem(LsimulatorItemInstance item) {
+	public void deleteItem(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -184,5 +184,5 @@ public class LsimulatorDwarfForElfInventory extends LsimulatorInventory {
 
 	private static Logger _log = Logger.getLogger(LsimulatorDwarfForElfInventory.class
 			.getName());
-	private final LsimulatorPcInstance _owner;
+	private final PcInstance _owner;
 }

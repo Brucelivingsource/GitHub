@@ -16,7 +16,7 @@ package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorTeleport;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_OwnCharPack;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -32,7 +32,7 @@ public class C_Ship extends ClientBasePacket {
 	public C_Ship(byte abyte0[], ClientThread client) {
 		super(abyte0);
 
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

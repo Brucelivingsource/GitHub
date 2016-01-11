@@ -26,10 +26,10 @@ import Lsimulator.server.server.datatables.ShopTable;
 import Lsimulator.server.server.model.LsimulatorLocation;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorMerchantInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
+import Lsimulator.server.server.model.Instance.MerchantInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.shop.LsimulatorShop;
 import Lsimulator.server.server.serverpackets.S_NPCPack;
 import Lsimulator.server.server.serverpackets.S_NpcChatPacket;
@@ -37,9 +37,9 @@ import Lsimulator.server.server.templates.LsimulatorRaceTicket;
 import Lsimulator.server.server.templates.LsimulatorShopItem;
 
 public class LsimulatorBugBearRace {
-	LsimulatorMerchantInstance pory;
-	LsimulatorMerchantInstance cecile;
-	LsimulatorMerchantInstance parkin;
+	MerchantInstance pory;
+	MerchantInstance cecile;
+	MerchantInstance parkin;
 	private static final int FIRST_ID = 0x0000000;
 	private static final int STATUS_NONE = 0;
 	private static final int STATUS_READY = 1;
@@ -48,7 +48,7 @@ public class LsimulatorBugBearRace {
 	private static final int WAIT_TIME = 60;
 	private static final int READY_TIME = 9 * 60 - 10;// test 60;//
 	private static final int FIRST_NPCID = 91350;// ~20
-	private LsimulatorNpcInstance[] _runner;
+	private NpcInstance[] _runner;
 	private int[] _runnerStatus = new int[5];
 	private double[] _winning_average = new double[5];
 	private double[] _allotment_percentage = new double[5];
@@ -79,25 +79,25 @@ public class LsimulatorBugBearRace {
 
 	LsimulatorBugBearRace() {
 		setRound(RaceTicketTable.getInstance().getRoundNumOfMax());
-		_runner = new LsimulatorNpcInstance[5];
+		_runner = new NpcInstance[5];
 		for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-			if (obj instanceof LsimulatorMerchantInstance) {
-				if (((LsimulatorMerchantInstance) obj).getNpcId() == 70041) {
-					parkin = (LsimulatorMerchantInstance) obj;
+			if (obj instanceof MerchantInstance) {
+				if (((MerchantInstance) obj).getNpcId() == 70041) {
+					parkin = (MerchantInstance) obj;
 				}
 			}
 		}
 		for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-			if (obj instanceof LsimulatorMerchantInstance) {
-				if (((LsimulatorMerchantInstance) obj).getNpcId() == 70035) {
-					cecile = (LsimulatorMerchantInstance) obj;
+			if (obj instanceof MerchantInstance) {
+				if (((MerchantInstance) obj).getNpcId() == 70035) {
+					cecile = (MerchantInstance) obj;
 				}
 			}
 		}
 		for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-			if (obj instanceof LsimulatorMerchantInstance) {
-				if (((LsimulatorMerchantInstance) obj).getNpcId() == 70042) {
-					pory = (LsimulatorMerchantInstance) obj;
+			if (obj instanceof MerchantInstance) {
+				if (((MerchantInstance) obj).getNpcId() == 70042) {
+					pory = (MerchantInstance) obj;
 				}
 			}
 		}
@@ -110,7 +110,7 @@ public class LsimulatorBugBearRace {
 			while (checkDuplicate(npcid, i)) {
 				npcid = FIRST_NPCID + _random.nextInt(20);
 			}
-			LsimulatorLocation loc = new LsimulatorLocation(33522 - (i * 2), 32861 + (i * 2), 4);
+			LsimulatorLocation loc = new LsimulatorLocation(33522 - ( i << 1 ), 32861 +( i << 1 ), 4);
 			_runner[i] = spawnOne(loc, npcid, 6);
 
 		}
@@ -142,7 +142,7 @@ public class LsimulatorBugBearRace {
 			setBetCount(i, 0);
 		}
 		setAllBet(0);
-		for (LsimulatorDoorInstance door : DoorTable.getInstance()
+		for (DoorInstance door : DoorTable.getInstance()
 				.getDoorList()) {
 			if (door.getDoorId() <= 812 && door.getDoorId() >= 808) {
 				door.close();
@@ -156,11 +156,11 @@ public class LsimulatorBugBearRace {
 			return false;
 		}
 		boolean flag = false;// ゴールするまではfalseを返す
-		LsimulatorNpcInstance npc = _runner[runnerNumber];
+		NpcInstance npc = _runner[runnerNumber];
 		int x = npc.getX();
 		int y = npc.getY();
 		if (_runnerStatus[runnerNumber] == 0) {// スタート　直線
-			if (// x==33476+(runnerNumber*2)&&y==32861+(runnerNumber*2)
+			if (        // x==33476+(runnerNumber*2)&&y==32861+(runnerNumber*2)
 			(x >= 33476 && x <= 33476 + 8) && (y >= 32861 && y <= 32861 + 8)) {
 				_runnerStatus[runnerNumber] = _runnerStatus[runnerNumber] + 1;
 				npc.setHeading(defaultHead[_runnerStatus[runnerNumber]]);// ヘッジを変更
@@ -334,7 +334,7 @@ public class LsimulatorBugBearRace {
 				shop2.getSellingItems().clear();
 				shop3.getSellingItems().clear();
 				/**/
-				for (LsimulatorDoorInstance door : DoorTable.getInstance()
+				for (DoorInstance door : DoorTable.getInstance()
 						.getDoorList()) {
 					if (door.getDoorId() <= 812 && door.getDoorId() >= 808) {
 						door.open();
@@ -376,7 +376,7 @@ public class LsimulatorBugBearRace {
 	}
 
 	private class BugBearRunning extends TimerTask {
-		LsimulatorNpcInstance _bugBear;
+		NpcInstance _bugBear;
 		int _runnerNumber;
 
 		BugBearRunning(int runnerNumber) {
@@ -447,11 +447,11 @@ public class LsimulatorBugBearRace {
 	 *            任意のNpcId
 	 * @param heading
 	 *            向き
-	 * @return LsimulatorNpcInstance 戻り値 : 成功=生成したインスタンス 失敗=null
+	 * @return NpcInstance 戻り値 : 成功=生成したインスタンス 失敗=null
 	 */
 	@SuppressWarnings("unused")
-	private LsimulatorNpcInstance spawnOne(LsimulatorLocation loc, int npcid, int heading) {
-		final LsimulatorNpcInstance mob = new LsimulatorNpcInstance(NpcTable.getInstance()
+	private NpcInstance spawnOne(LsimulatorLocation loc, int npcid, int heading) {
+		final NpcInstance mob = new NpcInstance(NpcTable.getInstance()
 				.getTemplate(npcid));
 		if (mob == null) {
 			return mob;
@@ -466,12 +466,12 @@ public class LsimulatorBugBearRace {
 		mob.setY(loc.getY());
 		mob.setHomeY(loc.getY());
 		mob.setMap((short) loc.getMapId());
-		mob.setPassispeed(mob.getPassispeed() * 2);
+		mob.setPassispeed(mob.getPassispeed() << 1 );
 		LsimulatorWorld.getInstance().storeObject(mob);
 		LsimulatorWorld.getInstance().addVisibleObject(mob);
 
 		final S_NPCPack s_npcPack = new S_NPCPack(mob);
-		for (final LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(
+		for (final PcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(
 				mob)) {
 			pc.addKnownObject(mob);
 			mob.addKnownObject(pc);
@@ -480,7 +480,7 @@ public class LsimulatorBugBearRace {
 		// モンスターのＡＩを開始
 		mob.onNpcAI();
 		mob.turnOnOffLight();
-		mob.startChat(LsimulatorNpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
+		mob.startChat(NpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
 		return mob;
 	}
 
@@ -501,7 +501,7 @@ public class LsimulatorBugBearRace {
 	}
 
 	private int calcSleepTime(int sleepTime, int runnerNumber) {
-		LsimulatorNpcInstance npc = _runner[runnerNumber];
+		NpcInstance npc = _runner[runnerNumber];
 		if (npc.getBraveSpeed() == 1) {
 			sleepTime -= (sleepTime * 0.25);
 		}
@@ -571,7 +571,7 @@ public class LsimulatorBugBearRace {
 		}
 	}
 
-	public LsimulatorNpcInstance getRunner(int num) {
+	public NpcInstance getRunner(int num) {
 		return _runner[num];
 	}
 

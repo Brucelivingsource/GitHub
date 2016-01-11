@@ -17,7 +17,7 @@ package Lsimulator.server.server.serverpackets;
 import java.io.IOException;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 
 public class S_HowManyKey extends ServerBasePacket {
 
@@ -27,7 +27,7 @@ public class S_HowManyKey extends ServerBasePacket {
 	 *  0010: 00 08 00 00 00 00 00 69 6e 6e 32 00 00 02 00 24 .......inn2....$
 	 *  0020: 34 35 30 00 32 32 30 00 450.220.
 	 */
-	public S_HowManyKey(LsimulatorNpcInstance npc, int price, int min, int max, String htmlId) {
+	public S_HowManyKey(NpcInstance npc, int price, int min, int max, String htmlId) {
 		writeC(Opcodes.S_OPCODE_INPUTAMOUNT);
 		writeD(npc.getId());
 		writeD(price); // 價錢

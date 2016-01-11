@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -26,11 +26,11 @@ public class S_DropItem extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_DropItem(LsimulatorItemInstance item) {
+	public S_DropItem(ItemInstance item) {
 		buildPacket(item);
 	}
 
-	private void buildPacket(LsimulatorItemInstance item) {
+	private void buildPacket(ItemInstance item) {
 		// int addbyte = 0;
 		// int addbyte1 = 1;
 		// int addbyte2 = 13;

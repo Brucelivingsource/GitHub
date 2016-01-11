@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.server.command.LsimulatorCommands;
 import Lsimulator.server.server.command.executor.LsimulatorCommandExecutor;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.templates.LsimulatorCommand;
@@ -57,7 +57,7 @@ public class GMCommands {
 		return "Lsimulator.server.server.command.executor." + className;
 	}
 
-	private boolean executeDatabaseCommand(LsimulatorPcInstance pc, String name,
+	private boolean executeDatabaseCommand(PcInstance pc, String name,
 			String arg) {
 		try {
 			LsimulatorCommand command = LsimulatorCommands.get(name);
@@ -82,7 +82,7 @@ public class GMCommands {
 		return false;
 	}
 
-	public void handleCommands(LsimulatorPcInstance gm, String cmdLine) {
+	public void handleCommands(PcInstance gm, String cmdLine) {
 		StringTokenizer token = new StringTokenizer(cmdLine);
 		// 命令，直到第一個空白，並在其後當作參數空格隔開
 		String cmd = token.nextToken();
@@ -113,7 +113,7 @@ public class GMCommands {
 
 	private static Map<Integer, String> _lastCommands = Maps.newMap();
 
-	private void redo(LsimulatorPcInstance pc, String arg) {
+	private void redo(PcInstance pc, String arg) {
 		try {
 			String lastCmd = _lastCommands.get(pc.getId());
 			if (arg.isEmpty()) {

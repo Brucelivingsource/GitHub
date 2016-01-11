@@ -15,7 +15,7 @@
 package Lsimulator.server.server.model.poison;
 
 import Lsimulator.server.server.model.LsimulatorCharacter;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Poison;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -29,11 +29,11 @@ public abstract class LsimulatorPoison {
 			return false;
 		}
 
-		if (!(cha instanceof LsimulatorPcInstance)) {
+		if (!(cha instanceof PcInstance)) {
 			return true;
 		}
 
-		LsimulatorPcInstance player = (LsimulatorPcInstance) cha;
+		PcInstance player = (PcInstance) cha;
 		if (player.getInventory().checkEquipped(20298) // 潔尼斯戒指
 				|| player.getInventory().checkEquipped(20117) // 巴風特盔甲
 				|| player.getInventory().checkEquipped(21115) // 安塔瑞斯的力量
@@ -49,11 +49,11 @@ public abstract class LsimulatorPoison {
 
 	// 微妙・・・素直にsendPacketsをLsimulatorCharacterへ引き上げるべきかもしれない
 	protected static void sendMessageIfPlayer(LsimulatorCharacter cha, int msgId) {
-		if (!(cha instanceof LsimulatorPcInstance)) {
+		if (!(cha instanceof PcInstance)) {
 			return;
 		}
 
-		LsimulatorPcInstance player = (LsimulatorPcInstance) cha;
+		PcInstance player = (PcInstance) cha;
 		player.sendPackets(new S_ServerMessage(msgId));
 	}
 

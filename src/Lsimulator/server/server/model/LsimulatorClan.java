@@ -18,7 +18,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Logger;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.collections.Lists;
 
 public class LsimulatorClan {
@@ -161,22 +161,22 @@ public class LsimulatorClan {
 		}
 	}
 
-	public LsimulatorPcInstance[] getOnlineClanMember() // オンライン中のクラン員のみ
+	public PcInstance[] getOnlineClanMember() // オンライン中のクラン員のみ
 	{
-		List<LsimulatorPcInstance> onlineMembers = Lists.newList();
+		List<PcInstance> onlineMembers = Lists.newList();
 		for (String name : membersNameList) {
-			LsimulatorPcInstance pc = LsimulatorWorld.getInstance().getPlayer(name);
+			PcInstance pc = LsimulatorWorld.getInstance().getPlayer(name);
 			if ((pc != null) && ! onlineMembers.contains(pc)) {
 				onlineMembers.add(pc);
 			}
 		}
-		return onlineMembers.toArray(new LsimulatorPcInstance[onlineMembers.size()]);
+		return onlineMembers.toArray(new PcInstance[onlineMembers.size()]);
 	}
 
 	public String getOnlineMembersFP() { // FP means "For Pledge"
 		String result = "";
 		for (String name : membersNameList) {
-			LsimulatorPcInstance pc = LsimulatorWorld.getInstance().getPlayer(name);
+			PcInstance pc = LsimulatorWorld.getInstance().getPlayer(name);
 			if (pc != null) {
 				result = result + name + " ";
 			}

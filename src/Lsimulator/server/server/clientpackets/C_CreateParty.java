@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorSystemMessageId;
 import Lsimulator.server.server.serverpackets.S_Message_YN;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -35,7 +35,7 @@ public class C_CreateParty extends ClientBasePacket {
 	public C_CreateParty(byte decrypt[], ClientThread client) throws Exception {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -44,8 +44,8 @@ public class C_CreateParty extends ClientBasePacket {
 		if ((type == 0) || (type == 1)) { // 自動接受組隊 on 與 off 的同
 			int targetId = readD();
 			LsimulatorObject temp = LsimulatorWorld.getInstance().findObject(targetId);
-			if (temp instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance targetPc = (LsimulatorPcInstance) temp;
+			if (temp instanceof PcInstance) {
+				PcInstance targetPc = (PcInstance) temp;
 				if (pc.getId() == targetPc.getId()) {
 					return;
 				}
@@ -94,7 +94,7 @@ public class C_CreateParty extends ClientBasePacket {
 			}
 		} else if (type == 2) { // 聊天組隊
 			String name = readS();
-			LsimulatorPcInstance targetPc = LsimulatorWorld.getInstance().getPlayer(name);
+			PcInstance targetPc = LsimulatorWorld.getInstance().getPlayer(name);
 			if (targetPc == null) {
 				// 沒有叫%0的人。
 				pc.sendPackets(new S_ServerMessage(109));
@@ -144,7 +144,7 @@ public class C_CreateParty extends ClientBasePacket {
 			LsimulatorObject obj = LsimulatorWorld.getInstance().findObject(targetId);
 
 			// 判斷目標是否合理
-			if ((obj == null) || (pc.getId() == obj.getId()) || !(obj instanceof LsimulatorPcInstance)) {
+			if ((obj == null) || (pc.getId() == obj.getId()) || !(obj instanceof PcInstance)) {
 				return;
 			}
 			if ((!pc.getLocation().isInScreen(obj.getLocation()) || (pc.getLocation().getTileLineDistance(obj.getLocation()) > 7))) {
@@ -154,7 +154,7 @@ public class C_CreateParty extends ClientBasePacket {
 			}
 
 			// 轉型為玩家物件
-			LsimulatorPcInstance targetPc = (LsimulatorPcInstance) obj;
+			PcInstance targetPc = (PcInstance) obj;
 
 			// 判斷目標是否屬於相同隊伍
 			if (!targetPc.isInParty()) {

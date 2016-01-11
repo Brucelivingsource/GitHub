@@ -19,11 +19,11 @@ import java.io.IOException;
 import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_RetrievePledgeList extends ServerBasePacket {
-	public S_RetrievePledgeList(int objid, LsimulatorPcInstance pc) {
+	public S_RetrievePledgeList(int objid, PcInstance pc) {
 		LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(pc.getClanname());
 		if (clan == null) {
 			return;
@@ -44,7 +44,7 @@ public class S_RetrievePledgeList extends ServerBasePacket {
 				writeH(size);
 				writeC(5); // 血盟倉庫
 				for (Object itemObject : clan.getDwarfForClanInventory().getItems()) {
-					LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+					ItemInstance item = (ItemInstance) itemObject;
 					writeD(item.getId());
 					writeC(item.getItem().getUseType());
 					writeH(item.get_gfxid());

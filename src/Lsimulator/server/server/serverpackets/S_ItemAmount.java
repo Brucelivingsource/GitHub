@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket, S_SendInvOnLogin
@@ -24,7 +24,7 @@ public class S_ItemAmount extends ServerBasePacket {
 
 	private static final String S_ITEM_AMOUNT = "[S] S_ItemAmount";
 
-	public S_ItemAmount(LsimulatorItemInstance item) {
+	public S_ItemAmount(ItemInstance item) {
 		if (item == null) {
 			return;
 		}
@@ -32,7 +32,7 @@ public class S_ItemAmount extends ServerBasePacket {
 		buildPacket(item);
 	}
 
-	private void buildPacket(LsimulatorItemInstance item) {
+	private void buildPacket(ItemInstance item) {
 		// writeC(Opcodes.S_OPCODE_ITEMAMOUNT);
 		// writeD(item.getId());
 		// writeD(item.getCount());

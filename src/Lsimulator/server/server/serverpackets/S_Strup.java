@@ -15,14 +15,14 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
 
 public class S_Strup extends ServerBasePacket {
 
-	public S_Strup(LsimulatorPcInstance pc, int type, int time) {
+	public S_Strup(PcInstance pc, int type, int time) {
 		writeC(Opcodes.S_OPCODE_STRUP);
 		writeH(time);
 		writeC(pc.getStr());

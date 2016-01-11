@@ -19,8 +19,8 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorSystemMessageId;
 import Lsimulator.server.server.serverpackets.S_RetrieveElfList;
 import Lsimulator.server.server.serverpackets.S_RetrieveList;
@@ -32,7 +32,7 @@ public class C_WarePassword extends ClientBasePacket {
 	public C_WarePassword(byte abyte0[], ClientThread client) {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -94,8 +94,8 @@ public class C_WarePassword extends ClientBasePacket {
 				if (pc.getLevel() >= 5) {// 判斷玩家等級
 					if (type == 1) {
 						if (obj != null) {
-							if (obj instanceof LsimulatorNpcInstance) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) obj;
+							if (obj instanceof NpcInstance) {
+								NpcInstance npc = (NpcInstance) obj;
 								// 判斷npc所屬倉庫類別
 								switch (npc.getNpcId()) {
 								case 60028:// 倉庫-艾爾(妖森)

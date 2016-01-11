@@ -27,9 +27,9 @@ import Lsimulator.server.server.model.LsimulatorHouseLocation;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorPcInventory;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorFurnitureInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.FurnitureInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_AttackPacket;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorFurnitureItem;
@@ -39,7 +39,7 @@ public class FurnitureItem {
 	private static Logger _log = Logger
 			.getLogger(FurnitureItem.class.getName());
 
-	public static void useFurnitureItem(LsimulatorPcInstance pc, int itemId,
+	public static void useFurnitureItem(PcInstance pc, int itemId,
 			int itemObjectId) {
 
 		LsimulatorFurnitureItem furniture_item = FurnitureItemTable.getInstance()
@@ -47,7 +47,7 @@ public class FurnitureItem {
 
 		boolean isAppear = true;
 
-		LsimulatorFurnitureInstance furniture = null;
+		FurnitureInstance furniture = null;
 
 		if (furniture_item == null) {
 			pc.sendPackets(new S_ServerMessage(79)); // \f1沒有任何事情發生。
@@ -60,8 +60,8 @@ public class FurnitureItem {
 		}
 
 		for (LsimulatorObject l1object : LsimulatorWorld.getInstance().getObject()) {
-			if (l1object instanceof LsimulatorFurnitureInstance) {
-				furniture = (LsimulatorFurnitureInstance) l1object;
+			if (l1object instanceof FurnitureInstance) {
+				furniture = (FurnitureInstance) l1object;
 				if (furniture.getItemObjId() == itemObjectId) { // 既に引き出している家具
 					isAppear = false;
 					break;
@@ -83,7 +83,7 @@ public class FurnitureItem {
 								"Lsimulator.server.server.model.Instance." + s
 										+ "Instance").getConstructors()[0];
 						Object aobj[] = { l1npc };
-						furniture = (LsimulatorFurnitureInstance) constructor
+						furniture = (FurnitureInstance) constructor
 								.newInstance(aobj);
 						furniture.setId(IdFactory.getInstance().nextId());
 						furniture.setMap(pc.getMapId());
@@ -116,8 +116,8 @@ public class FurnitureItem {
 	}
 
 	// 傢俱移除魔杖
-	public static void useFurnitureRemovalWand(LsimulatorPcInstance pc, int targetId,
-			LsimulatorItemInstance item) {
+	public static void useFurnitureRemovalWand(PcInstance pc, int targetId,
+			ItemInstance item) {
 		S_AttackPacket s_attackPacket = new S_AttackPacket(pc, 0,
 				ActionCodes.ACTION_Wand);
 		pc.sendPackets(s_attackPacket);
@@ -128,8 +128,8 @@ public class FurnitureItem {
 		}
 
 		LsimulatorObject target = LsimulatorWorld.getInstance().findObject(targetId);
-		if ((target != null) && (target instanceof LsimulatorFurnitureInstance)) {
-			LsimulatorFurnitureInstance furniture = (LsimulatorFurnitureInstance) target;
+		if ((target != null) && (target instanceof FurnitureInstance)) {
+			FurnitureInstance furniture = (FurnitureInstance) target;
 			furniture.deleteMe();
 			FurnitureSpawnTable.getInstance().deleteFurniture(furniture);
 			item.setChargeCount(item.getChargeCount() - 1);

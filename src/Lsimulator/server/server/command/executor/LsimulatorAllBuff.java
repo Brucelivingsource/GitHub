@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
 import Lsimulator.server.server.datatables.SkillsTable;
 import Lsimulator.server.server.model.LsimulatorPolyMorph;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.skill.LsimulatorBuffUtil;
 import Lsimulator.server.server.model.skill.LsimulatorSkillUse;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -70,7 +70,7 @@ public class LsimulatorAllBuff implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		int[] allBuffSkill =
 		{ LIGHT, DECREASE_WEIGHT, PHYSICAL_ENCHANT_DEX, MEDITATION, PHYSICAL_ENCHANT_STR, BLESS_WEAPON, BERSERKERS, IMMUNE_TO_HARM, ADVANCE_SPIRIT,
 				REDUCTION_ARMOR, BOUNCE_ATTACK, SOLID_CARRIAGE, ENCHANT_VENOM, BURNING_SPIRIT, VENOM_RESIST, DOUBLE_BRAKE, UNCANNY_DODGE,
@@ -79,7 +79,7 @@ public class LsimulatorAllBuff implements LsimulatorCommandExecutor {
 		try {
 			StringTokenizer st = new StringTokenizer(arg);
 			String name = st.nextToken();
-			LsimulatorPcInstance target = LsimulatorWorld.getInstance().getPlayer(name);
+			PcInstance target = LsimulatorWorld.getInstance().getPlayer(name);
 			if (target == null) {
 				pc.sendPackets(new S_ServerMessage(73, name)); // \f1%0はゲームをしていません。
 				return;

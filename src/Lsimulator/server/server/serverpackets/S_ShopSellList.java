@@ -24,10 +24,10 @@ import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorTaxCalculator;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.shop.LsimulatorShop;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 import Lsimulator.server.server.templates.LsimulatorItem;
 import Lsimulator.server.server.templates.LsimulatorShopItem;
 import java.util.StringTokenizer;
@@ -38,16 +38,16 @@ public class S_ShopSellList extends ServerBasePacket {
 	 * 商店販賣的物品清單
 	 * 店の品物リストを表示する。キャラクターがBUYボタンを押した時に送る。
 	 */
-	public S_ShopSellList(int objId, LsimulatorPcInstance pc) {
+	public S_ShopSellList(int objId, PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_SHOWSHOPBUYLIST);
 		writeD(objId);
 
 		LsimulatorObject npcObj = LsimulatorWorld.getInstance().findObject(objId);
-		if (!(npcObj instanceof LsimulatorNpcInstance)) {
+		if (!(npcObj instanceof NpcInstance)) {
 			writeH(0);
 			return;
 		}
-		int npcId = ((LsimulatorNpcInstance) npcObj).getNpcTemplate().get_npcId();
+		int npcId = ((NpcInstance) npcObj).getNpcTemplate().get_npcId();
 
 		LsimulatorTaxCalculator calc = new LsimulatorTaxCalculator(npcId);
 		LsimulatorShop shop = ShopTable.getInstance().get(npcId);
@@ -56,7 +56,7 @@ public class S_ShopSellList extends ServerBasePacket {
 		writeH(shopItems.size());
 
 		// LsimulatorItemInstanceのgetStatusBytesを利用するため
-		LsimulatorItemInstance dummy = new LsimulatorItemInstance();
+		ItemInstance dummy = new ItemInstance();
 
 		for (int i = 0; i < shopItems.size(); i++) {
 			LsimulatorShopItem shopItem = shopItems.get(i);

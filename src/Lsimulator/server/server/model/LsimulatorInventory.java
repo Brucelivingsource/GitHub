@@ -27,8 +27,8 @@ import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.datatables.LetterTable;
 import Lsimulator.server.server.datatables.PetTable;
 import Lsimulator.server.server.datatables.RaceTicketTable;
-import Lsimulator.server.server.model.Instance.LsimulatorFurnitureInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.FurnitureInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 import Lsimulator.server.server.templates.LsimulatorItem;
 import Lsimulator.server.server.templates.LsimulatorRaceTicket;
 import Lsimulator.server.server.utils.Random;
@@ -38,7 +38,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 
 	private static final long serialVersionUID = 1L;
 
-	protected List<LsimulatorItemInstance> _items = Lists.newConcurrentList();
+	protected List<ItemInstance> _items = Lists.newConcurrentList();
 
 	public static final int MAX_AMOUNT = 2000000000; // 2G
 
@@ -54,7 +54,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 	}
 
 	// インベントリ内の全てのアイテム
-	public List<LsimulatorItemInstance> getItems() {
+	public List<ItemInstance> getItems() {
 		return _items;
 	}
 
@@ -62,7 +62,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 	public int getWeight() {
 		int weight = 0;
 
-		for (LsimulatorItemInstance item : _items) {
+		for (ItemInstance item : _items) {
 			weight += item.getWeight();
 		}
 
@@ -78,7 +78,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 
 	public static final int AMOUNT_OVER = 3;
 
-	public int checkAddItem(LsimulatorItemInstance item, int count) {
+	public int checkAddItem(ItemInstance item, int count) {
 		if (item == null) {
 			return -1;
 		}
@@ -100,7 +100,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 			return WEIGHT_OVER;
 		}
 
-		LsimulatorItemInstance itemExist = findItemId(item.getItemId());
+		ItemInstance itemExist = findItemId(item.getItemId());
 		if ((itemExist != null)
 				&& ((itemExist.getCount() + count) > MAX_AMOUNT)) {
 			return AMOUNT_OVER;
@@ -114,7 +114,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 
 	public static final int WAREHOUSE_TYPE_CLAN = 1;
 
-	public int checkAddItemToWarehouse(LsimulatorItemInstance item, int count, int type) {
+	public int checkAddItemToWarehouse(ItemInstance item, int count, int type) {
 		if (item == null) {
 			return -1;
 		}
@@ -138,7 +138,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 	}
 
 	// 新しいアイテムの格納
-	public synchronized LsimulatorItemInstance storeItem(int id, int count) {
+	public synchronized ItemInstance storeItem(int id, int count) {
 		if (count <= 0) {
 			return null;
 		}
@@ -148,7 +148,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 		}
 
 		if (id == 40312) {
-			LsimulatorItemInstance item = new LsimulatorItemInstance(temp, count);
+			ItemInstance item = new ItemInstance(temp, count);
 
 			if (findKeyId(id) == null) { // 新しく生成する必要がある場合のみIDの発行とLsimulatorWorldへの登録を行う
 				item.setId(IdFactory.getInstance().nextId());
@@ -158,7 +158,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 			return storeItem(item);
 		}
 		else if (temp.isStackable()) {
-			LsimulatorItemInstance item = new LsimulatorItemInstance(temp, count);
+			ItemInstance item = new ItemInstance(temp, count);
 
 			if (findItemId(id) == null) { // 新しく生成する必要がある場合のみIDの発行とLsimulatorWorldへの登録を行う
 				item.setId(IdFactory.getInstance().nextId());
@@ -169,9 +169,9 @@ public class LsimulatorInventory extends LsimulatorObject {
 		}
 
 		// スタックできないアイテムの場合
-		LsimulatorItemInstance result = null;
+		ItemInstance result = null;
 		for (int i = 0; i < count; i++) {
-			LsimulatorItemInstance item = new LsimulatorItemInstance(temp, 1);
+			ItemInstance item = new ItemInstance(temp, 1);
 			item.setId(IdFactory.getInstance().nextId());
 			LsimulatorWorld.getInstance().storeObject(item);
 			storeItem(item);
@@ -182,13 +182,13 @@ public class LsimulatorInventory extends LsimulatorObject {
 	}
 
 	// DROP、購入、GMコマンドで入手した新しいアイテムの格納
-	public synchronized LsimulatorItemInstance storeItem(LsimulatorItemInstance item) {
+	public synchronized ItemInstance storeItem(ItemInstance item) {
 		if (item.getCount() <= 0) {
 			return null;
 		}
 		int itemId = item.getItem().getItemId();
 		if (item.isStackable()) {
-			LsimulatorItemInstance findItem = findItemId(itemId);
+			ItemInstance findItem = findItemId(itemId);
 			if (itemId == 40309) { // Race Tickets
 				findItem = findItemNameId(item.getItem().getIdentifiedNameId());
 			} else if (itemId == 40312) { // 旅館鑰匙
@@ -245,16 +245,16 @@ public class LsimulatorInventory extends LsimulatorObject {
 	}
 
 	// /trade、倉庫から入手したアイテムの格納
-	public synchronized LsimulatorItemInstance storeTradeItem(LsimulatorItemInstance item) {
+	public synchronized ItemInstance storeTradeItem(ItemInstance item) {
 		if (item.getItem().getItemId() == 40312) { // 旅館鑰匙
-			LsimulatorItemInstance findItem = findKeyId(item.getKeyId()); // 檢查鑰匙編號是否相同
+			ItemInstance findItem = findKeyId(item.getKeyId()); // 檢查鑰匙編號是否相同
 			if (findItem != null) {
 				findItem.setCount(findItem.getCount() + item.getCount());
 				updateItem(findItem);
 				return findItem;
 			}
 		} else if (item.isStackable()) {
-			LsimulatorItemInstance findItem = findItemId(item.getItem().getItemId());
+			ItemInstance findItem = findItemId(item.getItem().getItemId());
 			if (findItem != null) {
 				findItem.setCount(findItem.getCount() + item.getCount());
 				updateItem(findItem);
@@ -290,20 +290,20 @@ public class LsimulatorInventory extends LsimulatorObject {
 			return false;
 		}
 		if (ItemTable.getInstance().getTemplate(itemid).isStackable()) {
-			LsimulatorItemInstance item = findItemId(itemid);
+			ItemInstance item = findItemId(itemid);
 			if ((item != null) && (item.getCount() >= count)) {
 				removeItem(item, count);
 				return true;
 			}
 		} else {
-			LsimulatorItemInstance[] itemList = findItemsId(itemid);
+			ItemInstance[] itemList = findItemsId(itemid);
 			if (itemList.length == count) {
 				for (int i = 0; i < count; i++) {
 					removeItem(itemList[i], 1);
 				}
 				return true;
 			} else if (itemList.length > count) { // 指定個数より多く所持している場合
-				DataComparator<LsimulatorItemInstance> dc = new DataComparator<LsimulatorItemInstance>();
+				DataComparator<ItemInstance> dc = new DataComparator<ItemInstance>();
 				Arrays.sort(itemList, dc); // エンチャント順にソートし、エンチャント数の少ないものから消費させる
 				for (int i = 0; i < count; i++) {
 					removeItem(itemList[i], 1);
@@ -314,24 +314,24 @@ public class LsimulatorInventory extends LsimulatorObject {
 		return false;
 	}
 
-	public class DataComparator<T> implements Comparator<LsimulatorItemInstance> {
+	public class DataComparator<T> implements Comparator<ItemInstance> {
 		@Override
-		public int compare(LsimulatorItemInstance item1, LsimulatorItemInstance item2) {
+		public int compare(ItemInstance item1, ItemInstance item2) {
 			return item1.getEnchantLevel() - item2.getEnchantLevel();
 		}
 	}
 
 	// 指定したアイテムから指定個数を削除（使ったりゴミ箱に捨てられたとき）戻り値：実際に削除した数
 	public int removeItem(int objectId, int count) {
-		LsimulatorItemInstance item = getItem(objectId);
+		ItemInstance item = getItem(objectId);
 		return removeItem(item, count);
 	}
 
-	public int removeItem(LsimulatorItemInstance item) {
+	public int removeItem(ItemInstance item) {
 		return removeItem(item, item.getCount());
 	}
 
-	public int removeItem(LsimulatorItemInstance item, int count) {
+	public int removeItem(ItemInstance item, int count) {
 		if (item == null) {
 			return 0;
 		}
@@ -350,8 +350,8 @@ public class LsimulatorInventory extends LsimulatorObject {
 				lettertable.deleteLetter(item.getId());
 			} else if ((itemId >= 41383) && (itemId <= 41400)) { // 家具
 				for (LsimulatorObject l1object : LsimulatorWorld.getInstance().getObject()) {
-					if (l1object instanceof LsimulatorFurnitureInstance) {
-						LsimulatorFurnitureInstance furniture = (LsimulatorFurnitureInstance) l1object;
+					if (l1object instanceof FurnitureInstance) {
+						FurnitureInstance furniture = (FurnitureInstance) l1object;
 						if (furniture.getItemObjId() == item.getId()) { // 既に引き出している家具
 							FurnitureSpawnTable.getInstance().deleteFurniture(furniture);
 						}
@@ -370,7 +370,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 	}
 
 	// _itemsから指定オブジェクトを削除(LsimulatorPcInstance、LsimulatorDwarfInstance、LsimulatorGroundInstanceでこの部分をオーバライドする)
-	public void deleteItem(LsimulatorItemInstance item) {
+	public void deleteItem(ItemInstance item) {
 		// 刪除鑰匙紀錄
 		if (item.getItem().getItemId() == 40312) {
 			InnKeyTable.DeleteKey(item);
@@ -379,12 +379,12 @@ public class LsimulatorInventory extends LsimulatorObject {
 	}
 
 	// 引数のインベントリにアイテムを移譲
-	public synchronized LsimulatorItemInstance tradeItem(int objectId, int count,LsimulatorInventory inventory) {
-		LsimulatorItemInstance item = getItem(objectId);
+	public synchronized ItemInstance tradeItem(int objectId, int count,LsimulatorInventory inventory) {
+		ItemInstance item = getItem(objectId);
 		return tradeItem(item, count, inventory);
 	}
 
-	public synchronized LsimulatorItemInstance tradeItem(LsimulatorItemInstance item,int count, LsimulatorInventory inventory) {
+	public synchronized ItemInstance tradeItem(ItemInstance item,int count, LsimulatorInventory inventory) {
 		if (item == null) {
 			return null;
 		}
@@ -397,7 +397,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 		if (!checkItem(item.getItem().getItemId(), count)) {
 			return null;
 		}
-		LsimulatorItemInstance carryItem;
+		ItemInstance carryItem;
 		if (item.getCount() <= count) {
 			deleteItem(item);
 			carryItem = item;
@@ -427,16 +427,16 @@ public class LsimulatorInventory extends LsimulatorObject {
 	/*
 	 * アイテムを損傷・損耗させる（武器・防具も含む） アイテムの場合、損耗なのでマイナスするが 武器・防具は損傷度を表すのでプラスにする。
 	 */
-	public LsimulatorItemInstance receiveDamage(int objectId) {
-		LsimulatorItemInstance item = getItem(objectId);
+	public ItemInstance receiveDamage(int objectId) {
+		ItemInstance item = getItem(objectId);
 		return receiveDamage(item);
 	}
 
-	public LsimulatorItemInstance receiveDamage(LsimulatorItemInstance item) {
+	public ItemInstance receiveDamage(ItemInstance item) {
 		return receiveDamage(item, 1);
 	}
 
-	public LsimulatorItemInstance receiveDamage(LsimulatorItemInstance item, int count) {
+	public ItemInstance receiveDamage(ItemInstance item, int count) {
 		int itemType = item.getItem().getType2();
 		int currentDurability = item.get_durability();
 
@@ -471,7 +471,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 		return item;
 	}
 
-	public LsimulatorItemInstance recoveryDamage(LsimulatorItemInstance item) {
+	public ItemInstance recoveryDamage(ItemInstance item) {
 		if (item == null) {
 			return null;
 		}
@@ -497,8 +497,8 @@ public class LsimulatorInventory extends LsimulatorObject {
 	}
 
 	// アイテムＩＤから検索
-	public LsimulatorItemInstance findItemId(int id) {
-		for (LsimulatorItemInstance item : _items) {
+	public ItemInstance findItemId(int id) {
+		for (ItemInstance item : _items) {
 			if (item.getItem().getItemId() == id) {
 				return item;
 			}
@@ -506,8 +506,8 @@ public class LsimulatorInventory extends LsimulatorObject {
 		return null;
 	}
 
-	public LsimulatorItemInstance findKeyId(int id) {
-		for (LsimulatorItemInstance item : _items) {
+	public ItemInstance findKeyId(int id) {
+		for (ItemInstance item : _items) {
 			if (item.getKeyId() == id) {
 				return item;
 			}
@@ -515,32 +515,32 @@ public class LsimulatorInventory extends LsimulatorObject {
 		return null;
 	}
 
-	public LsimulatorItemInstance[] findItemsId(int id) {
-		List<LsimulatorItemInstance> itemList = Lists.newList();
-		for (LsimulatorItemInstance item : _items) {
+	public ItemInstance[] findItemsId(int id) {
+		List<ItemInstance> itemList = Lists.newList();
+		for (ItemInstance item : _items) {
 			if (item.getItemId() == id) {
 				itemList.add(item);
 			}
 		}
-		return itemList.toArray(new LsimulatorItemInstance[itemList.size()]);
+		return itemList.toArray(new ItemInstance[itemList.size()]);
 	}
 
-	public LsimulatorItemInstance[] findItemsIdNotEquipped(int id) {
-		List<LsimulatorItemInstance> itemList = Lists.newList();
-		for (LsimulatorItemInstance item : _items) {
+	public ItemInstance[] findItemsIdNotEquipped(int id) {
+		List<ItemInstance> itemList = Lists.newList();
+		for (ItemInstance item : _items) {
 			if (item.getItemId() == id) {
 				if (!item.isEquipped()) {
 					itemList.add(item);
 				}
 			}
 		}
-		return itemList.toArray(new LsimulatorItemInstance[itemList.size()]);
+		return itemList.toArray(new ItemInstance[itemList.size()]);
 	}
 
 	// オブジェクトＩＤから検索
-	public LsimulatorItemInstance getItem(int objectId) {
+	public ItemInstance getItem(int objectId) {
 		for (Object itemObject : _items) {
-			LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+			ItemInstance item = (ItemInstance) itemObject;
 			if (item.getId() == objectId) {
 				return item;
 			}
@@ -558,7 +558,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 			return true;
 		}
 		if (ItemTable.getInstance().getTemplate(id).isStackable()) {
-			LsimulatorItemInstance item = findItemId(id);
+			ItemInstance item = findItemId(id);
 			if ((item != null) && (item.getCount() >= count)) {
 				return true;
 			}
@@ -575,7 +575,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 	// 装備中のアイテムは所持していないと判別する
 	public boolean checkEnchantItem(int id, int enchant, int count) {
 		int num = 0;
-		for (LsimulatorItemInstance item : _items) {
+		for (ItemInstance item : _items) {
 			if (item.isEquipped()) { // 装備しているものは該当しない
 				continue;
 			}
@@ -592,7 +592,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 	// 強化された特定のアイテムを消費する
 	// 装備中のアイテムは所持していないと判別する
 	public boolean consumeEnchantItem(int id, int enchant, int count) {
-		for (LsimulatorItemInstance item : _items) {
+		for (ItemInstance item : _items) {
 			if (item.isEquipped()) { // 装備しているものは該当しない
 				continue;
 			}
@@ -639,7 +639,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 	 */
 	public int countItems(int id) {
 		if (ItemTable.getInstance().getTemplate(id).isStackable()) {
-			LsimulatorItemInstance item = findItemId(id);
+			ItemInstance item = findItemId(id);
 			if (item != null) {
 				return item.getCount();
 			}
@@ -657,7 +657,7 @@ public class LsimulatorInventory extends LsimulatorObject {
 	// インベントリ内の全てのアイテムを消す（所有者を消すときなど）
 	public void clearItems() {
 		for (Object itemObject : _items) {
-			LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+			ItemInstance item = (ItemInstance) itemObject;
 			LsimulatorWorld.getInstance().removeObject(item);
 		}
 		_items.clear();
@@ -669,8 +669,8 @@ public class LsimulatorInventory extends LsimulatorObject {
 	 * @param nameId
 	 * @return item null 如果沒有找到。
 	 */
-	public LsimulatorItemInstance findItemNameId(String nameId) {
-		for (LsimulatorItemInstance item : _items) {
+	public ItemInstance findItemNameId(String nameId) {
+		for (ItemInstance item : _items) {
 			if (nameId.equals(item.getItem().getIdentifiedNameId())) {
 				return item;
 			}
@@ -682,16 +682,16 @@ public class LsimulatorInventory extends LsimulatorObject {
 	public void loadItems() {
 	}
 
-	public void insertItem(LsimulatorItemInstance item) {
+	public void insertItem(ItemInstance item) {
 	}
 
-	public void updateItem(LsimulatorItemInstance item) {
+	public void updateItem(ItemInstance item) {
 	}
 
-	public void updateItem(LsimulatorItemInstance item, int colmn) {
+	public void updateItem(ItemInstance item, int colmn) {
 	}
 
-	public void updateEnchantAccessory(LsimulatorItemInstance item, int colmn) {
+	public void updateEnchantAccessory(ItemInstance item, int colmn) {
 	}
 
 }

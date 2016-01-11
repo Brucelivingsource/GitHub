@@ -15,7 +15,7 @@
 package Lsimulator.server.server.model.monitor;
 
 import Lsimulator.server.server.GeneralThreadPool;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class LsimulatorPcGhostMonitor extends LsimulatorPcMonitor {
 
@@ -24,11 +24,11 @@ public class LsimulatorPcGhostMonitor extends LsimulatorPcMonitor {
 	}
 
 	@Override
-	public void execTask(LsimulatorPcInstance pc) {
+	public void execTask(PcInstance pc) {
 		// endGhostの実行時間が影響ないように
 		Runnable r = new LsimulatorPcMonitor(pc.getId()) {
 			@Override
-			public void execTask(LsimulatorPcInstance pc) {
+			public void execTask(PcInstance pc) {
 				pc.endGhost();
 			}
 		};

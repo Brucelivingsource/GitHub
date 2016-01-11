@@ -22,22 +22,22 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import Lsimulator.server.server.datatables.ArmorSetTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorArmorSets;
 import Lsimulator.server.server.utils.collections.Lists;
 
 public abstract class LsimulatorArmorSet {
-	public abstract void giveEffect(LsimulatorPcInstance pc);
+	public abstract void giveEffect(PcInstance pc);
 
-	public abstract void cancelEffect(LsimulatorPcInstance pc);
+	public abstract void cancelEffect(PcInstance pc);
 
-	public abstract boolean isValid(LsimulatorPcInstance pc);
+	public abstract boolean isValid(PcInstance pc);
 
 	public abstract boolean isPartOfSet(int id);
 
-	public abstract boolean isEquippedRingOfArmorSet(LsimulatorPcInstance pc);
+	public abstract boolean isEquippedRingOfArmorSet(PcInstance pc);
 
 	public static List<LsimulatorArmorSet> getAllSet() {
 		return _allSet;
@@ -92,9 +92,9 @@ public abstract class LsimulatorArmorSet {
 }
 
 interface LsimulatorArmorSetEffect {
-	public void giveEffect(LsimulatorPcInstance pc);
+	public void giveEffect(PcInstance pc);
 
-	public void cancelEffect(LsimulatorPcInstance pc);
+	public void cancelEffect(PcInstance pc);
 }
 
 class LsimulatorArmorSetImpl extends LsimulatorArmorSet {
@@ -116,21 +116,21 @@ class LsimulatorArmorSetImpl extends LsimulatorArmorSet {
 	}
 
 	@Override
-	public void cancelEffect(LsimulatorPcInstance pc) {
+	public void cancelEffect(PcInstance pc) {
 		for (LsimulatorArmorSetEffect effect : _effects) {
 			effect.cancelEffect(pc);
 		}
 	}
 
 	@Override
-	public void giveEffect(LsimulatorPcInstance pc) {
+	public void giveEffect(PcInstance pc) {
 		for (LsimulatorArmorSetEffect effect : _effects) {
 			effect.giveEffect(pc);
 		}
 	}
 
 	@Override
-	public final boolean isValid(LsimulatorPcInstance pc) {
+	public final boolean isValid(PcInstance pc) {
 		return pc.getInventory().checkEquipped(_ids);
 	}
 
@@ -145,9 +145,9 @@ class LsimulatorArmorSetImpl extends LsimulatorArmorSet {
 	}
 
 	@Override
-	public boolean isEquippedRingOfArmorSet(LsimulatorPcInstance pc) {
+	public boolean isEquippedRingOfArmorSet(PcInstance pc) {
 		LsimulatorPcInventory pcInventory = pc.getInventory();
-		LsimulatorItemInstance armor = null;
+		ItemInstance armor = null;
 		boolean isSetContainRing = false;
 
 		// セット装備にリングが含まれているか調べる
@@ -164,7 +164,7 @@ class LsimulatorArmorSetImpl extends LsimulatorArmorSet {
 		if ((armor != null) && isSetContainRing) {
 			int itemId = armor.getItem().getItemId();
 			if (pcInventory.getTypeEquipped(2, 9) == 2) {
-				LsimulatorItemInstance ring[] = new LsimulatorItemInstance[2];
+				ItemInstance ring[] = new ItemInstance[2];
 				ring = pcInventory.getRingEquipped();
 				if ((ring[0].getItem().getItemId() == itemId)
 						&& (ring[1].getItem().getItemId() == itemId)) {
@@ -201,7 +201,7 @@ class AcHpMpBonusEffect implements LsimulatorArmorSetEffect {
 	}
 
 	@Override
-	public void giveEffect(LsimulatorPcInstance pc) {
+	public void giveEffect(PcInstance pc) {
 		pc.addAc(_ac);
 		pc.addMaxHp(_addHp);
 		pc.addMaxMp(_addMp);
@@ -211,7 +211,7 @@ class AcHpMpBonusEffect implements LsimulatorArmorSetEffect {
 	}
 
 	@Override
-	public void cancelEffect(LsimulatorPcInstance pc) {
+	public void cancelEffect(PcInstance pc) {
 		pc.addAc(-_ac);
 		pc.addMaxHp(-_addHp);
 		pc.addMaxMp(-_addMp);
@@ -244,7 +244,7 @@ class StatBonusEffect implements LsimulatorArmorSetEffect {
 	}
 
 	@Override
-	public void giveEffect(LsimulatorPcInstance pc) {
+	public void giveEffect(PcInstance pc) {
 		pc.addStr((byte) _str);
 		pc.addDex((byte) _dex);
 		pc.addCon((byte) _con);
@@ -254,7 +254,7 @@ class StatBonusEffect implements LsimulatorArmorSetEffect {
 	}
 
 	@Override
-	public void cancelEffect(LsimulatorPcInstance pc) {
+	public void cancelEffect(PcInstance pc) {
 		pc.addStr((byte) -_str);
 		pc.addDex((byte) -_dex);
 		pc.addCon((byte) -_con);
@@ -284,7 +284,7 @@ class DefenseBonusEffect implements LsimulatorArmorSetEffect {
 
 	// @Override
 	@Override
-	public void giveEffect(LsimulatorPcInstance pc) {
+	public void giveEffect(PcInstance pc) {
 		pc.addWater(_defenseWater);
 		pc.addWind(_defenseWind);
 		pc.addFire(_defenseFire);
@@ -293,7 +293,7 @@ class DefenseBonusEffect implements LsimulatorArmorSetEffect {
 
 	// @Override
 	@Override
-	public void cancelEffect(LsimulatorPcInstance pc) {
+	public void cancelEffect(PcInstance pc) {
 		pc.addWater(-_defenseWater);
 		pc.addWind(-_defenseWind);
 		pc.addFire(-_defenseFire);
@@ -324,7 +324,7 @@ class HitDmgModifierEffect implements LsimulatorArmorSetEffect {
 
 	// @Override
 	@Override
-	public void giveEffect(LsimulatorPcInstance pc) {
+	public void giveEffect(PcInstance pc) {
 		pc.addHitModifierByArmor(_hitModifier);
 		pc.addDmgModifierByArmor(_dmgModifier);
 		pc.addBowHitModifierByArmor(_bowHitModifier);
@@ -334,7 +334,7 @@ class HitDmgModifierEffect implements LsimulatorArmorSetEffect {
 
 	// @Override
 	@Override
-	public void cancelEffect(LsimulatorPcInstance pc) {
+	public void cancelEffect(PcInstance pc) {
 		pc.addHitModifierByArmor(-_hitModifier);
 		pc.addDmgModifierByArmor(-_dmgModifier);
 		pc.addBowHitModifierByArmor(-_bowHitModifier);
@@ -351,7 +351,7 @@ class PolymorphEffect implements LsimulatorArmorSetEffect {
 	}
 
 	@Override
-	public void giveEffect(LsimulatorPcInstance pc) {
+	public void giveEffect(PcInstance pc) {
 		int awakeSkillId = pc.getAwakeSkillId();
 		if ((awakeSkillId == AWAKEN_ANTHARAS)
 				|| (awakeSkillId == AWAKEN_FAFURION)
@@ -373,7 +373,7 @@ class PolymorphEffect implements LsimulatorArmorSetEffect {
 	}
 
 	@Override
-	public void cancelEffect(LsimulatorPcInstance pc) {
+	public void cancelEffect(PcInstance pc) {
 		int awakeSkillId = pc.getAwakeSkillId();
 		if ((awakeSkillId == AWAKEN_ANTHARAS)
 				|| (awakeSkillId == AWAKEN_FAFURION)
@@ -392,10 +392,10 @@ class PolymorphEffect implements LsimulatorArmorSetEffect {
 		LsimulatorPolyMorph.undoPoly(pc);
 	}
 
-	private boolean isRemainderOfCharge(LsimulatorPcInstance pc) {
+	private boolean isRemainderOfCharge(PcInstance pc) {
 		boolean isRemainderOfCharge = false;
 		if (pc.getInventory().checkItem(20383, 1)) {
-			LsimulatorItemInstance item = pc.getInventory().findItemId(20383);
+			ItemInstance item = pc.getInventory().findItemId(20383);
 			if (item != null) {
 				if (item.getChargeCount() != 0) {
 					isRemainderOfCharge = true;

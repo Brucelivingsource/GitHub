@@ -24,11 +24,11 @@ import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.model.shop.LsimulatorShop;
 import Lsimulator.server.server.model.shop.LsimulatorShopBuyOrderList;
@@ -49,7 +49,7 @@ public class C_Result extends ClientBasePacket {
 	public C_Result(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -72,11 +72,11 @@ public class C_Result extends ClientBasePacket {
 			if ((diffLocX > 5) || (diffLocY > 5)) {
 				return;
 			}
-			if (findObject instanceof LsimulatorNpcInstance) {
-				LsimulatorNpcInstance targetNpc = (LsimulatorNpcInstance) findObject;
+			if (findObject instanceof NpcInstance) {
+				NpcInstance targetNpc = (NpcInstance) findObject;
 				npcId = targetNpc.getNpcTemplate().get_npcId();
 				npcImpl = targetNpc.getNpcTemplate().getImpl();
-			} else if (findObject instanceof LsimulatorPcInstance) {
+			} else if (findObject instanceof PcInstance) {
 				isPrivateShop = true;
 			}
 		}
@@ -102,14 +102,14 @@ public class C_Result extends ClientBasePacket {
 				objectId = readD();
 				count = readD();
 				LsimulatorObject object = pc.getInventory().getItem(objectId);
-				LsimulatorItemInstance item = (LsimulatorItemInstance) object;
+				ItemInstance item = (ItemInstance) object;
 				if (!item.getItem().isTradable()) {
 					tradable = false;
 					pc.sendPackets(new S_ServerMessage(210, item.getItem().getName())); // \f1%0は捨てたりまたは他人に讓ることができません。
 				}
-				for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-					if (petNpc instanceof LsimulatorPetInstance) {
-						LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+				for (NpcInstance petNpc : pc.getPetList().values()) {
+					if (petNpc instanceof PetInstance) {
+						PetInstance pet = (PetInstance) petNpc;
 						if (item.getId() == pet.getItemObjId()) {
 							tradable = false;
 							// \f1%0は捨てたりまたは他人に讓ることができません。
@@ -118,7 +118,7 @@ public class C_Result extends ClientBasePacket {
 						}
 					}
 				}
-				for (LsimulatorDollInstance doll : pc.getDollList().values()) {
+				for (DollInstance doll : pc.getDollList().values()) {
 					if (item.getId() == doll.getItemObjId()) {
 						tradable = false;
 						pc.sendPackets(new S_ServerMessage(1181)); // 該当のマジックドールは現在使用中です。
@@ -140,7 +140,7 @@ public class C_Result extends ClientBasePacket {
 		} else if ((resultType == 3) && (size != 0)
 				&& npcImpl.equalsIgnoreCase("LsimulatorDwarf") && (level >= 5)) { // 從倉庫取出東西
 			int objectId, count;
-			LsimulatorItemInstance item;
+			ItemInstance item;
 			for (int i = 0; i < size; i++) {
 				objectId = readD();
 				count = readD();
@@ -167,7 +167,7 @@ public class C_Result extends ClientBasePacket {
 					count = readD();
 					LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(pc.getClanname());
 					LsimulatorObject object = pc.getInventory().getItem(objectId);
-					LsimulatorItemInstance item = (LsimulatorItemInstance) object;
+					ItemInstance item = (ItemInstance) object;
 					if (clan != null) {
 						if (!item.getItem().isTradable()) {
 							tradable = false;
@@ -177,9 +177,9 @@ public class C_Result extends ClientBasePacket {
 							tradable = false;
 							pc.sendPackets(new S_ServerMessage(210, item.getItem().getName())); // \f1%0は捨てたりまたは他人に讓ることができません。
 						}
-						for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-							if (petNpc instanceof LsimulatorPetInstance) {
-								LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+						for (NpcInstance petNpc : pc.getPetList().values()) {
+							if (petNpc instanceof PetInstance) {
+								PetInstance pet = (PetInstance) petNpc;
 								if (item.getId() == pet.getItemObjId()) {
 									tradable = false;
 									// \f1%0は捨てたりまたは他人に讓ることができません。
@@ -188,7 +188,7 @@ public class C_Result extends ClientBasePacket {
 								}
 							}
 						}
-						for (LsimulatorDollInstance doll : pc.getDollList().values()) {
+						for (DollInstance doll : pc.getDollList().values()) {
 							if (item.getId() == doll.getItemObjId()) {
 								tradable = false;
 								pc.sendPackets(new S_ServerMessage(1181)); // 該当のマジックドールは現在使用中です。
@@ -216,7 +216,7 @@ public class C_Result extends ClientBasePacket {
 		} else if ((resultType == 5) && (size != 0)
 				&& npcImpl.equalsIgnoreCase("LsimulatorDwarf") && (level >= 5)) { // 從克萊因血盟倉庫中取出道具
 			int objectId, count;
-			LsimulatorItemInstance item;
+			ItemInstance item;
 
 			LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(pc.getClanname());
 			if (clan != null) {
@@ -253,14 +253,14 @@ public class C_Result extends ClientBasePacket {
 				objectId = readD();
 				count = readD();
 				LsimulatorObject object = pc.getInventory().getItem(objectId);
-				LsimulatorItemInstance item = (LsimulatorItemInstance) object;
+				ItemInstance item = (ItemInstance) object;
 				if (!item.getItem().isTradable()) {
 					tradable = false;
 					pc.sendPackets(new S_ServerMessage(210, item.getItem().getName())); // \f1%0は捨てたりまたは他人に讓ることができません。
 				}
-				for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-					if (petNpc instanceof LsimulatorPetInstance) {
-						LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+				for (NpcInstance petNpc : pc.getPetList().values()) {
+					if (petNpc instanceof PetInstance) {
+						PetInstance pet = (PetInstance) petNpc;
 						if (item.getId() == pet.getItemObjId()) {
 							tradable = false;
 							// \f1%0は捨てたりまたは他人に讓ることができません。
@@ -269,7 +269,7 @@ public class C_Result extends ClientBasePacket {
 						}
 					}
 				}
-				for (LsimulatorDollInstance doll : pc.getDollList().values()) {
+				for (DollInstance doll : pc.getDollList().values()) {
 					if (item.getId() == doll.getItemObjId()) {
 						tradable = false;
 						pc.sendPackets(new S_ServerMessage(1181)); // 該当のマジックドールは現在使用中です。
@@ -293,7 +293,7 @@ public class C_Result extends ClientBasePacket {
 				&& npcImpl.equalsIgnoreCase("LsimulatorDwarf") && (level >= 5)
 				&& pc.isElf()) { // 自分のエルフ倉庫から取り出し
 			int objectId, count;
-			LsimulatorItemInstance item;
+			ItemInstance item;
 			for (int i = 0; i < size; i++) {
 				objectId = readD();
 				count = readD();
@@ -315,10 +315,10 @@ public class C_Result extends ClientBasePacket {
 			if (findObject == null) {
 				return;
 			}
-			if (!(findObject instanceof LsimulatorPcInstance)) {
+			if (!(findObject instanceof PcInstance)) {
 				return;
 			}
-			LsimulatorPcInstance targetPc = (LsimulatorPcInstance) findObject;
+			PcInstance targetPc = (PcInstance) findObject;
 
 			int order;
 			int count;
@@ -329,7 +329,7 @@ public class C_Result extends ClientBasePacket {
 			int sellPrice;
 			int sellTotalCount;
 			int sellCount;
-			LsimulatorItemInstance item;
+			ItemInstance item;
 			boolean[] isRemoveFromList = new boolean[8];
 
 			if (targetPc.isTradingInPrivateShop()) {
@@ -373,7 +373,7 @@ public class C_Result extends ClientBasePacket {
 						}
 						price = count * sellPrice;
 						if (pc.getInventory().checkItem(LsimulatorItemId.ADENA, price)) {
-							LsimulatorItemInstance adena = pc.getInventory().findItemId(LsimulatorItemId.ADENA);
+							ItemInstance adena = pc.getInventory().findItemId(LsimulatorItemId.ADENA);
 							if ((targetPc != null) && (adena != null)) {
 								if (targetPc.getInventory().tradeItem(item, count, pc.getInventory()) == null) {
 									targetPc.setTradingInPrivateShop(false);
@@ -411,15 +411,15 @@ public class C_Result extends ClientBasePacket {
 			List<LsimulatorPrivateShopBuyList> buyList;
 			LsimulatorPrivateShopBuyList psbl;
 			int itemObjectId;
-			LsimulatorItemInstance item;
+			ItemInstance item;
 			int buyPrice;
 			int buyTotalCount;
 			int buyCount;
 			boolean[] isRemoveFromList = new boolean[8];
 
-			LsimulatorPcInstance targetPc = null;
-			if (findObject instanceof LsimulatorPcInstance) {
-				targetPc = (LsimulatorPcInstance) findObject;
+			PcInstance targetPc = null;
+			if (findObject instanceof PcInstance) {
+				targetPc = (PcInstance) findObject;
 			}
 			if (targetPc.isTradingInPrivateShop()) {
 				return;
@@ -461,7 +461,7 @@ public class C_Result extends ClientBasePacket {
 					}
 					if (targetPc.getInventory().checkItem(LsimulatorItemId.ADENA,
 							count * buyPrice)) {
-						LsimulatorItemInstance adena = targetPc.getInventory()
+						ItemInstance adena = targetPc.getInventory()
 								.findItemId(LsimulatorItemId.ADENA);
 						if (adena != null) {
 							targetPc.getInventory().tradeItem(adena,
@@ -505,7 +505,7 @@ public class C_Result extends ClientBasePacket {
 				if (itemCount == 0) {
 					continue;
 				}
-				for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) 
+				for (NpcInstance petNpc : pc.getPetList().values()) 
 					petCost += petNpc.getPetcost();
 
 				int charisma = pc.getCha();
@@ -542,7 +542,7 @@ public class C_Result extends ClientBasePacket {
 						return;
 					}
 					LsimulatorNpc npcTemp = NpcTable.getInstance().getTemplate(npcId);
-					LsimulatorPetInstance pet = new LsimulatorPetInstance(npcTemp, pc, l1pet);
+					PetInstance pet = new PetInstance(npcTemp, pc, l1pet);
 					pet.setPetcost(divisor);
 				}
 			}

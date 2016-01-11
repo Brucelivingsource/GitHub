@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * 送出顯示龍門選單動作
@@ -25,7 +25,7 @@ public class S_DragonGate extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_DragonGate(LsimulatorPcInstance pc, boolean[] i) {
+	public S_DragonGate(PcInstance pc, boolean[] i) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
 		writeC(0x66); // = 102
 		writeD(pc.getId());

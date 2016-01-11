@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.collections.Lists;
 import Lsimulator.server.server.utils.collections.Maps;
 
@@ -87,7 +87,7 @@ public class LsimulatorHateList {
 		return cha;
 	}
 
-	public synchronized void removeInvalidCharacter(LsimulatorNpcInstance npc) {
+	public synchronized void removeInvalidCharacter(NpcInstance npc) {
 		List<LsimulatorCharacter> invalidChars = Lists.newList();
 		for (LsimulatorCharacter cha : _hateMap.keySet()) {
 			if ((cha == null) || cha.isDead() || !npc.knownsObject(cha)) {
@@ -111,7 +111,7 @@ public class LsimulatorHateList {
 	public synchronized int getTotalLawfulHate() {
 		int totalHate = 0;
 		for (Map.Entry<LsimulatorCharacter, Integer> e : _hateMap.entrySet()) {
-			if (e.getKey() instanceof LsimulatorPcInstance) {
+			if (e.getKey() instanceof PcInstance) {
 				totalHate += e.getValue();
 			}
 		}
@@ -122,14 +122,14 @@ public class LsimulatorHateList {
 		int partyHate = 0;
 
 		for (Map.Entry<LsimulatorCharacter, Integer> e : _hateMap.entrySet()) {
-			LsimulatorPcInstance pc = null;
-			if (e.getKey() instanceof LsimulatorPcInstance) {
-				pc = (LsimulatorPcInstance) e.getKey();
+			PcInstance pc = null;
+			if (e.getKey() instanceof PcInstance) {
+				pc = (PcInstance) e.getKey();
 			}
-			if (e.getKey() instanceof LsimulatorNpcInstance) {
-				LsimulatorCharacter cha = ((LsimulatorNpcInstance) e.getKey()).getMaster();
-				if (cha instanceof LsimulatorPcInstance) {
-					pc = (LsimulatorPcInstance) cha;
+			if (e.getKey() instanceof NpcInstance) {
+				LsimulatorCharacter cha = ((NpcInstance) e.getKey()).getMaster();
+				if (cha instanceof PcInstance) {
+					pc = (PcInstance) cha;
 				}
 			}
 
@@ -144,9 +144,9 @@ public class LsimulatorHateList {
 		int partyHate = 0;
 
 		for (Map.Entry<LsimulatorCharacter, Integer> e : _hateMap.entrySet()) {
-			LsimulatorPcInstance pc = null;
-			if (e.getKey() instanceof LsimulatorPcInstance) {
-				pc = (LsimulatorPcInstance) e.getKey();
+			PcInstance pc = null;
+			if (e.getKey() instanceof PcInstance) {
+				pc = (PcInstance) e.getKey();
 			}
 
 			if ((pc != null) && party.isMember(pc)) {

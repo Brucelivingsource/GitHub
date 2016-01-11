@@ -15,8 +15,8 @@
 package Lsimulator.server.server.model;
 
 import Lsimulator.server.Config;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.map.LsimulatorMap;
 import Lsimulator.server.server.serverpackets.S_SkillSound;
 import Lsimulator.server.server.serverpackets.S_Teleport;
@@ -41,19 +41,19 @@ public class LsimulatorTeleport {
 	private LsimulatorTeleport() {
 	}
 
-	public static void teleport(LsimulatorPcInstance pc, LsimulatorLocation loc, int head, boolean effectable) {
+	public static void teleport(PcInstance pc, LsimulatorLocation loc, int head, boolean effectable) {
 		teleport(pc, loc.getX(), loc.getY(), (short) loc.getMapId(), head, effectable, TELEPORT);
 	}
 
-	public static void teleport(LsimulatorPcInstance pc, LsimulatorLocation loc, int head, boolean effectable, int skillType) {
+	public static void teleport(PcInstance pc, LsimulatorLocation loc, int head, boolean effectable, int skillType) {
 		teleport(pc, loc.getX(), loc.getY(), (short) loc.getMapId(), head, effectable, skillType);
 	}
 
-	public static void teleport(LsimulatorPcInstance pc, int x, int y, short mapid, int head, boolean effectable) {
+	public static void teleport(PcInstance pc, int x, int y, short mapid, int head, boolean effectable) {
 		teleport(pc, x, y, mapid, head, effectable, TELEPORT);
 	}
 
-	public static void teleport(LsimulatorPcInstance pc, int x, int y, short mapId, int head, boolean effectable, int skillType) {
+	public static void teleport(PcInstance pc, int x, int y, short mapId, int head, boolean effectable, int skillType) {
 		// 瞬移, 取消交易
 		if (pc.getTradeID() != 0) {
 			LsimulatorTrade trade = new LsimulatorTrade();
@@ -147,16 +147,16 @@ public class LsimulatorTeleport {
 		}
 
 		if (map.isPassable(locX, locY)) {
-			if (cha instanceof LsimulatorPcInstance) {
-				teleport((LsimulatorPcInstance) cha, locX, locY, mapId, cha.getHeading(), true);
+			if (cha instanceof PcInstance) {
+				teleport((PcInstance) cha, locX, locY, mapId, cha.getHeading(), true);
 			}
-			else if (cha instanceof LsimulatorNpcInstance) {
-				((LsimulatorNpcInstance) cha).teleport(locX, locY, cha.getHeading());
+			else if (cha instanceof NpcInstance) {
+				((NpcInstance) cha).teleport(locX, locY, cha.getHeading());
 			}
 		}
 	}
 
-	public static void randomTeleport(LsimulatorPcInstance pc, boolean effectable) {
+	public static void randomTeleport(PcInstance pc, boolean effectable) {
 		// まだ本サーバのランテレ処理と違うところが結構あるような・・・
 		LsimulatorLocation newLocation = pc.getLocation().randomLocation(200, true);
 		int newX = newLocation.getX();

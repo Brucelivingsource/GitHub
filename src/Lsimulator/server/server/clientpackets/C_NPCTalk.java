@@ -20,7 +20,7 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.NpcActionTable;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.npc.LsimulatorNpcHtml;
 import Lsimulator.server.server.model.npc.action.LsimulatorNpcAction;
 import Lsimulator.server.server.serverpackets.S_NPCTalkReturn;
@@ -40,7 +40,7 @@ public class C_NPCTalk extends ClientBasePacket {
 			throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

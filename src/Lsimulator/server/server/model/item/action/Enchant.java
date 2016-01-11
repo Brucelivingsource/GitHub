@@ -18,8 +18,8 @@ import Lsimulator.server.Config;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.LogEnchantTable;
 import Lsimulator.server.server.model.LsimulatorPcInventory;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_ItemStatus;
 import Lsimulator.server.server.serverpackets.S_OwnCharAttrDef;
@@ -31,8 +31,8 @@ import Lsimulator.server.server.utils.Random;
 public class Enchant {
 
 	// 對武器施法的卷軸
-	public static void scrollOfEnchantWeapon(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance
-			, LsimulatorItemInstance l1iteminstance1, ClientThread client) {
+	public static void scrollOfEnchantWeapon(PcInstance pc, ItemInstance l1iteminstance
+			, ItemInstance l1iteminstance1, ClientThread client) {
 		int itemId = l1iteminstance.getItem().getItemId();
 		int safe_enchant = l1iteminstance1.getItem().get_safeenchant();
 		int weaponId = l1iteminstance1.getItem().getItemId();
@@ -100,7 +100,7 @@ public class Enchant {
 			if (rnd < enchant_chance_wepon) {
 				int randomEnchantLevel = RandomELevel(l1iteminstance1, itemId);
 				SuccessEnchant(pc, l1iteminstance1, client, randomEnchantLevel);
-			} else if ((enchant_level >= 9) && (rnd < (enchant_chance_wepon * 2))) {
+			} else if ((enchant_level >= 9) && (rnd < (enchant_chance_wepon << 1 ))) {
 				// \f1%0%s 持續發出 產生激烈的 藍色的 光芒，但是沒有任何事情發生。
 				pc.sendPackets(new S_ServerMessage(160, l1iteminstance1.getLogName(), "$245", "$248"));
 			} else {
@@ -110,8 +110,8 @@ public class Enchant {
 	}
 
 	// 對盔甲施法的卷軸
-	public static void scrollOfEnchantArmor(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance
-			, LsimulatorItemInstance l1iteminstance1, ClientThread client) {
+	public static void scrollOfEnchantArmor(PcInstance pc, ItemInstance l1iteminstance
+			, ItemInstance l1iteminstance1, ClientThread client) {
 		int itemId = l1iteminstance.getItem().getItemId();
 		int safe_enchant = ((LsimulatorArmor) l1iteminstance1.getItem()).get_safeenchant();
 		int armorId = l1iteminstance1.getItem().getItemId();
@@ -164,7 +164,7 @@ public class Enchant {
 				enchant_level_tmp = enchant_level;
 			}
 			if (enchant_level >= 9) {
-				enchant_chance_armor = (100 + enchant_level_tmp * Config.ENCHANT_CHANCE_ARMOR) / (enchant_level_tmp * 2);
+				enchant_chance_armor = (100 + enchant_level_tmp * Config.ENCHANT_CHANCE_ARMOR) / (enchant_level_tmp << 1 );
 			} else {
 				enchant_chance_armor = (100 + enchant_level_tmp * Config.ENCHANT_CHANCE_ARMOR) / enchant_level_tmp;
 			}
@@ -173,7 +173,7 @@ public class Enchant {
 				int randomEnchantLevel = RandomELevel(l1iteminstance1, itemId);
 				SuccessEnchant(pc, l1iteminstance1, client, randomEnchantLevel);
 			}
-			else if ((enchant_level >= 9) && (rnd < (enchant_chance_armor * 2))) {
+			else if ((enchant_level >= 9) && (rnd < (enchant_chance_armor << 1 ))) {
 				// \f1%0%s 持續發出 產生激烈的 銀色的 光芒，但是沒有任何事情發生。
 				pc.sendPackets(new S_ServerMessage(160, l1iteminstance1.getLogName(), "$252", "$248"));
 			} else {
@@ -183,8 +183,8 @@ public class Enchant {
 	}
 
 	// 飾品強化卷軸
-	public static void scrollOfEnchantAccessory(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance
-			, LsimulatorItemInstance l1iteminstance1, ClientThread client) {
+	public static void scrollOfEnchantAccessory(PcInstance pc, ItemInstance l1iteminstance
+			, ItemInstance l1iteminstance1, ClientThread client) {
 		if ((l1iteminstance1 == null) || (l1iteminstance1.getBless() >= 128)
 				|| (l1iteminstance1.getItem().getType2() != 2
 				|| l1iteminstance1.getItem().getType() < 8
@@ -295,8 +295,8 @@ public class Enchant {
 		pc.getInventory().removeItem(l1iteminstance, 1);
 	}
 
-	public static void scrollOfEnchantWeaponAttr(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance
-			, LsimulatorItemInstance l1iteminstance1, ClientThread client) {
+	public static void scrollOfEnchantWeaponAttr(PcInstance pc, ItemInstance l1iteminstance
+			, ItemInstance l1iteminstance1, ClientThread client) {
 		int itemId = l1iteminstance.getItem().getItemId();
 		if ((l1iteminstance1 == null) || (l1iteminstance1.getItem().getType2() != 1)
 				|| (l1iteminstance1.getBless() >= 128)) {
@@ -358,8 +358,8 @@ public class Enchant {
 	}
 
 	// 象牙塔對武器施法的卷軸
-	public static void scrollOfEnchantWeaponIvoryTower(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance
-			, LsimulatorItemInstance l1iteminstance1, ClientThread client) {
+	public static void scrollOfEnchantWeaponIvoryTower(PcInstance pc, ItemInstance l1iteminstance
+			, ItemInstance l1iteminstance1, ClientThread client) {
 		int weaponId = l1iteminstance1.getItem().getItemId();
 		if ((l1iteminstance1 == null) || (l1iteminstance1.getItem().getType2() != 1)) {
 			pc.sendPackets(new S_ServerMessage(79)); // \f1沒有任何事情發生。
@@ -385,8 +385,8 @@ public class Enchant {
 	}
 
 	// 象牙塔對盔甲施法的卷軸
-	public static void scrollOfEnchantArmorIvoryTower(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance
-			, LsimulatorItemInstance l1iteminstance1, ClientThread client) {
+	public static void scrollOfEnchantArmorIvoryTower(PcInstance pc, ItemInstance l1iteminstance
+			, ItemInstance l1iteminstance1, ClientThread client) {
 		int armorId = l1iteminstance1.getItem().getItemId();
 		if ((l1iteminstance1 == null) || (l1iteminstance1.getItem().getType2() != 2)
 				|| (l1iteminstance1.getBless() >= 128)) {
@@ -411,7 +411,7 @@ public class Enchant {
 	}
 
 	// 強化成功
-	private static void SuccessEnchant(LsimulatorPcInstance pc, LsimulatorItemInstance item, ClientThread client, int i) {
+	private static void SuccessEnchant(PcInstance pc, ItemInstance item, ClientThread client, int i) {
 		int itemType2 = item.getItem().getType2();
 
 		String[][] sa = { {"", "", "", "", ""}
@@ -467,7 +467,7 @@ public class Enchant {
 				// 抗魔法斗篷
 				for (int j = 0; j < i2.length; j ++) {
 					if (armorId == i2[j]) {
-						pc.addMr(i * 2);
+						pc.addMr( i << 1 );
 						pc.sendPackets(new S_SPMR(pc));
 						break;
 					}
@@ -478,7 +478,7 @@ public class Enchant {
 	}
 
 	// 強化失敗
-	private static void FailureEnchant(LsimulatorPcInstance pc, LsimulatorItemInstance item) {
+	private static void FailureEnchant(PcInstance pc, ItemInstance item) {
 		String[] sa = {"", "$245", "$252"}; // ""、藍色的、銀色的
 		int itemType2 = item.getItem().getType2();
 
@@ -490,7 +490,7 @@ public class Enchant {
 	}
 
 	// 隨機強化等級
-	private static int RandomELevel(LsimulatorItemInstance item, int itemId) {
+	private static int RandomELevel(ItemInstance item, int itemId) {
 		if ((itemId == LsimulatorItemId.B_SCROLL_OF_ENCHANT_ARMOR) || (itemId == LsimulatorItemId.B_SCROLL_OF_ENCHANT_WEAPON)
 				|| (itemId == 140129) || (itemId == 140130)) {
 			if (item.getEnchantLevel() <= 2) {

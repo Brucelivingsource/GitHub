@@ -27,11 +27,11 @@ import Lsimulator.server.server.datatables.MobSkillTable;
 import Lsimulator.server.server.datatables.NpcTable;
 import Lsimulator.server.server.datatables.SkillsTable;
 import Lsimulator.server.server.datatables.SprTable;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.model.skill.LsimulatorSkillUse;
 import Lsimulator.server.server.serverpackets.S_CharVisualUpdate;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
@@ -49,7 +49,7 @@ public class LsimulatorMobSkillUse {
 
 	private LsimulatorMobSkill _mobSkillTemplate = null;
 
-	private LsimulatorNpcInstance _attacker = null;
+	private NpcInstance _attacker = null;
 
 	private LsimulatorCharacter _target = null;
 
@@ -57,7 +57,7 @@ public class LsimulatorMobSkillUse {
 
 	private int _skillUseCount[];
 
-	public LsimulatorMobSkillUse(LsimulatorNpcInstance npc) {
+	public LsimulatorMobSkillUse(NpcInstance npc) {
 		_sleepTime = 0;
 
 		_mobSkillTemplate = MobSkillTable.getInstance().getTemplate(npc.getNpcTemplate().get_npcId());
@@ -246,7 +246,7 @@ public class LsimulatorMobSkillUse {
 			_sleepTime = SprTable.getInstance().getSprSpeed(_attacker.getTempCharGfx(), actId);
 		}
 
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(_attacker)) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(_attacker)) {
 			if (pc.isDead()) { // 死亡
 				continue;
 			}
@@ -349,8 +349,8 @@ public class LsimulatorMobSkillUse {
 				}
 
 				// ゴースト状態は対象外
-				if (cha instanceof LsimulatorPcInstance) {
-					if (((LsimulatorPcInstance) cha).isGhost()) {
+				if (cha instanceof PcInstance) {
+					if (((PcInstance) cha).isGhost()) {
 						continue;
 					}
 				}
@@ -360,16 +360,16 @@ public class LsimulatorMobSkillUse {
 					continue;
 				}
 
-				if ((_target instanceof LsimulatorPcInstance) || (_target instanceof LsimulatorSummonInstance) || (_target instanceof LsimulatorPetInstance)) {
+				if ((_target instanceof PcInstance) || (_target instanceof SummonInstance) || (_target instanceof PetInstance)) {
 					// 対PC
-					if (((obj instanceof LsimulatorPcInstance) && !((LsimulatorPcInstance) obj).isGhost() && !((LsimulatorPcInstance) obj).isGmInvis())
-							|| (obj instanceof LsimulatorSummonInstance) || (obj instanceof LsimulatorPetInstance)) {
+					if (((obj instanceof PcInstance) && !((PcInstance) obj).isGhost() && !((PcInstance) obj).isGmInvis())
+							|| (obj instanceof SummonInstance) || (obj instanceof PetInstance)) {
 						targetList.put(obj.getId(), 0);
 					}
 				}
 				else {
 					// 対NPC
-					if (obj instanceof LsimulatorMonsterInstance) {
+					if (obj instanceof MonsterInstance) {
 						targetList.put(obj.getId(), 0);
 					}
 				}
@@ -451,7 +451,7 @@ public class LsimulatorMobSkillUse {
 		}
 
 		if (getMobSkillTemplate().getTriggerCompanionHp(skillIdx) > 0) {
-			LsimulatorNpcInstance companionNpc = searchMinCompanionHp();
+			NpcInstance companionNpc = searchMinCompanionHp();
 			if (companionNpc == null) {
 				return false;
 			}
@@ -488,16 +488,16 @@ public class LsimulatorMobSkillUse {
 		return useble;
 	}
 
-	private LsimulatorNpcInstance searchMinCompanionHp() {
-		LsimulatorNpcInstance npc;
-		LsimulatorNpcInstance minHpNpc = null;
+	private NpcInstance searchMinCompanionHp() {
+		NpcInstance npc;
+		NpcInstance minHpNpc = null;
 		int hpRatio = 100;
 		int companionHpRatio;
 		int family = _attacker.getNpcTemplate().get_family();
 
 		for (LsimulatorObject object : LsimulatorWorld.getInstance().getVisibleObjects(_attacker)) {
-			if (object instanceof LsimulatorNpcInstance) {
-				npc = (LsimulatorNpcInstance) object;
+			if (object instanceof NpcInstance) {
+				npc = (NpcInstance) object;
 				if (npc.getNpcTemplate().get_family() == family) {
 					companionHpRatio = (npc.getCurrentHp() * 100) / npc.getMaxHp();
 					if (companionHpRatio < hpRatio) {
@@ -522,13 +522,13 @@ public class LsimulatorMobSkillUse {
 		try {
 			LsimulatorNpc spawnmonster = NpcTable.getInstance().getTemplate(summonId);
 			if (spawnmonster != null) {
-				LsimulatorNpcInstance mob = null;
+				NpcInstance mob = null;
 				try {
 					String implementationName = spawnmonster.getImpl();
 					Constructor<?> _constructor = Class.forName(
 							(new StringBuilder()).append("Lsimulator.server.server.model.Instance.").append(implementationName).append("Instance")
 									.toString()).getConstructors()[0];
-					mob = (LsimulatorNpcInstance) _constructor.newInstance(new Object[]
+					mob = (NpcInstance) _constructor.newInstance(new Object[]
 					{ spawnmonster });
 					mob.setId(IdFactory.getInstance().nextId());
 					LsimulatorLocation loc = _attacker.getLocation().randomLocation(8, false);
@@ -543,7 +543,7 @@ public class LsimulatorMobSkillUse {
 					LsimulatorWorld.getInstance().storeObject(mob);
 					LsimulatorWorld.getInstance().addVisibleObject(mob);
 					LsimulatorObject object = LsimulatorWorld.getInstance().findObject(mob.getId());
-					LsimulatorMonsterInstance newnpc = (LsimulatorMonsterInstance) object;
+					MonsterInstance newnpc = (MonsterInstance) object;
 					newnpc.set_storeDroped(true); // 召喚怪不會掉落道具
 					if (newnpc.getTempCharGfx() == 145) { // 史巴托
 						newnpc.setStatus(11);
@@ -557,7 +557,7 @@ public class LsimulatorMobSkillUse {
 					}
 					newnpc.onNpcAI();
 					newnpc.turnOnOffLight();
-					newnpc.startChat(LsimulatorNpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
+					newnpc.startChat(NpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
 				}
 				catch (Exception e) {
 					_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -581,7 +581,7 @@ public class LsimulatorMobSkillUse {
 				// ターゲット候補の選定
 				List<LsimulatorCharacter> targetList = Lists.newList();
 				for (LsimulatorObject obj : LsimulatorWorld.getInstance().getVisibleObjects(_attacker)) {
-					if ((obj instanceof LsimulatorPcInstance) || (obj instanceof LsimulatorPetInstance) || (obj instanceof LsimulatorSummonInstance)) {
+					if ((obj instanceof PcInstance) || (obj instanceof PetInstance) || (obj instanceof SummonInstance)) {
 						LsimulatorCharacter cha = (LsimulatorCharacter) obj;
 
 						int distance = _attacker.getLocation().getTileLineDistance(cha.getLocation());
@@ -605,8 +605,8 @@ public class LsimulatorMobSkillUse {
 						}
 
 						// ゴースト状態は対象外
-						if (cha instanceof LsimulatorPcInstance) {
-							if (((LsimulatorPcInstance) cha).isGhost()) {
+						if (cha instanceof PcInstance) {
+							if (((PcInstance) cha).isGhost()) {
 								continue;
 							}
 						}

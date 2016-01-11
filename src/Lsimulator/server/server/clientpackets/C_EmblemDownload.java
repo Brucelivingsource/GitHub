@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Emblem;
 
 //Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -33,7 +33,7 @@ public class C_EmblemDownload extends ClientBasePacket {
 
 		int emblemId = readD();
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}

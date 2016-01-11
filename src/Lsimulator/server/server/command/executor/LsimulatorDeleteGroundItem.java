@@ -22,9 +22,9 @@ import Lsimulator.server.server.datatables.PetTable;
 import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorFurnitureInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.FurnitureInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * GM指令：刪除地上道具
@@ -38,15 +38,15 @@ public class LsimulatorDeleteGroundItem implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		for (LsimulatorObject l1object : LsimulatorWorld.getInstance().getObject()) {
-			if (l1object instanceof LsimulatorItemInstance) {
-				LsimulatorItemInstance l1iteminstance = (LsimulatorItemInstance) l1object;
+			if (l1object instanceof ItemInstance) {
+				ItemInstance l1iteminstance = (ItemInstance) l1object;
 				if ((l1iteminstance.getX() == 0) && (l1iteminstance.getY() == 0)) { // 地面上のアイテムではなく、誰かの所有物
 					continue;
 				}
 
-				List<LsimulatorPcInstance> players = LsimulatorWorld.getInstance().getVisiblePlayer(l1iteminstance, 0);
+				List<PcInstance> players = LsimulatorWorld.getInstance().getVisiblePlayer(l1iteminstance, 0);
 				if (0 == players.size()) {
 					LsimulatorInventory groundInventory = LsimulatorWorld.getInstance().getInventory(l1iteminstance.getX(), l1iteminstance.getY(),
 							l1iteminstance.getMapId());
@@ -59,8 +59,8 @@ public class LsimulatorDeleteGroundItem implements LsimulatorCommandExecutor {
 						lettertable.deleteLetter(l1iteminstance.getId());
 					}
 					else if ((itemId >= 41383) && (itemId <= 41400)) { // 家具
-						if (l1object instanceof LsimulatorFurnitureInstance) {
-							LsimulatorFurnitureInstance furniture = (LsimulatorFurnitureInstance) l1object;
+						if (l1object instanceof FurnitureInstance) {
+							FurnitureInstance furniture = (FurnitureInstance) l1object;
 							if (furniture.getItemObjId() == l1iteminstance.getId()) { // 既に引き出している家具
 								FurnitureSpawnTable.getInstance().deleteFurniture(furniture);
 							}

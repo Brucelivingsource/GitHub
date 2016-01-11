@@ -16,8 +16,8 @@ package Lsimulator.server.server.command.executor;
 
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.GMSTATUS_SHOWTRAPS;
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorTrapInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.TrapInstance;
 import Lsimulator.server.server.serverpackets.S_RemoveObject;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
@@ -30,7 +30,7 @@ public class LsimulatorShowTrap implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		if (arg.equalsIgnoreCase("on")) {
 			pc.setSkillEffect(GMSTATUS_SHOWTRAPS, 0);
 		}
@@ -38,7 +38,7 @@ public class LsimulatorShowTrap implements LsimulatorCommandExecutor {
 			pc.removeSkillEffect(GMSTATUS_SHOWTRAPS);
 
 			for (LsimulatorObject obj : pc.getKnownObjects()) {
-				if (obj instanceof LsimulatorTrapInstance) {
+				if (obj instanceof TrapInstance) {
 					pc.removeKnownObject(obj);
 					pc.sendPackets(new S_RemoveObject(obj));
 				}

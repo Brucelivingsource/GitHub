@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Disconnect;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
@@ -33,9 +33,9 @@ public class LsimulatorSKick implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
-			LsimulatorPcInstance target = LsimulatorWorld.getInstance().getPlayer(arg);
+			PcInstance target = LsimulatorWorld.getInstance().getPlayer(arg);
 			if (target != null) {
 				pc.sendPackets(new S_SystemMessage((new StringBuilder()).append(target.getName()).append("已被您強制踢除遊戲。").toString()));
 				// SKTへ移動させる

@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.skill.LsimulatorSkillUse;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.utils.collections.Lists;
@@ -33,7 +33,7 @@ public class LsimulatorHauntedHouse {
 
 	public static final int STATUS_PLAYING = 2;
 
-	private final List<LsimulatorPcInstance> _members = Lists.newList();
+	private final List<PcInstance> _members = Lists.newList();
 
 	private int _hauntedHouseStatus = STATUS_NONE;
 
@@ -68,15 +68,15 @@ public class LsimulatorHauntedHouse {
 		else if ((8 >= membersCount) && (membersCount <= 10)) {
 			setWinnersCount(3);
 		}
-		for (LsimulatorPcInstance pc : getMembersArray()) {
+		for (PcInstance pc : getMembersArray()) {
 			LsimulatorSkillUse l1skilluse = new LsimulatorSkillUse();
 			l1skilluse.handleCommands(pc, CANCELLATION, pc.getId(), pc.getX(), pc.getY(), null, 0, LsimulatorSkillUse.TYPE_LOGIN);
 			LsimulatorPolyMorph.doPoly(pc, 6284, 300, LsimulatorPolyMorph.MORPH_BY_NPC);
 		}
 
 		for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-			if (object instanceof LsimulatorDoorInstance) {
-				LsimulatorDoorInstance door = (LsimulatorDoorInstance) object;
+			if (object instanceof DoorInstance) {
+				DoorInstance door = (DoorInstance) object;
 				if (door.getMapId() == 5140) {
 					door.open();
 				}
@@ -88,7 +88,7 @@ public class LsimulatorHauntedHouse {
 		setHauntedHouseStatus(STATUS_NONE);
 		setWinnersCount(0);
 		setGoalCount(0);
-		for (LsimulatorPcInstance pc : getMembersArray()) {
+		for (PcInstance pc : getMembersArray()) {
 			if (pc.getMapId() == 5140) {
 				LsimulatorSkillUse l1skilluse = new LsimulatorSkillUse();
 				l1skilluse.handleCommands(pc, CANCELLATION, pc.getId(), pc.getX(), pc.getY(), null, 0, LsimulatorSkillUse.TYPE_LOGIN);
@@ -97,8 +97,8 @@ public class LsimulatorHauntedHouse {
 		}
 		clearMembers();
 		for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-			if (object instanceof LsimulatorDoorInstance) {
-				LsimulatorDoorInstance door = (LsimulatorDoorInstance) object;
+			if (object instanceof DoorInstance) {
+				DoorInstance door = (DoorInstance) object;
 				if (door.getMapId() == 5140) {
 					door.close();
 				}
@@ -107,8 +107,8 @@ public class LsimulatorHauntedHouse {
 	}
 
 	public void removeRetiredMembers() {
-		LsimulatorPcInstance[] temp = getMembersArray();
-		for (LsimulatorPcInstance element : temp) {
+		PcInstance[] temp = getMembersArray();
+		for (PcInstance element : temp) {
 			if (element.getMapId() != 5140) {
 				removeMember(element);
 			}
@@ -116,12 +116,12 @@ public class LsimulatorHauntedHouse {
 	}
 
 	public void sendMessage(int type, String msg) {
-		for (LsimulatorPcInstance pc : getMembersArray()) {
+		for (PcInstance pc : getMembersArray()) {
 			pc.sendPackets(new S_ServerMessage(type, msg));
 		}
 	}
 
-	public void addMember(LsimulatorPcInstance pc) {
+	public void addMember(PcInstance pc) {
 		if (!_members.contains(pc)) {
 			_members.add(pc);
 		}
@@ -130,7 +130,7 @@ public class LsimulatorHauntedHouse {
 		}
 	}
 
-	public void removeMember(LsimulatorPcInstance pc) {
+	public void removeMember(PcInstance pc) {
 		_members.remove(pc);
 	}
 
@@ -138,12 +138,12 @@ public class LsimulatorHauntedHouse {
 		_members.clear();
 	}
 
-	public boolean isMember(LsimulatorPcInstance pc) {
+	public boolean isMember(PcInstance pc) {
 		return _members.contains(pc);
 	}
 
-	public LsimulatorPcInstance[] getMembersArray() {
-		return _members.toArray(new LsimulatorPcInstance[_members.size()]);
+	public PcInstance[] getMembersArray() {
+		return _members.toArray(new PcInstance[_members.size()]);
 	}
 
 	public int getMembersCount() {

@@ -25,7 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.npc.action.LsimulatorNpcAction;
 import Lsimulator.server.server.model.npc.action.LsimulatorNpcXmlParser;
 import Lsimulator.server.server.utils.FileUtil;
@@ -99,7 +99,7 @@ public class NpcActionTable {
 		return _instance;
 	}
 
-	public LsimulatorNpcAction get(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj) {
+	public LsimulatorNpcAction get(String actionName, PcInstance pc, LsimulatorObject obj) {
 		for (LsimulatorNpcAction action : _actions) {
 			if (action.acceptsRequest(actionName, pc, obj)) {
 				return action;
@@ -108,7 +108,7 @@ public class NpcActionTable {
 		return null;
 	}
 
-	public LsimulatorNpcAction get(LsimulatorPcInstance pc, LsimulatorObject obj) {
+	public LsimulatorNpcAction get(PcInstance pc, LsimulatorObject obj) {
 		for (LsimulatorNpcAction action : _talkActions) {
 			if (action.acceptsRequest("", pc, obj)) {
 				return action;

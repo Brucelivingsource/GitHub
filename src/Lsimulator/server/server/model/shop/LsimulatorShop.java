@@ -25,8 +25,8 @@ import Lsimulator.server.server.model.LsimulatorPcInventory;
 import Lsimulator.server.server.model.LsimulatorTaxCalculator;
 import Lsimulator.server.server.model.LsimulatorTownLocation;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.game.LsimulatorBugBearRace;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -69,7 +69,7 @@ public class LsimulatorShop {
 	 * @param item
 	 * @return アイテムが買取可能であればtrue
 	 */
-	private boolean isPurchaseableItem(LsimulatorItemInstance item) {
+	private boolean isPurchaseableItem(ItemInstance item) {
 		if (item == null) {
 			return false;
 		}
@@ -95,7 +95,7 @@ public class LsimulatorShop {
 		return null;
 	}
 
-	public LsimulatorAssessedItem assessItem(LsimulatorItemInstance item) {
+	public LsimulatorAssessedItem assessItem(ItemInstance item) {
 		LsimulatorShopItem shopItem = getPurchasingItem(item.getItemId());
 		if (shopItem == null) {
 			return null;
@@ -118,7 +118,7 @@ public class LsimulatorShop {
 	public List<LsimulatorAssessedItem> assessItems(LsimulatorPcInventory inv) {
 		List<LsimulatorAssessedItem> result = Lists.newList();
 		for (LsimulatorShopItem item : _purchasingItems) {
-			for (LsimulatorItemInstance targetItem : inv.findItemsId(item.getItemId())) {
+			for (ItemInstance targetItem : inv.findItemsId(item.getItemId())) {
 				if (!isPurchaseableItem(targetItem)) {
 					continue;
 				}
@@ -135,7 +135,7 @@ public class LsimulatorShop {
 	 * 
 	 * @return 何らかの理由でアイテムを販売できない場合、false
 	 */
-	private boolean ensureSell(LsimulatorPcInstance pc, LsimulatorShopBuyOrderList orderList) {
+	private boolean ensureSell(PcInstance pc, LsimulatorShopBuyOrderList orderList) {
 		int price = orderList.getTotalPriceTaxIncluded();
 		// オーバーフローチェック
 		if (!IntRange.includes(price, 0, 2000000000)) {
@@ -287,7 +287,7 @@ public class LsimulatorShop {
 		for (LsimulatorShopBuyOrder order : orderList.getList()) {
 			int itemId = order.getItem().getItemId();
 			int amount = order.getCount();
-			LsimulatorItemInstance item = ItemTable.getInstance().createItem(itemId);
+			ItemInstance item = ItemTable.getInstance().createItem(itemId);
 			if (item.getItemId() == 40309) {// Race Tickets
 				item.setItem(order.getItem().getItem());
 				LsimulatorBugBearRace.getInstance().setAllBet(
@@ -341,7 +341,7 @@ public class LsimulatorShop {
 	 * @param orderList
 	 *            販売すべきアイテムが記載されたLsimulatorShopBuyOrderList
 	 */
-	public void sellItems(LsimulatorPcInstance pc, LsimulatorShopBuyOrderList orderList) {
+	public void sellItems(PcInstance pc, LsimulatorShopBuyOrderList orderList) {
 		if (!ensureSell(pc, orderList)) {
 			return;
 		}
@@ -375,7 +375,7 @@ public class LsimulatorShop {
 		return new LsimulatorShopBuyOrderList(this);
 	}
 
-	public LsimulatorShopSellOrderList newSellOrderList(LsimulatorPcInstance pc) {
+	public LsimulatorShopSellOrderList newSellOrderList(PcInstance pc) {
 		return new LsimulatorShopSellOrderList(this, pc);
 	}
 }

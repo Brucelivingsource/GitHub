@@ -61,7 +61,7 @@ public class LsimulatorGameTime {
 	}
 
 	public Time toTime() {
-		int t = _time % (24 * 3600); // 日付情報分を切り捨て
+		int t = _time % (86400); // 日付情報分を切り捨て 24*3600
 		return new Time(t * 1000L - TimeZone.getDefault().getRawOffset());
 	}
 

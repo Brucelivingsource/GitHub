@@ -22,8 +22,8 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.HouseTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorHouse;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -39,7 +39,7 @@ public class C_Door extends ClientBasePacket {
 	public C_Door(byte abyte0[], ClientThread client) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -48,7 +48,7 @@ public class C_Door extends ClientBasePacket {
 		readH();
 		int objectId = readD();
 		
-		LsimulatorDoorInstance door = (LsimulatorDoorInstance) LsimulatorWorld.getInstance().findObject(objectId);
+		DoorInstance door = (DoorInstance) LsimulatorWorld.getInstance().findObject(objectId);
 		if (door == null) {
 			return;
 		}
@@ -86,7 +86,7 @@ public class C_Door extends ClientBasePacket {
 		}
 	}
 
-	private boolean isExistKeeper(LsimulatorPcInstance pc, int keeperId) {
+	private boolean isExistKeeper(PcInstance pc, int keeperId) {
 		if (keeperId == 0) {
 			return false;
 		}
@@ -106,9 +106,9 @@ public class C_Door extends ClientBasePacket {
 
 	public class CloseTimer extends TimerTask {
 
-		private LsimulatorDoorInstance _door;
+		private DoorInstance _door;
 
-		public CloseTimer(LsimulatorDoorInstance door) {
+		public CloseTimer(DoorInstance door) {
 			_door = door;
 		}
 

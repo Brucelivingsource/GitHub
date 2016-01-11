@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -23,7 +23,7 @@ import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
 public class S_TradeAddItem extends ServerBasePacket {
 	private static final String S_TRADE_ADD_ITEM = "[S] S_TradeAddItem";
 
-	public S_TradeAddItem(LsimulatorItemInstance item, int count, int type) {
+	public S_TradeAddItem(ItemInstance item, int count, int type) {
 		writeC(Opcodes.S_OPCODE_TRADEADDITEM);
 		writeC(type); // 0:トレードウィンドウ上段 1:トレードウィンドウ下段
 		writeH(item.getItem().getGfxId());

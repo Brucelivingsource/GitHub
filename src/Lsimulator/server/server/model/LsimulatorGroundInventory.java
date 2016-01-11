@@ -21,8 +21,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.Config;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_DropItem;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 import Lsimulator.server.server.serverpackets.S_RemoveObject;
@@ -39,9 +39,9 @@ public class LsimulatorGroundInventory extends LsimulatorInventory {
 	private Map<Integer, DeletionTimer> _reservedTimers = Maps.newMap();
 
 	private class DeletionTimer extends TimerTask {
-		private final LsimulatorItemInstance _item;
+		private final ItemInstance _item;
 
-		public DeletionTimer(LsimulatorItemInstance item) {
+		public DeletionTimer(ItemInstance item) {
 			_item = item;
 		}
 
@@ -61,7 +61,7 @@ public class LsimulatorGroundInventory extends LsimulatorInventory {
 		}
 	}
 
-	private void setTimer(LsimulatorItemInstance item) {
+	private void setTimer(ItemInstance item) {
 		if (!Config.ALT_ITEM_DELETION_TYPE.equalsIgnoreCase("std")) {
 			return;
 		}
@@ -72,7 +72,7 @@ public class LsimulatorGroundInventory extends LsimulatorInventory {
 		_timer.schedule(new DeletionTimer(item), Config.ALT_ITEM_DELETION_TIME * 60 * 1000);
 	}
 
-	private void cancelTimer(LsimulatorItemInstance item) {
+	private void cancelTimer(ItemInstance item) {
 		DeletionTimer timer = _reservedTimers.get(item.getId());
 		if (timer == null) {
 			return;
@@ -89,8 +89,8 @@ public class LsimulatorGroundInventory extends LsimulatorInventory {
 	}
 
 	@Override
-	public void onPerceive(LsimulatorPcInstance perceivedFrom) {
-		for (LsimulatorItemInstance item : getItems()) {
+	public void onPerceive(PcInstance perceivedFrom) {
+		for (ItemInstance item : getItems()) {
 			if (!perceivedFrom.knownsObject(item)) {
 				perceivedFrom.addKnownObject(item);
 				perceivedFrom.sendPackets(new S_DropItem(item)); // プレイヤーへDROPITEM情報を通知
@@ -100,10 +100,10 @@ public class LsimulatorGroundInventory extends LsimulatorInventory {
 
 	// 認識範囲内にいるプレイヤーへオブジェクト送信
 	@Override
-	public void insertItem(LsimulatorItemInstance item) {
+	public void insertItem(ItemInstance item) {
 		setTimer(item);
 
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(item)) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(item)) {
 			pc.sendPackets(new S_DropItem(item));
 			pc.addKnownObject(item);
 		}
@@ -111,17 +111,17 @@ public class LsimulatorGroundInventory extends LsimulatorInventory {
 
 	// 見える範囲内にいるプレイヤーのオブジェクト更新
 	@Override
-	public void updateItem(LsimulatorItemInstance item) {
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(item)) {
+	public void updateItem(ItemInstance item) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(item)) {
 			pc.sendPackets(new S_DropItem(item));
 		}
 	}
 
 	// 空インベントリ破棄及び見える範囲内にいるプレイヤーのオブジェクト削除
 	@Override
-	public void deleteItem(LsimulatorItemInstance item) {
+	public void deleteItem(ItemInstance item) {
 		cancelTimer(item);
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(item)) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(item)) {
 			pc.sendPackets(new S_RemoveObject(item));
 			pc.removeKnownObject(item);
 		}

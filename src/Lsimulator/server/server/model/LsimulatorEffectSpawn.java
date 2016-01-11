@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.datatables.NpcTable;
 import Lsimulator.server.server.datatables.SkillsTable;
-import Lsimulator.server.server.model.Instance.LsimulatorEffectInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.EffectInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.map.LsimulatorMap;
 import Lsimulator.server.server.model.map.LsimulatorWorldMap;
 import Lsimulator.server.server.serverpackets.S_NPCPack;
@@ -66,13 +66,13 @@ public class LsimulatorEffectSpawn {
 	 *            設置するマップのID
 	 * @return 生成されたエフェクトオブジェクト
 	 */
-	public LsimulatorEffectInstance spawnEffect(int npcId, int time, int locX, int locY, short mapId) {
+	public EffectInstance spawnEffect(int npcId, int time, int locX, int locY, short mapId) {
 		return spawnEffect(npcId, time, locX, locY, mapId, null, 0);
 	}
 
-	public LsimulatorEffectInstance spawnEffect(int npcId, int time, int locX, int locY, short mapId, LsimulatorPcInstance user, int skiiId) {
+	public EffectInstance spawnEffect(int npcId, int time, int locX, int locY, short mapId, PcInstance user, int skiiId) {
 		LsimulatorNpc template = NpcTable.getInstance().getTemplate(npcId);
-		LsimulatorEffectInstance effect = null;
+		EffectInstance effect = null;
 
 		if (template == null) {
 			return null;
@@ -84,7 +84,7 @@ public class LsimulatorEffectSpawn {
 			_constructor = Class.forName(className).getConstructors()[0];
 			Object obj[] =
 			{ template };
-			effect = (LsimulatorEffectInstance) _constructor.newInstance(obj);
+			effect = (EffectInstance) _constructor.newInstance(obj);
 
 			effect.setId(IdFactory.getInstance().nextId());
 			effect.setGfxId(template.get_gfxid());
@@ -99,7 +99,7 @@ public class LsimulatorEffectSpawn {
 			LsimulatorWorld.getInstance().storeObject(effect);
 			LsimulatorWorld.getInstance().addVisibleObject(effect);
 
-			for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(effect)) {
+			for (PcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(effect)) {
 				effect.addKnownObject(pc);
 				pc.addKnownObject(effect);
 				pc.sendPackets(new S_NPCPack(effect));
@@ -165,13 +165,13 @@ public class LsimulatorEffectSpawn {
 				break;
 			}
 
-			LsimulatorEffectInstance effect = spawnEffect(81157, duration * 1000, x, y, cha.getMapId());
+			EffectInstance effect = spawnEffect(81157, duration * 1000, x, y, cha.getMapId());
 			if (effect == null) {
 				break;
 			}
 			for (LsimulatorObject objects : LsimulatorWorld.getInstance().getVisibleObjects(effect, 0)) {
-				if (objects instanceof LsimulatorEffectInstance) {
-					LsimulatorEffectInstance npc = (LsimulatorEffectInstance) objects;
+				if (objects instanceof EffectInstance) {
+					EffectInstance npc = (EffectInstance) objects;
 					if (npc.getNpcTemplate().get_npcId() == 81157) {
 						npc.deleteMe();
 					}

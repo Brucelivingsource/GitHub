@@ -16,7 +16,7 @@ package Lsimulator.server.server.model;
 
 import Lsimulator.server.server.GeneralThreadPool;
 import Lsimulator.server.server.WarTimeController;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_PinkName;
 
 // Referenced classes of package Lsimulator.server.server.model:
@@ -27,9 +27,9 @@ public class LsimulatorPinkName {
 	}
 
 	static class PinkNameTimer implements Runnable {
-		private LsimulatorPcInstance _attacker = null;
+		private PcInstance _attacker = null;
 
-		public PinkNameTimer(LsimulatorPcInstance attacker) {
+		public PinkNameTimer(PcInstance attacker) {
 			_attacker = attacker;
 		}
 
@@ -55,22 +55,22 @@ public class LsimulatorPinkName {
 			stopPinkName(_attacker);
 		}
 
-		private void stopPinkName(LsimulatorPcInstance attacker) {
+		private void stopPinkName(PcInstance attacker) {
 			attacker.sendPackets(new S_PinkName(attacker.getId(), 0));
 			attacker.broadcastPacket(new S_PinkName(attacker.getId(), 0));
 			attacker.setPinkName(false);
 		}
 	}
 
-	public static void onAction(LsimulatorPcInstance pc, LsimulatorCharacter cha) {
+	public static void onAction(PcInstance pc, LsimulatorCharacter cha) {
 		if ((pc == null) || (cha == null)) {
 			return;
 		}
 
-		if (!(cha instanceof LsimulatorPcInstance)) {
+		if (!(cha instanceof PcInstance)) {
 			return;
 		}
-		LsimulatorPcInstance attacker = (LsimulatorPcInstance) cha;
+		PcInstance attacker = (PcInstance) cha;
 		if (pc.getId() == attacker.getId()) {
 			return;
 		}

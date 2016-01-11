@@ -30,8 +30,8 @@ import static Lsimulator.server.server.model.skill.LsimulatorSkillId.STATUS_BRAV
 import java.util.List;
 
 import Lsimulator.server.server.datatables.SkillsTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Ability;
 import Lsimulator.server.server.serverpackets.S_AddSkill;
 import Lsimulator.server.server.serverpackets.S_DelSkill;
@@ -44,35 +44,35 @@ import Lsimulator.server.server.templates.LsimulatorItem;
 import Lsimulator.server.server.utils.collections.Lists;
 
 public class LsimulatorEquipmentSlot {
-	private LsimulatorPcInstance _owner;
+	private PcInstance _owner;
 
 	/**
 	 * 効果中のセットアイテム
 	 */
 	private List<LsimulatorArmorSet> _currentArmorSet;
 
-	private LsimulatorItemInstance _weapon;
+	private ItemInstance _weapon;
 
-	private List<LsimulatorItemInstance> _armors;
+	private List<ItemInstance> _armors;
 
-	public LsimulatorEquipmentSlot(LsimulatorPcInstance owner) {
+	public LsimulatorEquipmentSlot(PcInstance owner) {
 		_owner = owner;
 		_armors = Lists.newList();
 		_currentArmorSet = Lists.newList();
 	}
 
-	private void setWeapon(LsimulatorItemInstance weapon) {
+	private void setWeapon(ItemInstance weapon) {
 		_owner.setWeapon(weapon);
 		_owner.setCurrentWeapon(weapon.getItem().getType1());
 		weapon.startEquipmentTimer(_owner);
 		_weapon = weapon;
 	}
 
-	public LsimulatorItemInstance getWeapon() {
+	public ItemInstance getWeapon() {
 		return _weapon;
 	}
 
-	private void setArmor(LsimulatorItemInstance armor) {
+	private void setArmor(ItemInstance armor) {
 		LsimulatorItem item = armor.getItem();
 		int itemId = armor.getItem().getItemId();
 		// 飾品不加防判斷
@@ -142,11 +142,11 @@ public class LsimulatorEquipmentSlot {
 		armor.startEquipmentTimer(_owner);
 	}
 
-	public List<LsimulatorItemInstance> getArmors() {
+	public List<ItemInstance> getArmors() {
 		return _armors;
 	}
 
-	private void removeWeapon(LsimulatorItemInstance weapon) {
+	private void removeWeapon(ItemInstance weapon) {
 		_owner.setWeapon(null);
 		_owner.setCurrentWeapon(0);
 		weapon.stopEquipmentTimer(_owner);
@@ -156,7 +156,7 @@ public class LsimulatorEquipmentSlot {
 		}
 	}
 
-	private void removeArmor(LsimulatorItemInstance armor) {
+	private void removeArmor(ItemInstance armor) {
 		LsimulatorItem item = armor.getItem();
 		int itemId = armor.getItem().getItemId();
 		// 飾品不加防判斷
@@ -205,7 +205,7 @@ public class LsimulatorEquipmentSlot {
 		_armors.remove(armor);
 	}
 
-	public void set(LsimulatorItemInstance equipment) {
+	public void set(ItemInstance equipment) {
 		LsimulatorItem item = equipment.getItem();
 		if (item.getType2() == 0) {
 			return;
@@ -273,7 +273,7 @@ public class LsimulatorEquipmentSlot {
 		}
 	}
 
-	public void remove(LsimulatorItemInstance equipment) {
+	public void remove(ItemInstance equipment) {
 		LsimulatorItem item = equipment.getItem();
 		if (item.getType2() == 0) {
 			return;
@@ -331,7 +331,7 @@ public class LsimulatorEquipmentSlot {
 		}
 	}
 
-	public void setMagicHelm(LsimulatorItemInstance item) {
+	public void setMagicHelm(ItemInstance item) {
 		switch (item.getItemId()) {
 		case 20013:
 			_owner.setSkillMastery(PHYSICAL_ENCHANT_DEX);
@@ -366,7 +366,7 @@ public class LsimulatorEquipmentSlot {
 		}
 	}
 
-	public void removeMagicHelm(int objectId, LsimulatorItemInstance item) {
+	public void removeMagicHelm(int objectId, ItemInstance item) {
 		switch (item.getItemId()) {
 		case 20013: // 敏捷魔法頭盔
 			if (!SkillsTable.getInstance().spellCheck(objectId,PHYSICAL_ENCHANT_DEX)) {

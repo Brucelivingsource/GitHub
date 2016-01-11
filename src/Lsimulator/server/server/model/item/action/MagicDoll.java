@@ -17,8 +17,8 @@ package Lsimulator.server.server.model.item.action;
 import Lsimulator.server.Config;
 import Lsimulator.server.server.datatables.MagicDollTable;
 import Lsimulator.server.server.datatables.NpcTable;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_OwnCharStatus;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.serverpackets.S_SkillIconGFX;
@@ -28,13 +28,13 @@ import Lsimulator.server.server.templates.LsimulatorNpc;
 
 public class MagicDoll {
 
-	public static void useMagicDoll(LsimulatorPcInstance pc, int itemId, int itemObjectId) {
+	public static void useMagicDoll(PcInstance pc, int itemId, int itemObjectId) {
 		LsimulatorMagicDoll magic_doll = MagicDollTable.getInstance().getTemplate((itemId));
 		if (magic_doll != null) {
 			boolean isAppear = true;
-			LsimulatorDollInstance doll = null;
+			DollInstance doll = null;
 
-			for (LsimulatorDollInstance curdoll : pc.getDollList().values()) {
+			for (DollInstance curdoll : pc.getDollList().values()) {
 				doll = curdoll;
 				if (doll.getItemObjId() == itemObjectId) {
 					isAppear = false;
@@ -54,7 +54,7 @@ public class MagicDoll {
 				int npcId = magic_doll.getDollId();
 
 				LsimulatorNpc template = NpcTable.getInstance().getTemplate(npcId);
-				doll = new LsimulatorDollInstance(template, pc, itemId, itemObjectId);
+				doll = new DollInstance(template, pc, itemId, itemObjectId);
 				pc.sendPackets(new S_SkillSound(doll.getId(), 5935));
 				pc.broadcastPacket(new S_SkillSound(doll.getId(), 5935));
 				pc.sendPackets(new S_SkillIconGFX(56, 1800));

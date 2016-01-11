@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.server.GMCommands;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.utils.collections.Maps;
 
@@ -40,7 +40,7 @@ public class LsimulatorFavorite implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			if (!_faviCom.containsKey(pc.getId())) {
 				_faviCom.put(pc.getId(), "");

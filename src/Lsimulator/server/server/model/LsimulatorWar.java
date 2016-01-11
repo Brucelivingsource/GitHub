@@ -21,7 +21,7 @@ import Lsimulator.server.Config;
 import Lsimulator.server.server.GeneralThreadPool;
 import Lsimulator.server.server.WarTimeController;
 import Lsimulator.server.server.datatables.CastleTable;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.serverpackets.S_War;
 import Lsimulator.server.server.templates.LsimulatorCastle;
@@ -138,8 +138,8 @@ public class LsimulatorWar {
 
 		LsimulatorClan clan1 = LsimulatorWorld.getInstance().getClan(clan1_name);
 		if (clan1 != null) {
-			LsimulatorPcInstance clan1_member[] = clan1.getOnlineClanMember();
-			for (LsimulatorPcInstance element : clan1_member) {
+			PcInstance clan1_member[] = clan1.getOnlineClanMember();
+			for (PcInstance element : clan1_member) {
 				element.sendPackets(new S_War(type, clan1_name, clan2_name));
 			}
 		}
@@ -149,8 +149,8 @@ public class LsimulatorWar {
 		if ((type == 1) || (type == 2) || (type == 3)) { // 宣戦布告、降伏、終結
 			LsimulatorClan clan2 = LsimulatorWorld.getInstance().getClan(clan2_name);
 			if (clan2 != null) {
-				LsimulatorPcInstance clan2_member[] = clan2.getOnlineClanMember();
-				for (LsimulatorPcInstance element : clan2_member) {
+				PcInstance clan2_member[] = clan2.getOnlineClanMember();
+				for (PcInstance element : clan2_member) {
 					if (type == 1) { // 宣戦布告
 						element.sendPackets(new S_War(type, clan1_name, clan2_name));
 					}
@@ -193,8 +193,8 @@ public class LsimulatorWar {
 
 		LsimulatorClan clan1 = LsimulatorWorld.getInstance().getClan(clan1_name);
 		if (clan1 != null) {
-			LsimulatorPcInstance clan1_member[] = clan1.getOnlineClanMember();
-			for (LsimulatorPcInstance element : clan1_member) {
+			PcInstance clan1_member[] = clan1.getOnlineClanMember();
+			for (PcInstance element : clan1_member) {
 				element.sendPackets(new S_War(type, clan1_name, clan2_name));
 			}
 		}
@@ -202,8 +202,8 @@ public class LsimulatorWar {
 		if ((type == 1) || (type == 2) || (type == 3)) { // 宣戦布告、降伏、終結
 			LsimulatorClan clan2 = LsimulatorWorld.getInstance().getClan(clan2_name);
 			if (clan2 != null) {
-				LsimulatorPcInstance clan2_member[] = clan2.getOnlineClanMember();
-				for (LsimulatorPcInstance element : clan2_member) {
+				PcInstance clan2_member[] = clan2.getOnlineClanMember();
+				for (PcInstance element : clan2_member) {
 					if (type == 1) { // 宣戦布告
 						element.sendPackets(new S_War(type, clan1_name, clan2_name));
 					}
@@ -228,8 +228,8 @@ public class LsimulatorWar {
 
 		LsimulatorClan defence_clan = LsimulatorWorld.getInstance().getClan(defence_clan_name);
 		if (defence_clan != null) {
-			LsimulatorPcInstance defence_clan_member[] = defence_clan.getOnlineClanMember();
-			for (LsimulatorPcInstance element : defence_clan_member) {
+			PcInstance defence_clan_member[] = defence_clan.getOnlineClanMember();
+			for (PcInstance element : defence_clan_member) {
 				for (String clanName : GetAttackClanList()) {
 					element.sendPackets(new S_War(3, defence_clan_name, clanName));
 				}
@@ -243,8 +243,8 @@ public class LsimulatorWar {
 						227, defence_clan_name, element));
 				LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(element);
 				if (clan != null) {
-					LsimulatorPcInstance clan_member[] = clan.getOnlineClanMember();
-					for (LsimulatorPcInstance element2 : clan_member) {
+					PcInstance clan_member[] = clan.getOnlineClanMember();
+					for (PcInstance element2 : clan_member) {
 						element2.sendPackets(new S_War(3, element, defence_clan_name));
 					}
 				}
@@ -265,8 +265,8 @@ public class LsimulatorWar {
 
 		LsimulatorClan defence_clan = LsimulatorWorld.getInstance().getClan(defence_clan_name);
 		if (defence_clan != null) {
-			LsimulatorPcInstance defence_clan_member[] = defence_clan.getOnlineClanMember();
-			for (LsimulatorPcInstance element : defence_clan_member) {
+			PcInstance defence_clan_member[] = defence_clan.getOnlineClanMember();
+			for (PcInstance element : defence_clan_member) {
 				element.sendPackets(new S_War(4, defence_clan_name, clanList[0]));
 			}
 		}
@@ -277,8 +277,8 @@ public class LsimulatorWar {
 						227, defence_clan_name, element));
 				LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(element);
 				if (clan != null) {
-					LsimulatorPcInstance clan_member[] = clan.getOnlineClanMember();
-					for (LsimulatorPcInstance element2 : clan_member) {
+					PcInstance clan_member[] = clan.getOnlineClanMember();
+					for (PcInstance element2 : clan_member) {
 						element2.sendPackets(new S_War(3, element, defence_clan_name));
 					}
 				}

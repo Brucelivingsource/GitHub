@@ -19,8 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import Lsimulator.server.server.utils.Random;
 
-import Lsimulator.server.server.model.Instance.LsimulatorEffectInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.EffectInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.types.Point;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.*;
 
@@ -29,7 +29,7 @@ public class HpRegeneration extends TimerTask {
 	private static final Logger _log = Logger.getLogger(HpRegeneration.class
 			.getName());
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
 	private int _regenMax = 0;
 
@@ -37,7 +37,7 @@ public class HpRegeneration extends TimerTask {
 
 	private int _curPoint = 4;
 
-	public HpRegeneration(LsimulatorPcInstance pc) {
+	public HpRegeneration(PcInstance pc) {
 		_pc = pc;
 
 		updateLevel();
@@ -82,7 +82,7 @@ public class HpRegeneration extends TimerTask {
 		}
 
 		synchronized (this) {
-			_regenMax = lvlTable[regenLvl - 1] * 4;
+			_regenMax = ( lvlTable[regenLvl - 1]  << 2 ) ;
 		}
 	}
 
@@ -203,7 +203,7 @@ public class HpRegeneration extends TimerTask {
 		}
 	}
 
-	private boolean isUnderwater(LsimulatorPcInstance pc) {
+	private boolean isUnderwater(PcInstance pc) {
 		// ウォーターブーツ装備時か、 エヴァの祝福状態、修理された装備セットであれば水中では無いとみなす。
 		if (pc.getInventory().checkEquipped(20207)) {
 			return false;
@@ -220,7 +220,7 @@ public class HpRegeneration extends TimerTask {
 		return pc.getMap().isUnderwater();
 	}
 
-	private boolean isOverWeight(LsimulatorPcInstance pc) {
+	private boolean isOverWeight(PcInstance pc) {
 		// エキゾチックバイタライズ状態、アディショナルファイアー状態か
 		// ゴールデンウィング装備時であれば、重量オーバーでは無いとみなす。
 		if (pc.hasSkillEffect(EXOTIC_VITALIZE)
@@ -234,7 +234,7 @@ public class HpRegeneration extends TimerTask {
 		return (121 <= pc.getInventory().getWeight242()) ? true : false;
 	}
 
-	private boolean isLv50Quest(LsimulatorPcInstance pc) {
+	private boolean isLv50Quest(PcInstance pc) {
 		int mapId = pc.getMapId();
 		return (mapId == 2000 || mapId == 2001) ? true : false;
 	}
@@ -246,12 +246,12 @@ public class HpRegeneration extends TimerTask {
 	 *            PC
 	 * @return true PCがライフストリームの範囲内にいる場合
 	 */
-	private static boolean isPlayerInLifeStream(LsimulatorPcInstance pc) {
+	private static boolean isPlayerInLifeStream(PcInstance pc) {
 		for (LsimulatorObject object : pc.getKnownObjects()) {
-			if ( ! (object instanceof LsimulatorEffectInstance ) ) {
+			if ( ! (object instanceof EffectInstance ) ) {
 				continue;
 			}
-			LsimulatorEffectInstance effect = (LsimulatorEffectInstance) object;
+			EffectInstance effect = (EffectInstance) object;
 			if (effect.getNpcId() == 81169 && effect.getLocation()
 					.getTileLineDistance(pc.getLocation()) < 4) {
 				return true;

@@ -21,9 +21,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import Lsimulator.server.Config;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.model.map.LsimulatorMap;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.serverpackets.ServerBasePacket;
@@ -34,11 +34,11 @@ import Lsimulator.server.server.utils.collections.Maps;
 public class LsimulatorWorld {
 	private static Logger _log = Logger.getLogger(LsimulatorWorld.class.getName());
 
-	private final Map<String, LsimulatorPcInstance> _allPlayers;
+	private final Map<String, PcInstance> _allPlayers;
 
-	private final Map<Integer, LsimulatorPetInstance> _allPets;
+	private final Map<Integer, PetInstance> _allPets;
 
-	private final Map<Integer, LsimulatorSummonInstance> _allSummons;
+	private final Map<Integer, SummonInstance> _allSummons;
 
 	private final Map<Integer, LsimulatorObject> _allObjects;
 
@@ -94,14 +94,14 @@ public class LsimulatorWorld {
 		}
 
 		_allObjects.put(object.getId(), object);
-		if (object instanceof LsimulatorPcInstance) {
-			_allPlayers.put(((LsimulatorPcInstance) object).getName(), (LsimulatorPcInstance) object);
+		if (object instanceof PcInstance) {
+			_allPlayers.put(((PcInstance) object).getName(), (PcInstance) object);
 		}
-		if (object instanceof LsimulatorPetInstance) {
-			_allPets.put(object.getId(), (LsimulatorPetInstance) object);
+		if (object instanceof PetInstance) {
+			_allPets.put(object.getId(), (PetInstance) object);
 		}
-		if (object instanceof LsimulatorSummonInstance) {
-			_allSummons.put(object.getId(), (LsimulatorSummonInstance) object);
+		if (object instanceof SummonInstance) {
+			_allSummons.put(object.getId(), (SummonInstance) object);
 		}
 	}
 
@@ -111,13 +111,13 @@ public class LsimulatorWorld {
 		}
 
 		_allObjects.remove(object.getId());
-		if (object instanceof LsimulatorPcInstance) {
-			_allPlayers.remove(((LsimulatorPcInstance) object).getName());
+		if (object instanceof PcInstance) {
+			_allPlayers.remove(((PcInstance) object).getName());
 		}
-		if (object instanceof LsimulatorPetInstance) {
+		if (object instanceof PetInstance) {
 			_allPets.remove(object.getId());
 		}
-		if (object instanceof LsimulatorSummonInstance) {
+		if (object instanceof SummonInstance) {
 			_allSummons.remove(object.getId());
 		}
 	}
@@ -203,10 +203,10 @@ public class LsimulatorWorld {
 				key = (x << 16) + y;
 				lineMap.put(key, key);
 				x += sx;
-				E += 2 * dy;
+				E += ( dy << 1 );
 				if (E >= 0) {
 					y += sy;
-					E -= 2 * dx;
+					E -= ( dx << 1 ) ;
 				}
 			}
 			/* 傾きが1より大きい場合 */
@@ -217,10 +217,10 @@ public class LsimulatorWorld {
 				key = (x << 16) + y;
 				lineMap.put(key, key);
 				y += sy;
-				E += 2 * dx;
+				E += ( dx << 1 ) ;
 				if (E >= 0) {
 					x += sx;
-					E -= 2 * dy;
+					E -=  ( dy << 1 );
 				}
 			}
 		}
@@ -364,16 +364,16 @@ public class LsimulatorWorld {
 		return result;
 	}
 
-	public List<LsimulatorPcInstance> getVisiblePlayer(LsimulatorObject object) {
+	public List<PcInstance> getVisiblePlayer(LsimulatorObject object) {
 		return getVisiblePlayer(object, -1);
 	}
 
-	public List<LsimulatorPcInstance> getVisiblePlayer(LsimulatorObject object, int radius) {
+	public List<PcInstance> getVisiblePlayer(LsimulatorObject object, int radius) {
 		int map = object.getMapId();
 		Point pt = object.getLocation();
-		List<LsimulatorPcInstance> result = Lists.newList();
+		List<PcInstance> result = Lists.newList();
 
-		for (LsimulatorPcInstance element : _allPlayers.values()) {
+		for (PcInstance element : _allPlayers.values()) {
 			if (element.equals(object)) {
 				continue;
 			}
@@ -401,13 +401,13 @@ public class LsimulatorWorld {
 		return result;
 	}
 
-	public List<LsimulatorPcInstance> getVisiblePlayerExceptTargetSight(LsimulatorObject object, LsimulatorObject target) {
+	public List<PcInstance> getVisiblePlayerExceptTargetSight(LsimulatorObject object, LsimulatorObject target) {
 		int map = object.getMapId();
 		Point objectPt = object.getLocation();
 		Point targetPt = target.getLocation();
-		List<LsimulatorPcInstance> result = Lists.newList();
+		List<PcInstance> result = Lists.newList();
 
-		for (LsimulatorPcInstance element : _allPlayers.values()) {
+		for (PcInstance element : _allPlayers.values()) {
 			if (element.equals(object)) {
 				continue;
 			}
@@ -440,15 +440,15 @@ public class LsimulatorWorld {
 	 * @param object
 	 * @return
 	 */
-	public List<LsimulatorPcInstance> getRecognizePlayer(LsimulatorObject object) {
+	public List<PcInstance> getRecognizePlayer(LsimulatorObject object) {
 		return getVisiblePlayer(object, Config.PC_RECOGNIZE_RANGE);
 	}
 
 	// _allPlayersのビュー
-	private Collection<LsimulatorPcInstance> _allPlayerValues;
+	private Collection<PcInstance> _allPlayerValues;
 
-	public Collection<LsimulatorPcInstance> getAllPlayers() {
-		Collection<LsimulatorPcInstance> vs = _allPlayerValues;
+	public Collection<PcInstance> getAllPlayers() {
+		Collection<PcInstance> vs = _allPlayerValues;
 		return (vs != null) ? vs : (_allPlayerValues = Collections.unmodifiableCollection(_allPlayers.values()));
 	}
 
@@ -459,11 +459,11 @@ public class LsimulatorWorld {
 	 *            - プレイヤー名(小文字・大文字は無視される)
 	 * @return 指定された名前のLsimulatorPcInstance。該当プレイヤーが存在しない場合はnullを返す。
 	 */
-	public LsimulatorPcInstance getPlayer(String name) {
+	public PcInstance getPlayer(String name) {
 		if (_allPlayers.containsKey(name)) {
 			return _allPlayers.get(name);
 		}
-		for (LsimulatorPcInstance each : getAllPlayers()) {
+		for (PcInstance each : getAllPlayers()) {
 			if (each.getName().equalsIgnoreCase(name)) {
 				return each;
 			}
@@ -472,18 +472,18 @@ public class LsimulatorWorld {
 	}
 
 	// _allPetsのビュー
-	private Collection<LsimulatorPetInstance> _allPetValues;
+	private Collection<PetInstance> _allPetValues;
 
-	public Collection<LsimulatorPetInstance> getAllPets() {
-		Collection<LsimulatorPetInstance> vs = _allPetValues;
+	public Collection<PetInstance> getAllPets() {
+		Collection<PetInstance> vs = _allPetValues;
 		return (vs != null) ? vs : (_allPetValues = Collections.unmodifiableCollection(_allPets.values()));
 	}
 
 	// _allSummonsのビュー
-	private Collection<LsimulatorSummonInstance> _allSummonValues;
+	private Collection<SummonInstance> _allSummonValues;
 
-	public Collection<LsimulatorSummonInstance> getAllSummons() {
-		Collection<LsimulatorSummonInstance> vs = _allSummonValues;
+	public Collection<SummonInstance> getAllSummons() {
+		Collection<SummonInstance> vs = _allSummonValues;
 		return (vs != null) ? vs : (_allSummonValues = Collections.unmodifiableCollection(_allSummons.values()));
 	}
 
@@ -581,7 +581,7 @@ public class LsimulatorWorld {
 	 */
 	public void broadcastPacketToAll(ServerBasePacket packet) {
 		_log.finest("players to notify : " + getAllPlayers().size());
-		for (LsimulatorPcInstance pc : getAllPlayers()) {
+		for (PcInstance pc : getAllPlayers()) {
 			pc.sendPackets(packet);
 		}
 	}

@@ -18,16 +18,16 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Party;
 
 public class LsimulatorPartyRefresh extends TimerTask {
 	private static Logger _log = Logger.getLogger(LsimulatorPartyRefresh.class
 			.getName());
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
-	public LsimulatorPartyRefresh(LsimulatorPcInstance pc) {
+	public LsimulatorPartyRefresh(PcInstance pc) {
 		_pc = pc;
 	}
 

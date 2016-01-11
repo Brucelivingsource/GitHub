@@ -20,8 +20,8 @@ import Lsimulator.server.Config;
 import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_CharVisualUpdate;
 import Lsimulator.server.server.serverpackets.S_OwnCharStatus;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -31,7 +31,7 @@ import Lsimulator.server.server.utils.collections.Lists;
 public class FishingTimeController implements Runnable {
 	private static FishingTimeController _instance;
 
-	private final List<LsimulatorPcInstance> _fishingList = Lists.newList();
+	private final List<PcInstance> _fishingList = Lists.newList();
 
 	public static FishingTimeController getInstance() {
 		if (_instance == null) {
@@ -51,14 +51,14 @@ public class FishingTimeController implements Runnable {
 		}
 	}
 
-	public void addMember(LsimulatorPcInstance pc) {
+	public void addMember(PcInstance pc) {
 		if ((pc == null) || _fishingList.contains(pc)) {
 			return;
 		}
 		_fishingList.add(pc);
 	}
 
-	public void removeMember(LsimulatorPcInstance pc) {
+	public void removeMember(PcInstance pc) {
 		if ((pc == null) || !_fishingList.contains(pc)) {
 			return;
 		}
@@ -69,7 +69,7 @@ public class FishingTimeController implements Runnable {
 		if (_fishingList.size() > 0) {
 			long currentTime = System.currentTimeMillis();
 			for (int i = 0; i < _fishingList.size(); i++) {
-				LsimulatorPcInstance pc = _fishingList.get(i);
+				PcInstance pc = _fishingList.get(i);
 				if (pc.isFishing()) { // 釣魚中
 					long time = pc.getFishingTime();
 					if ((currentTime <= (time + 500))
@@ -84,7 +84,7 @@ public class FishingTimeController implements Runnable {
 	}
 
 	// 釣魚完成
-	private void finishFishing(LsimulatorPcInstance pc) {
+	private void finishFishing(PcInstance pc) {
 		int chance = Random.nextInt(215) + 1;
 		boolean finish = false;
 		int[] fish = { 41296, 41297, 41298, 41299, 41300, 41301, 41302, 41303, 41304, 41305,
@@ -107,11 +107,11 @@ public class FishingTimeController implements Runnable {
 	}
 
 	// 釣魚成功
-	private void successFishing(LsimulatorPcInstance pc, int itemId) {
-		LsimulatorItemInstance item = ItemTable.getInstance().createItem(itemId);
+	private void successFishing(PcInstance pc, int itemId) {
+		ItemInstance item = ItemTable.getInstance().createItem(itemId);
 		if (item != null) {
 			pc.sendPackets(new S_ServerMessage(403, item.getItem().getName()));
-			pc.addExp((int) (2 * Config.RATE_XP));
+			pc.addExp( (int)  Config.RATE_XP << 1  );
 			pc.sendPackets(new S_OwnCharStatus(pc));
 			item.setCount(1);
 			if (pc.getInventory().checkAddItem(item, 1) == LsimulatorInventory.OK) {
@@ -139,7 +139,7 @@ public class FishingTimeController implements Runnable {
 	}
 
 	// 重新釣魚
-	private void restartFishing(LsimulatorPcInstance pc) {
+	private void restartFishing(PcInstance pc) {
 		if (pc.getInventory().consumeItem(47103, 1)) { // 消耗餌，重新釣魚
 			long fishTime = System.currentTimeMillis() + 10000 + Random.nextInt(5) * 1000;
 			pc.setFishingTime(fishTime);
@@ -151,7 +151,7 @@ public class FishingTimeController implements Runnable {
 	}
 
 	// 停止釣魚
-	private void stopFishing(LsimulatorPcInstance pc) {
+	private void stopFishing(PcInstance pc) {
 		pc.setFishingTime(0);
 		pc.setFishingReady(false);
 		pc.setFishing(false);

@@ -22,9 +22,9 @@ import java.util.logging.Logger;
 import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.datatables.NpcTable;
 import Lsimulator.server.server.datatables.PetTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorNpc;
 import Lsimulator.server.server.templates.LsimulatorPet;
@@ -47,9 +47,9 @@ public class LsimulatorPetMatch {
 
 	private String[] _pc2Name = new String[MAX_PET_MATCH];
 
-	private LsimulatorPetInstance[] _pet1 = new LsimulatorPetInstance[MAX_PET_MATCH];
+	private PetInstance[] _pet1 = new PetInstance[MAX_PET_MATCH];
 
-	private LsimulatorPetInstance[] _pet2 = new LsimulatorPetInstance[MAX_PET_MATCH];
+	private PetInstance[] _pet2 = new PetInstance[MAX_PET_MATCH];
 
 	private static LsimulatorPetMatch _instance;
 
@@ -60,7 +60,7 @@ public class LsimulatorPetMatch {
 		return _instance;
 	}
 
-	public int setPetMatchPc(int petMatchNo, LsimulatorPcInstance pc, LsimulatorPetInstance pet) {
+	public int setPetMatchPc(int petMatchNo, PcInstance pc, PetInstance pet) {
 		int status = getPetMatchStatus(petMatchNo);
 		if (status == STATUS_NONE) {
 			_pc1Name[petMatchNo] = pc.getName();
@@ -81,11 +81,11 @@ public class LsimulatorPetMatch {
 	}
 
 	private synchronized int getPetMatchStatus(int petMatchNo) {
-		LsimulatorPcInstance pc1 = null;
+		PcInstance pc1 = null;
 		if (_pc1Name[petMatchNo] != null) {
 			pc1 = LsimulatorWorld.getInstance().getPlayer(_pc1Name[petMatchNo]);
 		}
-		LsimulatorPcInstance pc2 = null;
+		PcInstance pc2 = null;
 		if (_pc2Name[petMatchNo] != null) {
 			pc2 = LsimulatorWorld.getInstance().getPlayer(_pc2Name[petMatchNo]);
 		}
@@ -151,13 +151,13 @@ public class LsimulatorPetMatch {
 		return -1;
 	}
 
-	public synchronized boolean enterPetMatch(LsimulatorPcInstance pc, int amuletId) {
+	public synchronized boolean enterPetMatch(PcInstance pc, int amuletId) {
 		int petMatchNo = decidePetMatchNo();
 		if (petMatchNo == -1) {
 			return false;
 		}
 
-		LsimulatorPetInstance pet = withdrawPet(pc, amuletId);
+		PetInstance pet = withdrawPet(pc, amuletId);
 		LsimulatorTeleport.teleport(pc, 32799, 32868, PET_MATCH_MAPID[petMatchNo], 0, true);
 
 		LsimulatorPetMatchReadyTimer timer = new LsimulatorPetMatchReadyTimer(petMatchNo, pc, pet);
@@ -165,13 +165,13 @@ public class LsimulatorPetMatch {
 		return true;
 	}
 
-	private LsimulatorPetInstance withdrawPet(LsimulatorPcInstance pc, int amuletId) {
+	private PetInstance withdrawPet(PcInstance pc, int amuletId) {
 		LsimulatorPet l1pet = PetTable.getInstance().getTemplate(amuletId);
 		if (l1pet == null) {
 			return null;
 		}
 		LsimulatorNpc npcTemp = NpcTable.getInstance().getTemplate(l1pet.get_npcid());
-		LsimulatorPetInstance pet = new LsimulatorPetInstance(npcTemp, pc, l1pet);
+		PetInstance pet = new PetInstance(npcTemp, pc, l1pet);
 		pet.setPetcost(6);
 		return pet;
 	}
@@ -188,8 +188,8 @@ public class LsimulatorPetMatch {
 	}
 
 	public void endPetMatch(int petMatchNo, int winNo) {
-		LsimulatorPcInstance pc1 = LsimulatorWorld.getInstance().getPlayer(_pc1Name[petMatchNo]);
-		LsimulatorPcInstance pc2 = LsimulatorWorld.getInstance().getPlayer(_pc2Name[petMatchNo]);
+		PcInstance pc1 = LsimulatorWorld.getInstance().getPlayer(_pc1Name[petMatchNo]);
+		PcInstance pc2 = LsimulatorWorld.getInstance().getPlayer(_pc2Name[petMatchNo]);
 		if (winNo == 1) {
 			giveMedal(pc1, petMatchNo, true);
 			giveMedal(pc2, petMatchNo, false);
@@ -205,7 +205,7 @@ public class LsimulatorPetMatch {
 		qiutPetMatch(petMatchNo);
 	}
 
-	private void giveMedal(LsimulatorPcInstance pc, int petMatchNo, boolean isWin) {
+	private void giveMedal(PcInstance pc, int petMatchNo, boolean isWin) {
 		if (pc == null) {
 			return;
 		}
@@ -214,7 +214,7 @@ public class LsimulatorPetMatch {
 		}
 		if (isWin) {
 			pc.sendPackets(new S_ServerMessage(1166, pc.getName())); // %0%sペットマッチで勝利を収めました。
-			LsimulatorItemInstance item = ItemTable.getInstance().createItem(41309);
+			ItemInstance item = ItemTable.getInstance().createItem(41309);
 			int count = 3;
 			if (item != null) {
 				if (pc.getInventory().checkAddItem(item, count) == LsimulatorInventory.OK) {
@@ -225,7 +225,7 @@ public class LsimulatorPetMatch {
 			}
 		}
 		else {
-			LsimulatorItemInstance item = ItemTable.getInstance().createItem(41309);
+			ItemInstance item = ItemTable.getInstance().createItem(41309);
 			int count = 1;
 			if (item != null) {
 				if (pc.getInventory().checkAddItem(item, count) == LsimulatorInventory.OK) {
@@ -238,11 +238,11 @@ public class LsimulatorPetMatch {
 	}
 
 	private void qiutPetMatch(int petMatchNo) {
-		LsimulatorPcInstance pc1 = LsimulatorWorld.getInstance().getPlayer(_pc1Name[petMatchNo]);
+		PcInstance pc1 = LsimulatorWorld.getInstance().getPlayer(_pc1Name[petMatchNo]);
 		if ((pc1 != null) && (pc1.getMapId() == PET_MATCH_MAPID[petMatchNo])) {
 			for (Object object : pc1.getPetList().values().toArray()) {
-				if (object instanceof LsimulatorPetInstance) {
-					LsimulatorPetInstance pet = (LsimulatorPetInstance) object;
+				if (object instanceof PetInstance) {
+					PetInstance pet = (PetInstance) object;
 					pet.dropItem();
 					pc1.getPetList().remove(pet.getId());
 					pet.deleteMe();
@@ -253,11 +253,11 @@ public class LsimulatorPetMatch {
 		_pc1Name[petMatchNo] = null;
 		_pet1[petMatchNo] = null;
 
-		LsimulatorPcInstance pc2 = LsimulatorWorld.getInstance().getPlayer(_pc2Name[petMatchNo]);
+		PcInstance pc2 = LsimulatorWorld.getInstance().getPlayer(_pc2Name[petMatchNo]);
 		if ((pc2 != null) && (pc2.getMapId() == PET_MATCH_MAPID[petMatchNo])) {
 			for (Object object : pc2.getPetList().values().toArray()) {
-				if (object instanceof LsimulatorPetInstance) {
-					LsimulatorPetInstance pet = (LsimulatorPetInstance) object;
+				if (object instanceof PetInstance) {
+					PetInstance pet = (PetInstance) object;
 					pet.dropItem();
 					pc2.getPetList().remove(pet.getId());
 					pet.deleteMe();
@@ -274,11 +274,11 @@ public class LsimulatorPetMatch {
 
 		private final int _petMatchNo;
 
-		private final LsimulatorPcInstance _pc;
+		private final PcInstance _pc;
 
-		private final LsimulatorPetInstance _pet;
+		private final PetInstance _pet;
 
-		public LsimulatorPetMatchReadyTimer(int petMatchNo, LsimulatorPcInstance pc, LsimulatorPetInstance pet) {
+		public LsimulatorPetMatchReadyTimer(int petMatchNo, PcInstance pc, PetInstance pet) {
 			_petMatchNo = petMatchNo;
 			_pc = pc;
 			_pet = pet;
@@ -319,15 +319,15 @@ public class LsimulatorPetMatch {
 	public class LsimulatorPetMatchTimer extends TimerTask {
 		private Logger _log = Logger.getLogger(LsimulatorPetMatchTimer.class.getName());
 
-		private final LsimulatorPetInstance _pet1;
+		private final PetInstance _pet1;
 
-		private final LsimulatorPetInstance _pet2;
+		private final PetInstance _pet2;
 
 		private final int _petMatchNo;
 
 		private int _counter = 0;
 
-		public LsimulatorPetMatchTimer(LsimulatorPetInstance pet1, LsimulatorPetInstance pet2, int petMatchNo) {
+		public LsimulatorPetMatchTimer(PetInstance pet1, PetInstance pet2, int petMatchNo) {
 			_pet1 = pet1;
 			_pet2 = pet2;
 			_petMatchNo = petMatchNo;

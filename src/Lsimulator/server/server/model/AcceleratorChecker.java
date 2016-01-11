@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.Config;
 import Lsimulator.server.server.datatables.SprTable;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Disconnect;
 import Lsimulator.server.server.serverpackets.S_Paralysis;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -33,7 +33,7 @@ public class AcceleratorChecker {
 
 	private static final Logger _log = Logger.getLogger(AcceleratorChecker.class.getName());
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
 	private int _injusticeCount;
 
@@ -70,7 +70,7 @@ public class AcceleratorChecker {
 
 	public static final int R_DISPOSED = 2;
 
-	public AcceleratorChecker(LsimulatorPcInstance pc) {
+	public AcceleratorChecker(PcInstance pc) {
 		_pc = pc;
 		_injusticeCount = 0;
 		_justiceCount = 0;
@@ -256,7 +256,7 @@ public class AcceleratorChecker {
 		}
 		// 風之枷鎖
 		if (_pc.isWindShackle() && !type.equals(ACT_TYPE.MOVE)) { // 攻速or施法速度 / 2倍
-			interval /= 2;
+			interval= interval >> 1 ;
 		}
 		if (_pc.getMapId() == 5143) { // 寵物競速例外
 			interval *= 0.1;

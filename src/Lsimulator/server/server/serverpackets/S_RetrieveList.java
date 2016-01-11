@@ -17,11 +17,11 @@ package Lsimulator.server.server.serverpackets;
 import java.io.IOException;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_RetrieveList extends ServerBasePacket {
-	public S_RetrieveList(int objid, LsimulatorPcInstance pc) {
+	public S_RetrieveList(int objid, PcInstance pc) {
 		if (pc.getInventory().getSize() < 180) {
 			int size = pc.getDwarfInventory().getSize();
 			if (size > 0) {
@@ -30,7 +30,7 @@ public class S_RetrieveList extends ServerBasePacket {
 				writeH(size);
 				writeC(3); // 個人倉庫
 				for (Object itemObject : pc.getDwarfInventory().getItems()) {
-					LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+					ItemInstance item = (ItemInstance) itemObject;
 					writeD(item.getId());
 					writeC(item.getItem().getUseType()); // 道具:0 武器:1  防具:2...
 					writeH(item.get_gfxid());

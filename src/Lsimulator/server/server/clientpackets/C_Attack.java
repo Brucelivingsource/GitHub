@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.clientpackets;
 
-import static Lsimulator.server.server.model.Instance.LsimulatorPcInstance.REGENSTATE_ATTACK;
+import static Lsimulator.server.server.model.Instance.PcInstance.REGENSTATE_ATTACK;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.ABSOLUTE_BARRIER;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.MEDITATION;
 import Lsimulator.server.Config;
@@ -24,8 +24,8 @@ import Lsimulator.server.server.model.LsimulatorAttack;
 import Lsimulator.server.server.model.LsimulatorCharacter;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -39,7 +39,7 @@ public class C_Attack extends ClientBasePacket {
 	public C_Attack(byte[] decrypt, ClientThread client) {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if ((pc == null) || pc.isGhost() || pc.isDead() || pc.isTeleport()|| pc.isParalyzed() || pc.isSleeped()) {
 			return;
 		}
@@ -71,10 +71,10 @@ public class C_Attack extends ClientBasePacket {
 			}
 		}
 
-		if (target instanceof LsimulatorNpcInstance) {
-			int hiddenStatus = ((LsimulatorNpcInstance) target).getHiddenStatus();
-			if ((hiddenStatus == LsimulatorNpcInstance.HIDDEN_STATUS_SINK)
-					|| (hiddenStatus == LsimulatorNpcInstance.HIDDEN_STATUS_FLY)) { // 如果目標躲到土裡面，或是飛起來了
+		if (target instanceof NpcInstance) {
+			int hiddenStatus = ((NpcInstance) target).getHiddenStatus();
+			if ((hiddenStatus == NpcInstance.HIDDEN_STATUS_SINK)
+					|| (hiddenStatus == NpcInstance.HIDDEN_STATUS_FLY)) { // 如果目標躲到土裡面，或是飛起來了
 				return;
 			}
 		}

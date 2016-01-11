@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.server.Account;
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * 處理收到由客戶端傳來斷線的封包
@@ -30,7 +30,7 @@ public class C_Disconnect extends ClientBasePacket {
 	public C_Disconnect(byte[] decrypt, ClientThread client) {
 		super(decrypt);
 		client.CharReStart(true);
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc != null) {
 
 			_log.fine("Disconnect from: " + pc.getName());

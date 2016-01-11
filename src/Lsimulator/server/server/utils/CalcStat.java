@@ -33,7 +33,7 @@ public class CalcStat {
 	public static int calcAc(int level, int dex) {
 		int acBonus = 10;
 		if (dex <= 9) {
-			acBonus -= level / 8;
+			acBonus -= ( level >> 3 );
 		} else if (dex >= 10 && dex <= 12) {
 			acBonus -= level / 7;
 		} else if (dex >= 13 && dex <= 15) {
@@ -41,7 +41,7 @@ public class CalcStat {
 		} else if (dex >= 16 && dex <= 17) {
 			acBonus -= level / 5;
 		} else if (dex >= 18) {
-			acBonus -= level / 4;
+			acBonus -= ( level  >> 2 ) ;
 		}
 		return acBonus;
 	}

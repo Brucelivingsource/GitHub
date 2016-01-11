@@ -23,7 +23,7 @@ import Lsimulator.server.Config;
 import Lsimulator.server.server.datatables.NpcChatTable;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 import Lsimulator.server.server.templates.LsimulatorNpcChat;
 
 public class NpcChatTimeController implements Runnable {
@@ -55,12 +55,12 @@ public class NpcChatTimeController implements Runnable {
 			if (isChatTime(npcChat.getGameTime())) {
 				int npcId = npcChat.getNpcId();
 				for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-					if (!(obj instanceof LsimulatorNpcInstance)) {
+					if (!(obj instanceof NpcInstance)) {
 						continue;
 					}
-					LsimulatorNpcInstance npc = (LsimulatorNpcInstance) obj;
+					NpcInstance npc = (NpcInstance) obj;
 					if (npc.getNpcTemplate().get_npcId() == npcId) {
-						npc.startChat(LsimulatorNpcInstance.CHAT_TIMING_GAME_TIME);
+						npc.startChat(NpcInstance.CHAT_TIMING_GAME_TIME);
 					}
 				}
 			}

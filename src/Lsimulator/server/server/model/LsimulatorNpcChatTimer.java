@@ -18,8 +18,8 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_NpcChatPacket;
 import Lsimulator.server.server.templates.LsimulatorNpcChat;
 
@@ -27,11 +27,11 @@ public class LsimulatorNpcChatTimer extends TimerTask {
 	private static final Logger _log = Logger.getLogger(LsimulatorNpcChatTimer.class
 			.getName());
 
-	private final LsimulatorNpcInstance _npc;
+	private final NpcInstance _npc;
 
 	private final LsimulatorNpcChat _npcChat;
 
-	public LsimulatorNpcChatTimer(LsimulatorNpcInstance npc, LsimulatorNpcChat npcChat) {
+	public LsimulatorNpcChatTimer(NpcInstance npc, LsimulatorNpcChat npcChat) {
 		_npc = npc;
 		_npcChat = npcChat;
 	}
@@ -43,7 +43,7 @@ public class LsimulatorNpcChatTimer extends TimerTask {
 				return;
 			}
 
-			if (_npc.getHiddenStatus() != LsimulatorNpcInstance.HIDDEN_STATUS_NONE
+			if (_npc.getHiddenStatus() != NpcInstance.HIDDEN_STATUS_NONE
 					|| _npc._destroyed) {
 				return;
 			}
@@ -86,16 +86,16 @@ public class LsimulatorNpcChatTimer extends TimerTask {
 		}
 	}
 
-	private void chat(LsimulatorNpcInstance npc, int chatTiming, String chatId,
+	private void chat(NpcInstance npc, int chatTiming, String chatId,
 			boolean isShout, boolean isWorldChat) {
-		if (chatTiming == LsimulatorNpcInstance.CHAT_TIMING_APPEARANCE && npc.
+		if (chatTiming == NpcInstance.CHAT_TIMING_APPEARANCE && npc.
 				isDead()) {
 			return;
 		}
-		if (chatTiming == LsimulatorNpcInstance.CHAT_TIMING_DEAD && !npc.isDead()) {
+		if (chatTiming == NpcInstance.CHAT_TIMING_DEAD && !npc.isDead()) {
 			return;
 		}
-		if (chatTiming == LsimulatorNpcInstance.CHAT_TIMING_HIDE && npc.isDead()) {
+		if (chatTiming == NpcInstance.CHAT_TIMING_HIDE && npc.isDead()) {
 			return;
 		}
 
@@ -107,7 +107,7 @@ public class LsimulatorNpcChatTimer extends TimerTask {
 
 		if (isWorldChat) {
 			// XXX npcはsendPacketsできないので、ワールド内のPCからsendPacketsさせる
-			for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
+			for (PcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
 				if (pc != null) {
 					pc.sendPackets(new S_NpcChatPacket(npc, chatId, 3));
 				}

@@ -16,7 +16,7 @@ package Lsimulator.server.server;
 
 import java.util.Map;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.LsimulatorTrade;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.utils.collections.Maps;
@@ -102,7 +102,7 @@ public class LoginController {
 		}
 		
 		//重登, 取消交易
-		LsimulatorPcInstance player = client.getActiveChar();
+		PcInstance player = client.getActiveChar();
 		if (player != null) {
 			if (player.getTradeID() != 0) {
 				final LsimulatorTrade trade = new LsimulatorTrade();

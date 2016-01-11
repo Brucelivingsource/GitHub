@@ -17,7 +17,7 @@ package Lsimulator.server.server.serverpackets;
 import java.util.List;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -29,11 +29,11 @@ public class S_InvList extends ServerBasePacket {
 	/**
 	 * インベントリにアイテムを複数個まとめて追加する。
 	 */
-	public S_InvList(List<LsimulatorItemInstance> items) {
+	public S_InvList(List<ItemInstance> items) {
 		writeC(Opcodes.S_OPCODE_INVLIST);
 		writeC(items.size());               // 物品數量
 		
-		for (LsimulatorItemInstance item : items) {
+		for (ItemInstance item : items) {
 			writeD(item.getId());
 			writeH(item.getItem().getMagicCatalystType() > 0 ? item.getItem().getMagicCatalystType() :
 				   item.getItem().getItemDescId() > 0 ? item.getItem().getItemDescId() : item.getItem().getGroundGfxId());

@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorBookMark;
 
 /**
@@ -27,7 +27,7 @@ public class C_DeleteBookmark extends ClientBasePacket {
 	public C_DeleteBookmark(byte[] decrypt, ClientThread client) {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

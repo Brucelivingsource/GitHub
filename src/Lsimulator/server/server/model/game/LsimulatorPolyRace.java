@@ -23,9 +23,9 @@ import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorPolyMorph;
 import Lsimulator.server.server.model.LsimulatorTeleport;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.model.skill.LsimulatorSkillId;
 import Lsimulator.server.server.model.skill.LsimulatorSkillUse;
@@ -71,21 +71,21 @@ public class LsimulatorPolyRace {
 	private static int readyTime = 60 * 1000; //進場之後等待時間 60秒
 	private static int limitTime = 240 * 1000; //遊戲時間 240秒
 
-	private FastTable<LsimulatorPcInstance> playerList = new FastTable<LsimulatorPcInstance>();
+	private FastTable<PcInstance> playerList = new FastTable<PcInstance>();
 
-	public void addPlayerList(LsimulatorPcInstance pc) {
+	public void addPlayerList(PcInstance pc) {
 		if (!playerList.contains(pc)) {
 			playerList.add(pc);
 		}
 	}
 
-	public void removePlayerList(LsimulatorPcInstance pc) {
+	public void removePlayerList(PcInstance pc) {
 		if (playerList.contains(pc)) {
 			playerList.remove(pc);
 		}
 	}
 
-	public void enterGame(LsimulatorPcInstance pc) {
+	public void enterGame(PcInstance pc) {
 		if (pc.getLevel() < 30) {
 			pc.sendPackets(new S_ServerMessage(1273,"30","99"));
 			return;
@@ -111,14 +111,14 @@ public class LsimulatorPolyRace {
 		LsimulatorTeleport.teleport(pc, 32768, 32849, (short) 5143, 6, true);
 	}
 
-	private FastTable<LsimulatorPcInstance> orderList = new FastTable<LsimulatorPcInstance>();
+	private FastTable<PcInstance> orderList = new FastTable<PcInstance>();
 
-	public void removeOrderList(LsimulatorPcInstance pc) {
+	public void removeOrderList(PcInstance pc) {
 		orderList.remove(pc);
 	}
 
 	//預約進場...試做1
-	public void addOrderList(LsimulatorPcInstance pc) {
+	public void addOrderList(PcInstance pc) {
 		if (orderList.contains(pc)) {
 			pc.sendPackets(new S_ServerMessage(1254));
 			return;
@@ -128,7 +128,7 @@ public class LsimulatorPolyRace {
 		pc.sendPackets(new S_ServerMessage(1253, String.valueOf(orderList.size())));//已預約到第%0順位進入比賽場地。
 
 		if (orderList.size() >= minPlayer) {
-			for (LsimulatorPcInstance player : orderList) {
+			for (PcInstance player : orderList) {
 				player.sendPackets(new S_Message_YN(1256, null));//要進入到競賽場地嗎？(Y/N)
 			}
 			setGameStatus(STATUS_READY);
@@ -145,7 +145,7 @@ public class LsimulatorPolyRace {
 
 	private void setGameStart() {
 		setGameStatus(STATUS_PLAYING);
-		for (LsimulatorPcInstance pc : playerList) {
+		for (PcInstance pc : playerList) {
 			speedUp(pc, 0, 0);
 			randomPoly(pc, 0, 0);
 			pc.sendPackets(new S_ServerMessage(1257));//稍後比賽即將開始，請做好準備。
@@ -157,7 +157,7 @@ public class LsimulatorPolyRace {
 		startClockTimer();
 	}
 
-	private void setGameWinner(LsimulatorPcInstance pc) {
+	private void setGameWinner(PcInstance pc) {
 		if (getWinner() == null) {
 			setWinner(pc);
 			setGameEnd(END_STATUS_WINNER);
@@ -185,7 +185,7 @@ public class LsimulatorPolyRace {
 				sendEndMessage();
 			break;
 			case END_STATUS_NOPLAYER:
-				for (LsimulatorPcInstance pc : playerList) {
+				for (PcInstance pc : playerList) {
 					//未達到比賽最低人數(2人)，因此強制關閉比賽並退還1000個金幣。
 					pc.sendPackets(new S_ServerMessage(1264));
 					pc.getInventory().storeItem(LsimulatorItemId.ADENA, 1000);
@@ -196,8 +196,8 @@ public class LsimulatorPolyRace {
 	}
 
 	private void giftWinner() {
-		LsimulatorPcInstance winner = getWinner();
-		LsimulatorItemInstance item = ItemTable.getInstance().createItem(41308);
+		PcInstance winner = getWinner();
+		ItemInstance item = ItemTable.getInstance().createItem(41308);
 		if (winner == null || item == null) {
 			return;
 		}
@@ -209,11 +209,11 @@ public class LsimulatorPolyRace {
 	}
 
 	private void sendEndMessage() {
-		LsimulatorPcInstance winner = getWinner();
-		for (LsimulatorPcInstance pc : playerList) {
+		PcInstance winner = getWinner();
+		for (PcInstance pc : playerList) {
 			if (winner != null) {
 				pc.sendPackets(new S_ServerMessage(1259));//稍後將往村莊移動。
-				pc.sendPackets(new S_Race(winner.getName(), _time * 2));
+				pc.sendPackets(new S_Race(winner.getName(), _time << 1 ));
 				continue;
 			}
 			pc.sendPackets(new S_Race(S_Race.GameOver));
@@ -222,7 +222,7 @@ public class LsimulatorPolyRace {
 
 	//初始化 + 下一場準備
 	private void setGameInit() {
-		for (LsimulatorPcInstance pc : playerList) {
+		for (PcInstance pc : playerList) {
 			pc.sendPackets(new S_Race(S_Race.GameEnd));
 			pc.setLap(1);
 			pc.setLapCheck(0);
@@ -237,7 +237,7 @@ public class LsimulatorPolyRace {
 	}
 
 	//XXX for ClientThread.java
-	public void checkLeaveGame(LsimulatorPcInstance pc) {
+	public void checkLeaveGame(PcInstance pc) {
 		if (pc.getMapId() == 5143) {
 			removePlayerList(pc);
 			LsimulatorPolyMorph.undoPoly(pc);
@@ -248,7 +248,7 @@ public class LsimulatorPolyRace {
 	}
 
 	//XXX for C_Attr.java
-	public void requsetAttr(LsimulatorPcInstance pc, int c) {
+	public void requsetAttr(PcInstance pc, int c) {
 		if (c == 0) { //NO
 			removeOrderList(pc);
 			pc.setInOrderList(false);
@@ -262,16 +262,16 @@ public class LsimulatorPolyRace {
 		}
 	}
 
-	private FastTable<LsimulatorPcInstance> position = new FastTable<LsimulatorPcInstance>();
+	private FastTable<PcInstance> position = new FastTable<PcInstance>();
 
 	//判斷排名
 	private void comparePosition() {
-		FastTable<LsimulatorPcInstance> temp = new FastTable<LsimulatorPcInstance>();
+		FastTable<PcInstance> temp = new FastTable<PcInstance>();
 		int size = playerList.size();
 		int count = 0;
 		while (size > count) {
 			int maxLapScore = 0;
-			for (LsimulatorPcInstance pc : playerList) {
+			for (PcInstance pc : playerList) {
 				if (temp.contains(pc)) {
 					continue;
 				}
@@ -279,7 +279,7 @@ public class LsimulatorPolyRace {
 					maxLapScore = pc.getLapScore();
 				}
 			}
-			for (LsimulatorPcInstance player : playerList) {
+			for (PcInstance player : playerList) {
 				if (player.getLapScore() == maxLapScore) {
 					temp.add(player);
 				}
@@ -289,15 +289,15 @@ public class LsimulatorPolyRace {
 		if (!position.equals(temp)) {
 			position.clear();
 			position.addAll(temp);
-			for (LsimulatorPcInstance pc : playerList) {
+			for (PcInstance pc : playerList) {
 				pc.sendPackets(new S_Race(position, pc));//info
 			}
 		}
 	}
 
 	private void setDoorClose(boolean isClose) {
-		LsimulatorDoorInstance[] list = DoorTable.getInstance().getDoorList();
-		for (LsimulatorDoorInstance door : list) {
+		DoorInstance[] list = DoorTable.getInstance().getDoorList();
+		for (DoorInstance door : list) {
 			if (door.getMapId() == 5143) {
 				if (isClose) {
 					door.close();
@@ -308,14 +308,14 @@ public class LsimulatorPolyRace {
 		}
 	}
 
-	public void removeSkillEffect(LsimulatorPcInstance pc) {
+	public void removeSkillEffect(PcInstance pc) {
 		LsimulatorSkillUse skill = new LsimulatorSkillUse();
 		skill.handleCommands(pc, LsimulatorSkillId.CANCELLATION, pc.getId(), pc.getX(),
 				pc.getY(), null, 0, LsimulatorSkillUse.TYPE_LOGIN);
 	}
 
 	//很蠢的陷阱設定 ...
-	private void onEffectTrap(LsimulatorPcInstance pc) {
+	private void onEffectTrap(PcInstance pc) {
 		int x = pc.getX();
 		int y = pc.getY();
 		if (x == 32748 && (y == 32845 || y == 32846)) {
@@ -355,26 +355,26 @@ public class LsimulatorPolyRace {
 	private static int SPEED_EFFECT = 18333;
 
 	//變身效果
-	private void randomPoly(LsimulatorPcInstance pc, int x, int y) {
+	private void randomPoly(PcInstance pc, int x, int y) {
 		if (pc.hasSkillEffect(POLY_EFFECT)) {
 			return;
 		}
-		pc.setSkillEffect(POLY_EFFECT, 4 * 1000);
+		pc.setSkillEffect(POLY_EFFECT, 4000);
 
 		int i = Random.nextInt(polyList.length);	
 		LsimulatorPolyMorph.doPoly(pc, polyList[i], 3600, LsimulatorPolyMorph.MORPH_BY_NPC);
 
-		for (LsimulatorPcInstance player : playerList) {
+		for (PcInstance player : playerList) {
 			player.sendPackets(new S_EffectLocation(x, y, 6675));
 		}
 	}
 
 	//加速效果
-	private void speedUp(LsimulatorPcInstance pc, int x, int y) {
+	private void speedUp(PcInstance pc, int x, int y) {
 		if (pc.hasSkillEffect(SPEED_EFFECT)) {
 			return;
 		}
-		pc.setSkillEffect(SPEED_EFFECT, 4 * 1000);
+		pc.setSkillEffect(SPEED_EFFECT, 4000);
 		int time = 15;
 		int objectId = pc.getId();
 		//競速專用 -超級加速
@@ -390,13 +390,13 @@ public class LsimulatorPolyRace {
 		pc.setSkillEffect(LsimulatorSkillId.STATUS_HASTE, time * 10 * 1000);
 		pc.setMoveSpeed(1);
 
-		for (LsimulatorPcInstance player : playerList) {
+		for (PcInstance player : playerList) {
 			player.sendPackets(new S_EffectLocation(x, y, 6674));
 		}
 	}
 
 	//很蠢的判斷圈數...
-	public void checkLapFinish(LsimulatorPcInstance pc) {
+	public void checkLapFinish(PcInstance pc) {
 		if (pc.getMapId() != 5143 || getGameStatus() != STATUS_PLAYING) {
 			return;
 		}
@@ -494,13 +494,13 @@ public class LsimulatorPolyRace {
 		_time++;
 	}
 
-	private LsimulatorPcInstance _winner = null;
+	private PcInstance _winner = null;
 
-	public void setWinner(LsimulatorPcInstance pc) {
+	public void setWinner(PcInstance pc) {
 		_winner = pc;
 	}
 
-	public LsimulatorPcInstance getWinner() {
+	public PcInstance getWinner() {
 		return _winner;
 	}
 
@@ -552,7 +552,7 @@ public class LsimulatorPolyRace {
 	private class ReadyTimer extends TimerTask {
 		@Override
 		public void run() {
-			for (LsimulatorPcInstance pc : playerList) {
+			for (PcInstance pc : playerList) {
 				pc.sendPackets(new S_ServerMessage(1258));
 			}
 			startCheckTimer();
@@ -588,7 +588,7 @@ public class LsimulatorPolyRace {
 		@Override
 		public void run() {
 			// 計時封包
-			for (LsimulatorPcInstance pc : playerList) {
+			for (PcInstance pc : playerList) {
 				pc.sendPackets(new S_Race(S_Race.CountDown));
 			}
 			setDoorClose(false);

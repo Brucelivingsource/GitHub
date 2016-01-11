@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
 // ClientBasePacket
@@ -39,7 +39,7 @@ public class C_NPCTalkAction extends ClientBasePacket {
 			throws FileNotFoundException, Exception {
 		super(decrypt);
 		
-		LsimulatorPcInstance activeChar = client.getActiveChar();
+		PcInstance activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -54,7 +54,7 @@ public class C_NPCTalkAction extends ClientBasePacket {
 		}
 
 		try {
-			LsimulatorNpcInstance npc = (LsimulatorNpcInstance) obj;
+			NpcInstance npc = (NpcInstance) obj;
 			npc.onFinalAction(activeChar, action);
 		} catch (ClassCastException e) {
 		}

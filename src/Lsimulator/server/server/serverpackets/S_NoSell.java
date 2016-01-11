@@ -15,18 +15,18 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 
 public class S_NoSell extends ServerBasePacket {
 	private static final String _S__25_NoSell = "[S] _S__25_NoSell";
 
 	private byte[] _byte = null;
 
-	public S_NoSell(LsimulatorNpcInstance npc) {
+	public S_NoSell(NpcInstance npc) {
 		buildPacket(npc);
 	}
 
-	private void buildPacket(LsimulatorNpcInstance npc) {
+	private void buildPacket(NpcInstance npc) {
 		writeC(Opcodes.S_OPCODE_SHOWHTML);
 		writeD(npc.getId());
 		writeS("nosell");

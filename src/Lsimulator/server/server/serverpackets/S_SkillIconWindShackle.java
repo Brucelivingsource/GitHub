@@ -22,7 +22,7 @@ import Lsimulator.server.server.Opcodes;
 public class S_SkillIconWindShackle extends ServerBasePacket {
 
 	public S_SkillIconWindShackle(int objectId, int time) {
-		int buffTime = (time / 4); // なぜか4倍されるため4で割っておく
+		int buffTime = (time  >> 2 ); // なぜか4倍されるため4で割っておく
 		writeC(Opcodes.S_OPCODE_SKILLICONGFX);
 		writeC(0x2c);
 		writeD(objectId);

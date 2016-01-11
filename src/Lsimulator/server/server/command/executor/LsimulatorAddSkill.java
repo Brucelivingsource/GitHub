@@ -15,7 +15,7 @@
 package Lsimulator.server.server.command.executor;
 
 import Lsimulator.server.server.datatables.SkillsTable;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_AddSkill;
 import Lsimulator.server.server.serverpackets.S_SkillSound;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
@@ -33,7 +33,7 @@ public class LsimulatorAddSkill implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			int cnt = 0; // 計數器
 			String skill_name = ""; // 技能名稱

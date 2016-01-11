@@ -24,10 +24,10 @@ import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.GeneralThreadPool;
 import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.datatables.NpcTable;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTime;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTimeAdapter;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTimeClock;
@@ -91,7 +91,7 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 
 	private Map<Integer, Point> _homePoint = null; // initでspawnした個々のオブジェクトのホームポイント
 
-	private List<LsimulatorNpcInstance> _mobs = Lists.newList();
+	private List<NpcInstance> _mobs = Lists.newList();
 
 	private String _name;
 
@@ -342,7 +342,7 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 	}
 
 	protected void doSpawn(int spawnNumber, int objectId) { // 再出現
-		LsimulatorNpcInstance mob = null;
+		NpcInstance mob = null;
 		try {
 			int newlocx = getLocX();
 			int newlocy = getLocY();
@@ -386,14 +386,14 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 				switch (getSpawnType()) {
 					case SPAWN_TYPE_PC_AROUND: // PC周辺に湧くタイプ
 						if (!_initSpawn) { // 初期配置では無条件に通常spawn
-							List<LsimulatorPcInstance> players = Lists.newList();
-							for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
+							List<PcInstance> players = Lists.newList();
+							for (PcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
 								if (getMapId() == pc.getMapId()) {
 									players.add(pc);
 								}
 							}
 							if (players.size() > 0) {
-								LsimulatorPcInstance pc = players.get(Random.nextInt(players.size()));
+								PcInstance pc = players.get(Random.nextInt(players.size()));
 								LsimulatorLocation loc = pc.getLocation().randomLocation(PC_AROUND_DISTANCE, false);
 								newlocx = loc.getX();
 								newlocy = loc.getY();
@@ -435,11 +435,11 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 				mob.setHomeY(newlocy);
 
 				if (mob.getMap().isInMap(mob.getLocation()) && mob.getMap().isPassable(mob.getLocation())) {
-					if (mob instanceof LsimulatorMonsterInstance) {
+					if (mob instanceof MonsterInstance) {
 						if (isRespawnScreen()) {
 							break;
 						}
-						LsimulatorMonsterInstance mobtemp = (LsimulatorMonsterInstance) mob;
+						MonsterInstance mobtemp = (MonsterInstance) mob;
 						if (LsimulatorWorld.getInstance().getVisiblePlayer(mobtemp).isEmpty()) {
 							break;
 						}
@@ -451,8 +451,8 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 				}
 				tryCount++;
 			}
-			if (mob instanceof LsimulatorMonsterInstance) {
-				((LsimulatorMonsterInstance) mob).initHide();
+			if (mob instanceof MonsterInstance) {
+				((MonsterInstance) mob).initHide();
 			}
 
 			mob.setSpawn(this);
@@ -463,13 +463,13 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 				_homePoint.put(spawnNumber, pt); // ここで保存したpointを再出現時に使う
 			}
 
-			if (mob instanceof LsimulatorMonsterInstance) {
+			if (mob instanceof MonsterInstance) {
 				if (mob.getMapId() == 666) {
-					((LsimulatorMonsterInstance) mob).set_storeDroped(true);
+					((MonsterInstance) mob).set_storeDroped(true);
 				}
 			}
 			if ((npcId == 45573) && (mob.getMapId() == 2)) { // バフォメット
-				for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
+				for (PcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
 					if (pc.getMapId() == 2) {
 						LsimulatorTeleport.teleport(pc, 32664, 32797, (short) 2, 0, true);
 					}
@@ -477,14 +477,14 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 			}
 
 			if (((npcId == 46142) && (mob.getMapId() == 73)) || ((npcId == 46141) && (mob.getMapId() == 74))) {
-				for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
+				for (PcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
 					if ((pc.getMapId() >= 72) && (pc.getMapId() <= 74)) {
 						LsimulatorTeleport.teleport(pc, 32840, 32833, (short) 72, pc.getHeading(), true);
 					}
 				}
 			}
 			if ((npcId == 81341) && ((mob.getMapId() == 2000) || (mob.getMapId() == 2001) || (mob.getMapId() == 2002) || (mob.getMapId() == 2003))) { // 再生之祭壇
-				for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
+				for (PcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
 					if ((pc.getMapId() >= 2000) && (pc.getMapId() <= 2003)) {
 						LsimulatorTeleport.teleport(pc, 32933, 32988, (short) 410, 5, true);
 					}
@@ -496,8 +496,8 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 			LsimulatorWorld.getInstance().storeObject(mob);
 			LsimulatorWorld.getInstance().addVisibleObject(mob);
 
-			if (mob instanceof LsimulatorMonsterInstance) {
-				LsimulatorMonsterInstance mobtemp = (LsimulatorMonsterInstance) mob;
+			if (mob instanceof MonsterInstance) {
+				MonsterInstance mobtemp = (MonsterInstance) mob;
 				if (!_initSpawn && (mobtemp.getHiddenStatus() == 0)) {
 					mobtemp.onNpcAI(); // モンスターのＡＩを開始
 				}
@@ -506,7 +506,7 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 				LsimulatorMobGroupSpawn.getInstance().doSpawn(mob, getGroupId(), isRespawnScreen(), _initSpawn);
 			}
 			mob.turnOnOffLight();
-			mob.startChat(LsimulatorNpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
+			mob.startChat(NpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
 		}
 		catch (Exception e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -559,7 +559,7 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 				return;
 			}
 			// 指定時間外になっていれば削除
-			for (LsimulatorNpcInstance mob : _mobs) {
+			for (NpcInstance mob : _mobs) {
 				mob.setCurrentHpDirect(0);
 				mob.setDead(true);
 				mob.setStatus(ActionCodes.ACTION_Die);
@@ -584,8 +584,8 @@ public class LsimulatorSpawn extends LsimulatorGameTimeAdapter {
 
 	private static void closeDoorInCrystalCave(int doorId) {
 		for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-			if (object instanceof LsimulatorDoorInstance) {
-				LsimulatorDoorInstance door = (LsimulatorDoorInstance) object;
+			if (object instanceof DoorInstance) {
+				DoorInstance door = (DoorInstance) object;
 				if (door.getDoorId() == doorId) {
 					door.close();
 				}

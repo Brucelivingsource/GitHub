@@ -19,7 +19,7 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.datatables.ChatLogTable;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ChatPacket;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -36,7 +36,7 @@ public class C_ChatWhisper extends ClientBasePacket {
 	public C_ChatWhisper(byte abyte0[], ClientThread client) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance whisperFrom = client.getActiveChar();
+		PcInstance whisperFrom = client.getActiveChar();
 		if (whisperFrom == null) {
 			return;
 		}
@@ -56,7 +56,7 @@ public class C_ChatWhisper extends ClientBasePacket {
 																											// 以下無法使用密談。
 			return;
 		}
-		LsimulatorPcInstance whisperTo = LsimulatorWorld.getInstance().getPlayer(targetName);
+		PcInstance whisperTo = LsimulatorWorld.getInstance().getPlayer(targetName);
 		// 密語對象不存在
 		if (whisperTo == null) {
 			whisperFrom.sendPackets(new S_ServerMessage(73, targetName)); // \f1%0%d

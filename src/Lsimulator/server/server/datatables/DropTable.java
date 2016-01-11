@@ -29,11 +29,11 @@ import Lsimulator.server.server.model.LsimulatorCharacter;
 import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorQuest;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorDrop;
@@ -104,7 +104,7 @@ public class DropTable {
 	}
 
 	// インベントリにドロップを設定
-	public void setDrop(LsimulatorNpcInstance npc, LsimulatorInventory inventory) {
+	public void setDrop(NpcInstance npc, LsimulatorInventory inventory) {
 		// ドロップリストの取得
 		int mobId = npc.getNpcTemplate().get_npcId();
 		List<LsimulatorDrop> dropList = _droplists.get(mobId);
@@ -130,7 +130,7 @@ public class DropTable {
 		int addCount;
 		int randomChance;
 		int enchantlvl;
-		LsimulatorItemInstance item;
+		ItemInstance item;
 
 		for (LsimulatorDrop drop : dropList) {
 			// ドロップアイテムの取得
@@ -180,7 +180,7 @@ public class DropTable {
 	}
 
 	// ドロップを分配
-	public void dropShare(LsimulatorNpcInstance npc, List<LsimulatorCharacter> acquisitorList, List<Integer> hateList) {
+	public void dropShare(NpcInstance npc, List<LsimulatorCharacter> acquisitorList, List<Integer> hateList) {
 		LsimulatorInventory inventory = npc.getInventory();
 		if (inventory.getSize() == 0) {
 			return;
@@ -194,7 +194,7 @@ public class DropTable {
 		for (int i = hateList.size() - 1; i >= 0; i--) {
 			acquisitor = acquisitorList.get(i);
 			if ((Config.AUTO_LOOT == 2) // オートルーティング２の場合はサモン及びペットは省く
-					&& ((acquisitor instanceof LsimulatorSummonInstance) || (acquisitor instanceof LsimulatorPetInstance))) {
+					&& ((acquisitor instanceof SummonInstance) || (acquisitor instanceof PetInstance))) {
 				acquisitorList.remove(i);
 				hateList.remove(i);
 			}
@@ -209,10 +209,10 @@ public class DropTable {
 		}
 
 		// ドロップの分配
-		LsimulatorItemInstance item;
+		ItemInstance item;
 		LsimulatorInventory targetInventory = null;
-		LsimulatorPcInstance player;
-		LsimulatorPcInstance[] partyMember;
+		PcInstance player;
+		PcInstance[] partyMember;
 		int randomInt;
 		int chanceHate;
 		int itemId;
@@ -233,11 +233,11 @@ public class DropTable {
 					if (chanceHate > randomInt) {
 						acquisitor = acquisitorList.get(j);
 						if ((itemId >= 40131) && (itemId <= 40135)) {
-							if (!(acquisitor instanceof LsimulatorPcInstance) || (hateList.size() > 1)) {
+							if (!(acquisitor instanceof PcInstance) || (hateList.size() > 1)) {
 								targetInventory = null;
 								break;
 							}
-							player = (LsimulatorPcInstance) acquisitor;
+							player = (PcInstance) acquisitor;
 							if (player.getQuest().get_step(LsimulatorQuest.QUEST_LYRA) != 1) {
 								targetInventory = null;
 								break;
@@ -245,9 +245,9 @@ public class DropTable {
 						}
 						if (acquisitor.getInventory().checkAddItem(item, item.getCount()) == LsimulatorInventory.OK) {
 							targetInventory = acquisitor.getInventory();
-							if (acquisitor instanceof LsimulatorPcInstance) {
-								player = (LsimulatorPcInstance) acquisitor;
-								LsimulatorItemInstance l1iteminstance = player.getInventory().findItemId(LsimulatorItemId.ADENA); // 所持アデナをチェック
+							if (acquisitor instanceof PcInstance) {
+								player = (PcInstance) acquisitor;
+								ItemInstance l1iteminstance = player.getInventory().findItemId(LsimulatorItemId.ADENA); // 所持アデナをチェック
 								if ((l1iteminstance != null) && (l1iteminstance.getCount() > 2000000000)) {
 									targetInventory = LsimulatorWorld.getInstance().getInventory(acquisitor.getX(), acquisitor.getY(), acquisitor.getMapId()); // 持てないので足元に落とす
 									isGround = true;
@@ -260,7 +260,7 @@ public class DropTable {
 										if (player.getPartyType() == 1) {
 											int partySize = 0;
 											int memberItemCount = 0;
-											for (LsimulatorPcInstance member : partyMember) {
+											for (PcInstance member : partyMember) {
 												if (member !=null && member.getMapId() == npc.getMapId() 
 													&& member.getCurrentHp() > 0 && !member.isDead()) {
 													partySize++;
@@ -272,11 +272,11 @@ public class DropTable {
 												if (otherCount > 0) {
 													item.setCount(memberItemCount + otherCount);
 												}
-												for (LsimulatorPcInstance member : partyMember) {
+												for (PcInstance member : partyMember) {
 													if (member !=null && member.getMapId() == npc.getMapId() 
 														&& member.getCurrentHp() > 0 && !member.isDead()) {
 														member.getInventory().storeItem(itemId, memberItemCount);
-														for (LsimulatorPcInstance pc : player.getParty().getMembers()) {
+														for (PcInstance pc : player.getParty().getMembers()) {
 															pc.sendPackets(new S_ServerMessage(813, npc.getName(), item.getLogName(), member.getName()));
 														}
 														if (otherCount > 0) {
@@ -288,12 +288,12 @@ public class DropTable {
 												inventory.removeItem(item, item.getCount());
 												isPartyShare = true;
 											} else {
-												for (LsimulatorPcInstance pc : player.getParty().getMembers()) {
+												for (PcInstance pc : player.getParty().getMembers()) {
 													pc.sendPackets(new S_ServerMessage(813, npc.getName(), item.getLogName(), player.getName()));
 												}
 											}
 										} else {
-											for (LsimulatorPcInstance element : partyMember) {
+											for (PcInstance element : partyMember) {
 												element.sendPackets(new S_ServerMessage(813, npc.getName(), item.getLogName(), player.getName()));
 											}
 										}

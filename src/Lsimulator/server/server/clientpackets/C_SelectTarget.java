@@ -17,10 +17,10 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorCharacter;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -40,56 +40,56 @@ public class C_SelectTarget extends ClientBasePacket {
 		readC();
 		int targetId = readD();
 
-		LsimulatorPetInstance pet = (LsimulatorPetInstance) LsimulatorWorld.getInstance().findObject(petId);
+		PetInstance pet = (PetInstance) LsimulatorWorld.getInstance().findObject(petId);
 		LsimulatorCharacter target = (LsimulatorCharacter) LsimulatorWorld.getInstance().findObject(targetId);
 
 		if ((pet != null) && (target != null)) {
 			// 目標為玩家
-			if (target instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) target;
+			if (target instanceof PcInstance) {
+				PcInstance pc = (PcInstance) target;
 				// 目標在安區、攻擊者在安區、NOPVP
 				if ((pc.getZoneType() == 1) || (pet.getZoneType() == 1) || (pc.checkNonPvP(pc, pet))) {
 					// 寵物主人
-					if (pet.getMaster() instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance petMaster = (LsimulatorPcInstance) pet.getMaster();
+					if (pet.getMaster() instanceof PcInstance) {
+						PcInstance petMaster = (PcInstance) pet.getMaster();
 						petMaster.sendPackets(new S_ServerMessage(328)); // 請選擇正確的對象。
 					}
 					return;
 				}
 			}
 			// 目標為寵物
-			else if (target instanceof LsimulatorPetInstance) {
-				LsimulatorPetInstance targetPet = (LsimulatorPetInstance) target;
+			else if (target instanceof PetInstance) {
+				PetInstance targetPet = (PetInstance) target;
 				// 目標在安區、攻擊者在安區
 				if ((targetPet.getZoneType() == 1) || (pet.getZoneType() == 1)) {
 					// 寵物主人
-					if (pet.getMaster() instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance petMaster = (LsimulatorPcInstance) pet.getMaster();
+					if (pet.getMaster() instanceof PcInstance) {
+						PcInstance petMaster = (PcInstance) pet.getMaster();
 						petMaster.sendPackets(new S_ServerMessage(328)); // 請選擇正確的對象。
 					}
 					return;
 				}
 			}
 			// 目標為召喚怪
-			else if (target instanceof LsimulatorSummonInstance) {
-				LsimulatorSummonInstance targetSummon = (LsimulatorSummonInstance) target;
+			else if (target instanceof SummonInstance) {
+				SummonInstance targetSummon = (SummonInstance) target;
 				// 目標在安區、攻擊者在安區
 				if ((targetSummon.getZoneType() == 1) || (pet.getZoneType() == 1)) {
 					// 寵物主人
-					if (pet.getMaster() instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance petMaster = (LsimulatorPcInstance) pet.getMaster();
+					if (pet.getMaster() instanceof PcInstance) {
+						PcInstance petMaster = (PcInstance) pet.getMaster();
 						petMaster.sendPackets(new S_ServerMessage(328)); // 請選擇正確的對象。
 					}
 					return;
 				}
 			}
 			// 目標為怪物
-			else if (target instanceof LsimulatorMonsterInstance) {
-				LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) target;
+			else if (target instanceof MonsterInstance) {
+				MonsterInstance mob = (MonsterInstance) target;
 				// 特定狀態下才可攻擊
 				if (pet.getMaster().isAttackMiss(pet.getMaster(), mob.getNpcId())) {
-					if (pet.getMaster() instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance petMaster = (LsimulatorPcInstance) pet.getMaster();
+					if (pet.getMaster() instanceof PcInstance) {
+						PcInstance petMaster = (PcInstance) pet.getMaster();
 						petMaster.sendPackets(new S_ServerMessage(328)); // 請選擇正確的對象。
 					}
 					return;

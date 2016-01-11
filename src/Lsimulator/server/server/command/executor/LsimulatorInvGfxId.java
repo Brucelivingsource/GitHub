@@ -17,8 +17,8 @@ package Lsimulator.server.server.command.executor;
 import java.util.StringTokenizer;
 
 import Lsimulator.server.server.datatables.ItemTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
 public class LsimulatorInvGfxId implements LsimulatorCommandExecutor {
@@ -30,13 +30,13 @@ public class LsimulatorInvGfxId implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer st = new StringTokenizer(arg);
 			int gfxid = Integer.parseInt(st.nextToken(), 10);
 			int count = Integer.parseInt(st.nextToken(), 10);
 			for (int i = 0; i < count; i++) {
-				LsimulatorItemInstance item = ItemTable.getInstance().createItem(40005);
+				ItemInstance item = ItemTable.getInstance().createItem(40005);
 				item.getItem().setGfxId(gfxid + i);
 				item.getItem().setName(String.valueOf(gfxid + i));
 				pc.getInventory().storeItem(item);

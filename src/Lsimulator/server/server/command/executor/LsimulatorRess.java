@@ -15,7 +15,7 @@
 package Lsimulator.server.server.command.executor;
 
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Message_YN;
 import Lsimulator.server.server.serverpackets.S_SkillSound;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
@@ -29,14 +29,14 @@ public class LsimulatorRess implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			int objid = pc.getId();
 			pc.sendPackets(new S_SkillSound(objid, 759));
 			pc.broadcastPacket(new S_SkillSound(objid, 759));
 			pc.setCurrentHp(pc.getMaxHp());
 			pc.setCurrentMp(pc.getMaxMp());
-			for (LsimulatorPcInstance tg : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) {
+			for (PcInstance tg : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) {
 				if ((tg.getCurrentHp() == 0) && tg.isDead()) {
 					tg.sendPackets(new S_SystemMessage("GM給予了重生。"));
 					tg.broadcastPacket(new S_SkillSound(tg.getId(), 3944));

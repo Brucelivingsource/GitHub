@@ -17,7 +17,7 @@ package Lsimulator.server.server.serverpackets;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.STATUS_THIRD_SPEED;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket, S_OtherCharPacks
@@ -34,15 +34,15 @@ public class S_OtherCharPacks extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_OtherCharPacks(LsimulatorPcInstance pc, boolean isFindInvis) {
+	public S_OtherCharPacks(PcInstance pc, boolean isFindInvis) {
 		buildPacket(pc, isFindInvis);
 	}
 
-	public S_OtherCharPacks(LsimulatorPcInstance pc) {
+	public S_OtherCharPacks(PcInstance pc) {
 		buildPacket(pc, false);
 	}
 
-	private void buildPacket(LsimulatorPcInstance pc, boolean isFindInvis) {
+	private void buildPacket(PcInstance pc, boolean isFindInvis) {
 		int status = STATUS_PC;
 
 		if (pc.getPoison() != null) { // 毒状態
@@ -54,7 +54,7 @@ public class S_OtherCharPacks extends ServerBasePacket {
 			status |= STATUS_INVISIBLE;
 		}
 		if (pc.getBraveSpeed() != 0) { // 2段加速效果
-			status |= pc.getBraveSpeed() * 16;
+			status |= ( pc.getBraveSpeed()  << 4 ) ;
 		}
 
 		// int addbyte = 0;

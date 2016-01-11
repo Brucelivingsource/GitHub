@@ -192,7 +192,7 @@ import Lsimulator.server.server.clientpackets.C_UseSkill;
 import Lsimulator.server.server.clientpackets.C_War;
 import Lsimulator.server.server.clientpackets.C_WarePassword;
 import Lsimulator.server.server.clientpackets.C_Who;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server:
 // Opcodes, LoginController, ClientThread, Logins
@@ -203,7 +203,7 @@ public class PacketHandler {
 		_client = clientthread;
 	}
 
-	public void handlePacket(byte abyte0[], LsimulatorPcInstance object) throws Exception {
+	public void handlePacket(byte abyte0[], PcInstance object) throws Exception {
 		int i = abyte0[0] & 0xff;
 
 		switch (i) {

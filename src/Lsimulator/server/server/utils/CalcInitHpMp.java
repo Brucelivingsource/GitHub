@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.utils;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class CalcInitHpMp {
 
@@ -28,7 +28,7 @@ public class CalcInitHpMp {
 	 * @return hp
 	 * 
 	 */
-	public static int calcInitHp(LsimulatorPcInstance pc) {
+	public static int calcInitHp(PcInstance pc) {
 		int hp = 1;
 		if (pc.isCrown()) {
 			hp = 14;
@@ -55,7 +55,7 @@ public class CalcInitHpMp {
 	 * @return mp
 	 * 
 	 */
-	public static int calcInitMp(LsimulatorPcInstance pc) {
+	public static int calcInitMp(PcInstance pc) {
 		int mp = 1;
 		if (pc.isCrown()) {
 			switch (pc.getWis()) {

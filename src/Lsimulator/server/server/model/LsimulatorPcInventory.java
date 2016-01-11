@@ -23,9 +23,9 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.Config;
 import Lsimulator.server.server.datatables.RaceTicketTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_AddItem;
 import Lsimulator.server.server.serverpackets.S_CharVisualUpdate;
@@ -50,19 +50,19 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 
 	private static final int MAX_SIZE = 180;
 
-	private final LsimulatorPcInstance _owner; // 所有者プレイヤー
+	private final PcInstance _owner; // 所有者プレイヤー
 
 	private int _arrowId; // 優先して使用されるアローのItemID
 
 	private int _stingId; // 優先して使用されるスティングのItemID
 
-	public LsimulatorPcInventory(LsimulatorPcInstance owner) {
+	public LsimulatorPcInventory(PcInstance owner) {
 		_owner = owner;
 		_arrowId = 0;
 		_stingId = 0;
 	}
 
-	public LsimulatorPcInstance getOwner() {
+	public PcInstance getOwner() {
 		return _owner;
 	}
 
@@ -92,11 +92,11 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	}
 
 	@Override
-	public int checkAddItem(LsimulatorItemInstance item, int count) {
+	public int checkAddItem(ItemInstance item, int count) {
 		return checkAddItem(item, count, true);
 	}
 
-	public int checkAddItem(LsimulatorItemInstance item, int count, boolean message) {
+	public int checkAddItem(ItemInstance item, int count, boolean message) {
 		if (item == null) {
 			return -1;
 		}
@@ -124,7 +124,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 			return WEIGHT_OVER;
 		}
 
-		LsimulatorItemInstance itemExist = findItemId(item.getItemId());
+		ItemInstance itemExist = findItemId(item.getItemId());
 		if (itemExist != null && (itemExist.getCount() + count) > MAX_AMOUNT) {
 			if (message) {
 				getOwner().sendPackets(
@@ -151,7 +151,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 		try {
 			CharactersItemStorage storage = CharactersItemStorage.create();
 
-			for (LsimulatorItemInstance item : storage.loadItems(_owner.getId())) {
+			for (ItemInstance item : storage.loadItems(_owner.getId())) {
 				_items.add(item);
 
 				if (item.isEquipped()) {
@@ -187,7 +187,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 
 	// 對資料庫中的character_items資料表寫入
 	@Override
-	public void insertItem(LsimulatorItemInstance item) {
+	public void insertItem(ItemInstance item) {
 		_owner.sendPackets(new S_AddItem(item));
 		if (item.getItem().getWeight() != 0) {
 			_owner.sendPackets(new S_PacketBox(S_PacketBox.WEIGHT,getWeight242()));
@@ -247,7 +247,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	public static final int COL_WINDMR = 512;
 
 	@Override
-	public void updateItem(LsimulatorItemInstance item) {
+	public void updateItem(ItemInstance item) {
 		updateItem(item, COL_COUNT);
 		if (item.getItem().isToBeSavedAtOnce()) {
 			saveItem(item, COL_COUNT);
@@ -263,7 +263,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	 *            - 更新するステータスの種類
 	 */
 	@Override
-	public void updateItem(LsimulatorItemInstance item, int column) {
+	public void updateItem(ItemInstance item, int column) {
 		if (column >= COL_ATTR_ENCHANT_LEVEL) { // 属性強化数
 			_owner.sendPackets(new S_ItemStatus(item));
 			column -= COL_ATTR_ENCHANT_LEVEL;
@@ -336,7 +336,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	 * @param column
 	 *            - 更新するステータスの種類
 	 */
-	public void saveItem(LsimulatorItemInstance item, int column) {
+	public void saveItem(ItemInstance item, int column) {
 		if (column == 0) {
 			return;
 		}
@@ -396,7 +396,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 		}
 	}
 
-	public void saveEnchantAccessory(LsimulatorItemInstance item, int column) { // 飾品強化
+	public void saveEnchantAccessory(ItemInstance item, int column) { // 飾品強化
 		if (column == 0) {
 			return;
 		}
@@ -450,7 +450,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 
 	// ＤＢのcharacter_itemsから削除
 	@Override
-	public void deleteItem(LsimulatorItemInstance item) {
+	public void deleteItem(ItemInstance item) {
 		try {
 			CharactersItemStorage storage = CharactersItemStorage.create();
 
@@ -469,11 +469,11 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	}
 
 	// アイテムを装着脱着させる（LsimulatorItemInstanceの変更、補正値の設定、character_itemsの更新、パケット送信まで管理）
-	public void setEquipped(LsimulatorItemInstance item, boolean equipped) {
+	public void setEquipped(ItemInstance item, boolean equipped) {
 		setEquipped(item, equipped, false, false);
 	}
 
-	public void setEquipped(LsimulatorItemInstance item, boolean equipped, boolean loaded, boolean changeWeapon) {
+	public void setEquipped(ItemInstance item, boolean equipped, boolean loaded, boolean changeWeapon) {
 		if (item.isEquipped() != equipped) { // 設定値と違う場合だけ処理
 			LsimulatorItem temp = item.getItem();
 			if (equipped) { // 装着
@@ -514,7 +514,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	// 特定のアイテムを装備しているか確認
 	public boolean checkEquipped(int id) {
 		for (Object itemObject : _items) {
-			LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+			ItemInstance item = (ItemInstance) itemObject;
 			if (item.getItem().getItemId() == id && item.isEquipped()) {
 				return true;
 			}
@@ -536,7 +536,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	public int getTypeEquipped(int type2, int type) {
 		int equipeCount = 0;
 		for (Object itemObject : _items) {
-			LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+			ItemInstance item = (ItemInstance) itemObject;
 			if (item.getItem().getType2() == type2
 					&& item.getItem().getType() == type && item.isEquipped()) {
 				equipeCount++;
@@ -546,10 +546,10 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	}
 
 	// 装備している特定のタイプのアイテム
-	public LsimulatorItemInstance getItemEquipped(int type2, int type) {
-		LsimulatorItemInstance equipeitem = null;
+	public ItemInstance getItemEquipped(int type2, int type) {
+		ItemInstance equipeitem = null;
 		for (Object itemObject : _items) {
-			LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+			ItemInstance item = (ItemInstance) itemObject;
 			if (item.getItem().getType2() == type2
 					&& item.getItem().getType() == type && item.isEquipped()) {
 				equipeitem = item;
@@ -560,11 +560,11 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	}
 
 	// 装備しているリング
-	public LsimulatorItemInstance[] getRingEquipped() {
-		LsimulatorItemInstance equipeItem[] = new LsimulatorItemInstance[2];
+	public ItemInstance[] getRingEquipped() {
+		ItemInstance equipeItem[] = new ItemInstance[2];
 		int equipeCount = 0;
 		for (Object itemObject : _items) {
-			LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+			ItemInstance item = (ItemInstance) itemObject;
 			if (item.getItem().getType2() == 2 && item.getItem().getType() == 9
 					&& item.isEquipped()) {
 				equipeItem[equipeCount] = item;
@@ -601,7 +601,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 
 	// 変身時に装備できない防具を外す
 	private void takeoffArmor(int polyid) {
-		LsimulatorItemInstance armor = null;
+		ItemInstance armor = null;
 
 		// ヘルムからガーダーまでチェックする
 		for (int type = 0; type <= 13; type++) {
@@ -628,17 +628,17 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	}
 
 	// 使用するアローの取得
-	public LsimulatorItemInstance getArrow() {
+	public ItemInstance getArrow() {
 		return getBullet(0);
 	}
 
 	// 使用するスティングの取得
-	public LsimulatorItemInstance getSting() {
+	public ItemInstance getSting() {
 		return getBullet(15);
 	}
 
-	private LsimulatorItemInstance getBullet(int type) {
-		LsimulatorItemInstance bullet;
+	private ItemInstance getBullet(int type) {
+		ItemInstance bullet;
 		int priorityId = 0;
 		if (type == 0) {
 			priorityId = _arrowId; // アロー
@@ -664,7 +664,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 
 		for (Object itemObject : _items) // 弾を探す
 		{
-			bullet = (LsimulatorItemInstance) itemObject;
+			bullet = (ItemInstance) itemObject;
 			if (bullet.getItem().getType() == type
 					&& bullet.getItem().getType2() == 0) {
 				if (type == 0) {
@@ -693,7 +693,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	public int hpRegenPerTick() {
 		int hpr = 0;
 		for (Object itemObject : _items) {
-			LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+			ItemInstance item = (ItemInstance) itemObject;
 			if (item.isEquipped()) {
 				hpr += item.getItem().get_addhpr() + item.getHpr();
 			}
@@ -705,7 +705,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 	public int mpRegenPerTick() {
 		int mpr = 0;
 		for (Object itemObject : _items) {
-			LsimulatorItemInstance item = (LsimulatorItemInstance) itemObject;
+			ItemInstance item = (ItemInstance) itemObject;
 			if (item.isEquipped()) {
 				mpr += item.getItem().get_addmpr() + item.getMpr();
 			}
@@ -713,17 +713,17 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 		return mpr;
 	}
 
-	public LsimulatorItemInstance CaoPenalty() {
+	public ItemInstance CaoPenalty() {
 		int rnd = Random.nextInt(_items.size());
-		LsimulatorItemInstance penaltyItem = _items.get(rnd);
+		ItemInstance penaltyItem = _items.get(rnd);
 		if (penaltyItem.getItem().getItemId() == LsimulatorItemId.ADENA // アデナ、トレード不可のアイテムは落とさない
 				|| !penaltyItem.getItem().isTradable()) {
 			return null;
 		}
 		Object[] petlist = _owner.getPetList().values().toArray();
 		for (Object petObject : petlist) {
-			if (petObject instanceof LsimulatorPetInstance) {
-				LsimulatorPetInstance pet = (LsimulatorPetInstance) petObject;
+			if (petObject instanceof PetInstance) {
+				PetInstance pet = (PetInstance) petObject;
 				if (penaltyItem.getId() == pet.getItemObjId()) {
 					return null;
 				}
@@ -733,7 +733,7 @@ public class LsimulatorPcInventory extends LsimulatorInventory {
 		return penaltyItem;
 	}
 	
-	public void setEquipmentOnOff(LsimulatorItemInstance item, boolean onOff) {
+	public void setEquipmentOnOff(ItemInstance item, boolean onOff) {
 		int index = 0;
 		if(item.isEquipped() && item.getItem().getType2() == 1){ // LsimulatorWeapon
 			index = 8;

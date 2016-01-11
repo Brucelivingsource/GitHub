@@ -18,9 +18,9 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.PetItemTable;
 import Lsimulator.server.server.datatables.PetTypeTable;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.serverpackets.S_PetEquipment;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorPetItem;
@@ -47,7 +47,7 @@ public class C_UsePetItem extends ClientBasePacket {
 	public C_UsePetItem(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -56,11 +56,11 @@ public class C_UsePetItem extends ClientBasePacket {
 		int petId = readD();
 		int listNo = readC();
 
-		LsimulatorPetInstance pet = (LsimulatorPetInstance) LsimulatorWorld.getInstance().findObject(petId);
+		PetInstance pet = (PetInstance) LsimulatorWorld.getInstance().findObject(petId);
 		if (pet == null)  {
 			return;
 		}
-		LsimulatorItemInstance item = pet.getInventory().getItems().get(listNo);
+		ItemInstance item = pet.getInventory().getItems().get(listNo);
 		if (item == null) {
 			return;
 		}

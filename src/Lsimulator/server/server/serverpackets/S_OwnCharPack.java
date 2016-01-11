@@ -17,7 +17,7 @@ package Lsimulator.server.server.serverpackets;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.STATUS_THIRD_SPEED;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -34,11 +34,11 @@ public class S_OwnCharPack extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_OwnCharPack(LsimulatorPcInstance pc) {
+	public S_OwnCharPack(PcInstance pc) {
 		buildPacket(pc);
 	}
 
-	private void buildPacket(LsimulatorPcInstance pc) {
+	private void buildPacket(PcInstance pc) {
 		int status = STATUS_PC;
 
 		// グール毒みたいな緑の毒
@@ -50,7 +50,7 @@ public class S_OwnCharPack extends ServerBasePacket {
 			status |= STATUS_INVISIBLE;
 		}
 		if (pc.getBraveSpeed() != 0) { // 2段加速效果
-			status |= pc.getBraveSpeed() * 16;
+			status |= ( pc.getBraveSpeed()  << 4 ) ;
 		}
 
 		if (pc.isGhost()) {

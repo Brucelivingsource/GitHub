@@ -206,8 +206,8 @@ public class LsimulatorLocation extends Point {
 
 		int trial = 0;
 		// 試行回数を範囲最小値によってあげる為の計算
-		int amax = (int) Math.pow(1 + (max * 2), 2);
-		int amin = (min == 0) ? 0 : (int) Math.pow(1 + ((min - 1) * 2), 2);
+		int amax = (int) Math.pow(1 + (max << 1 ), 2);
+		int amin = (min == 0) ? 0 : (int) Math.pow(1 + ((min - 1) << 1 ), 2);
 		int trialLimit = 40 * amax / (amax - amin);
 
 		while (true) {

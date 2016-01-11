@@ -18,7 +18,7 @@ import static Lsimulator.server.server.model.skill.LsimulatorSkillId.STATUS_POIS
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.STATUS_POISON_PARALYZING;
 import Lsimulator.server.server.GeneralThreadPool;
 import Lsimulator.server.server.model.LsimulatorCharacter;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Paralysis;
 
 public class LsimulatorParalysisPoison extends LsimulatorPoison {
@@ -55,8 +55,8 @@ public class LsimulatorParalysisPoison extends LsimulatorPoison {
 			_effectId = 2;
 			_target.setPoisonEffect(2);
 
-			if (_target instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance player = (LsimulatorPcInstance) _target;
+			if (_target instanceof PcInstance) {
+				PcInstance player = (PcInstance) _target;
 				if (  ! player.isDead() ) {
 					player.sendPackets(new S_Paralysis(1, true)); // 麻痺状態にする
 					_timer = new ParalysisTimer();
@@ -80,8 +80,8 @@ public class LsimulatorParalysisPoison extends LsimulatorPoison {
 			catch (InterruptedException e) {}
 
 			_target.killSkillEffectTimer(STATUS_POISON_PARALYZED);
-			if (_target instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance player = (LsimulatorPcInstance) _target;
+			if (_target instanceof PcInstance) {
+				PcInstance player = (PcInstance) _target;
 				if (!player.isDead()) {
 					player.sendPackets(new S_Paralysis(1, false)); // 麻痺状態を解除する
 					cure(); // 解毒処理
@@ -111,7 +111,7 @@ public class LsimulatorParalysisPoison extends LsimulatorPoison {
 		sendMessageIfPlayer(_target, 212);
 		_target.setPoisonEffect(1);
 
-		if (_target instanceof LsimulatorPcInstance) {
+		if (_target instanceof PcInstance) {
 			_timer = new ParalysisPoisonTimer();
 			GeneralThreadPool.getInstance().execute(_timer);
 		}

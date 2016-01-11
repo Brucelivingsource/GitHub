@@ -28,15 +28,15 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.datatables.InnTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTimeClock;
 import Lsimulator.server.server.templates.LsimulatorInn;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Maps;
 
 // Referenced classes of package Lsimulator.server.server.model:
-// LsimulatorTeleport, LsimulatorPcInstance
+// LsimulatorTeleport, PcInstance
 
 public class Dungeon {
 
@@ -167,7 +167,7 @@ public class Dungeon {
 		}
 	}
 
-	public boolean dg(int locX, int locY, int mapId, LsimulatorPcInstance pc) {
+	public boolean dg(int locX, int locY, int mapId, PcInstance pc) {
 		int servertime = LsimulatorGameTimeClock.getInstance().currentTime().getSeconds();
 		int nowtime = servertime % 86400;
 		String key = new StringBuilder().append(mapId).append(locX).append(locY).toString();
@@ -270,8 +270,8 @@ public class Dungeon {
 	}
 
 	// 檢查身上的鑰匙
-	private int checkInnKey(LsimulatorPcInstance pc, int npcid) {
-		for (LsimulatorItemInstance item : pc.getInventory().getItems()) {
+	private int checkInnKey(PcInstance pc, int npcid) {
+		for (ItemInstance item : pc.getInventory().getItems()) {
 			if (item.getInnNpcId() == npcid) { // 鑰匙與旅館NPC相符
 				for (int i = 0; i < 16; i++) {
 					LsimulatorInn inn = InnTable.getInstance().getTemplate(npcid, i);

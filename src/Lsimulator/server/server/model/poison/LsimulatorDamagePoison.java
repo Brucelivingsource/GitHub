@@ -17,8 +17,8 @@ package Lsimulator.server.server.model.poison;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.STATUS_POISON;
 import Lsimulator.server.server.GeneralThreadPool;
 import Lsimulator.server.server.model.LsimulatorCharacter;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class LsimulatorDamagePoison extends LsimulatorPoison {
 	private Thread _timer;
@@ -54,15 +54,15 @@ public class LsimulatorDamagePoison extends LsimulatorPoison {
 				if (!_target.hasSkillEffect(STATUS_POISON)) {
 					break;
 				}
-				if (_target instanceof LsimulatorPcInstance) {
-					LsimulatorPcInstance player = (LsimulatorPcInstance) _target;
+				if (_target instanceof PcInstance) {
+					PcInstance player = (PcInstance) _target;
 					player.receiveDamage(_attacker, _damage, false);
 					if (player.isDead()) { // 死亡したら解毒処理
 						break;
 					}
 				}
-				else if (_target instanceof LsimulatorMonsterInstance) {
-					LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) _target;
+				else if (_target instanceof MonsterInstance) {
+					MonsterInstance mob = (MonsterInstance) _target;
 					mob.receiveDamage(_attacker, _damage);
 					if (mob.isDead()) { // 死亡しても解毒しない
 						return;
@@ -74,7 +74,7 @@ public class LsimulatorDamagePoison extends LsimulatorPoison {
 	}
 
 	boolean isDamageTarget(LsimulatorCharacter cha) {
-		return (cha instanceof LsimulatorPcInstance) || (cha instanceof LsimulatorMonsterInstance);
+		return (cha instanceof PcInstance) || (cha instanceof MonsterInstance);
 	}
 
 	private void doInfection() {

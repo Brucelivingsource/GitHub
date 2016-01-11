@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 public class S_IdentifyDesc extends ServerBasePacket {
 
@@ -24,11 +24,11 @@ public class S_IdentifyDesc extends ServerBasePacket {
 	/**
 	 * 確認スクロール使用時のメッセージを表示する
 	 */
-	public S_IdentifyDesc(LsimulatorItemInstance item) {
+	public S_IdentifyDesc(ItemInstance item) {
 		buildPacket(item);
 	}
 
-	private void buildPacket(LsimulatorItemInstance item) {
+	private void buildPacket(ItemInstance item) {
 		writeC(Opcodes.S_OPCODE_IDENTIFYDESC);
 		writeH(item.getItem().getItemDescId());
 

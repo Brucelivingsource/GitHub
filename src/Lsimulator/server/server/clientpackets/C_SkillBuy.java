@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SkillBuy;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -31,7 +31,7 @@ public class C_SkillBuy extends ClientBasePacket {
 	public C_SkillBuy(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if ((pc == null) || pc.isGhost()) {
 			return;
 		}

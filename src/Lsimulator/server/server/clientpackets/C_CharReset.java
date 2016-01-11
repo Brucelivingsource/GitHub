@@ -21,8 +21,8 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.CharacterTable;
 import Lsimulator.server.server.datatables.ExpTable;
 import Lsimulator.server.server.model.LsimulatorTeleport;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_CharReset;
 import Lsimulator.server.server.serverpackets.S_OwnCharStatus;
 import Lsimulator.server.server.serverpackets.S_OwnCharStatus2;
@@ -56,7 +56,7 @@ public class C_CharReset extends ClientBasePacket {
 	public C_CharReset(byte abyte0[], ClientThread clientthread) {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -157,7 +157,7 @@ public class C_CharReset extends ClientBasePacket {
 		}
 	}
 
-	private void saveNewCharStatus(LsimulatorPcInstance pc) {
+	private void saveNewCharStatus(PcInstance pc) {
 		pc.setInCharReset(false);
 		if (pc.getOriginalAc() > 0) {
 			pc.addAc(pc.getOriginalAc());
@@ -179,7 +179,7 @@ public class C_CharReset extends ClientBasePacket {
 			pc.setBonusStats(0);
 		}
 		pc.sendPackets(new S_OwnCharStatus(pc));
-		LsimulatorItemInstance item = pc.getInventory().findItemId(49142); // 希望のロウソク
+		ItemInstance item = pc.getInventory().findItemId(49142); // 希望のロウソク
 		if (item != null) {
 			try {
 				pc.getInventory().removeItem(item, 1);
@@ -192,7 +192,7 @@ public class C_CharReset extends ClientBasePacket {
 		LsimulatorTeleport.teleport(pc, 32628, 32772, (short) 4, 4, false);
 	}
 
-	private void initCharStatus(LsimulatorPcInstance pc, int hp, int mp, int str, int intel, int wis, int dex, int con, int cha) {
+	private void initCharStatus(PcInstance pc, int hp, int mp, int str, int intel, int wis, int dex, int con, int cha) {
 		pc.addBaseMaxHp((short) (hp - pc.getBaseMaxHp()));
 		pc.addBaseMaxMp((short) (mp - pc.getBaseMaxMp()));
 		pc.addBaseStr((byte) (str - pc.getBaseStr()));
@@ -203,7 +203,7 @@ public class C_CharReset extends ClientBasePacket {
 		pc.addBaseCha((byte) (cha - pc.getBaseCha()));
 	}
 
-	private void setLevelUp(LsimulatorPcInstance pc, int addLv) {
+	private void setLevelUp(PcInstance pc, int addLv) {
 		pc.setTempLevel(pc.getTempLevel() + addLv);
 		for (int i = 0; i < addLv; i++) {
 			short randomHp = CalcStat.calcStatHp(pc.getType(), pc.getBaseMaxHp(), pc.getBaseCon(), pc.getOriginalHpup());

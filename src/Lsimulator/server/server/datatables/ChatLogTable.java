@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.Config;
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.SQLUtil;
 
 public class ChatLogTable {
@@ -62,7 +62,7 @@ public class ChatLogTable {
 		return loggingConfig[type];
 	}
 
-	public void storeChat(LsimulatorPcInstance pc, LsimulatorPcInstance target, String text,
+	public void storeChat(PcInstance pc, PcInstance target, String text,
 			int type) {
 		if (!isLoggingTarget(type)) {
 			return;

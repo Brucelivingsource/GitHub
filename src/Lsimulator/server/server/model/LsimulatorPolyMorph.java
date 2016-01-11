@@ -20,9 +20,9 @@ import java.util.Map;
 
 import Lsimulator.server.server.datatables.PolyTable;
 import Lsimulator.server.server.datatables.SprTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.npc.action.LsimulatorNpcDefaultAction;
 import Lsimulator.server.server.serverpackets.S_ChangeShape;
 import Lsimulator.server.server.serverpackets.S_CharVisualUpdate;
@@ -34,7 +34,7 @@ import Lsimulator.server.server.serverpackets.S_SkillIconGFX;
 import Lsimulator.server.server.utils.collections.Maps;
 
 // Referenced classes of package Lsimulator.server.server.model:
-// LsimulatorPcInstance
+// PcInstance
 
 public class LsimulatorPolyMorph {
 	// weapon equip bit
@@ -196,7 +196,7 @@ public class LsimulatorPolyMorph {
 		return _causeFlg;
 	}
 
-	public static void handleCommands(LsimulatorPcInstance pc, String s) {
+	public static void handleCommands(PcInstance pc, String s) {
 		if ((pc == null) || pc.isDead()) {
 			return;
 		}
@@ -234,8 +234,8 @@ public class LsimulatorPolyMorph {
 		if ((cha == null) || cha.isDead()) {
 			return;
 		}
-		if (cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if (cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) cha;
 			if (pc.getMapId() == 5124 || pc.getMapId() == 5300 || pc.getMapId() == 5301) { // 釣魚池
 				if (cantPolyMessage) {
 					pc.sendPackets(new S_ServerMessage(1170)); // 這裡不可以變身。
@@ -255,7 +255,7 @@ public class LsimulatorPolyMorph {
 			pc.killSkillEffectTimer(SHAPE_CHANGE);
 			pc.setSkillEffect(SHAPE_CHANGE, timeSecs * 1000);
 			if (pc.getTempCharGfx() != polyId) {
-				LsimulatorItemInstance weapon = pc.getWeapon();
+				ItemInstance weapon = pc.getWeapon();
 				boolean weaponTakeoff = (weapon != null && !isEquipableWeapon(polyId, weapon.getItem().getType()));
 				if (weaponTakeoff) { // 解除武器時
 					pc.setCurrentWeapon(0);
@@ -271,8 +271,8 @@ public class LsimulatorPolyMorph {
 				pc.getInventory().takeoffEquip(polyId); // 是否將裝備的武器強制解除。
 			}
 			pc.sendPackets(new S_SkillIconGFX(35, timeSecs));
-		} else if (cha instanceof LsimulatorMonsterInstance) { // 怪物變身
-			LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) cha;
+		} else if (cha instanceof MonsterInstance) { // 怪物變身
+			MonsterInstance mob = (MonsterInstance) cha;
 			mob.killSkillEffectTimer(SHAPE_CHANGE);
 			mob.setSkillEffect(SHAPE_CHANGE, timeSecs * 1000);
 			if (mob.getTempCharGfx() != polyId) {
@@ -305,12 +305,12 @@ public class LsimulatorPolyMorph {
 		if ((cha == null) || cha.isDead()) {
 			return;
 		}
-		if (cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if (cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) cha;
 			/** 3.80 個人商店變身清單 */
 			int PolyList[] = { 11479, 11427, 10047, 9688, 11322, 10069, 10034,10032 };
 			if (pc.getTempCharGfx() != PolyList[polyIndex - 1]) {
-				LsimulatorItemInstance weapon = pc.getWeapon();
+				ItemInstance weapon = pc.getWeapon();
 				boolean weaponTakeoff = (weapon != null && !isEquipableWeapon(PolyList[polyIndex - 1], weapon.getItem().getType()));
 				if (weaponTakeoff) { // 解除武器時
 					pc.setCurrentWeapon(0);
@@ -336,8 +336,8 @@ public class LsimulatorPolyMorph {
 	 * @param cha
 	 */
 	public static void undoPolyPrivateShop(LsimulatorCharacter cha){
-		if (cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if (cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) cha;
 			int classId = pc.getClassId();
 			pc.setTempCharGfx(classId);
 			if (!pc.isDead()) {
@@ -353,16 +353,16 @@ public class LsimulatorPolyMorph {
 
 	// 解除變身
 	public static void undoPoly(LsimulatorCharacter cha) {
-		if (cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if (cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) cha;
 			int classId = pc.getClassId();
 			pc.setTempCharGfx(classId);
 			if (!pc.isDead()) {
 				pc.sendPackets(new S_ChangeShape(pc.getId(), classId, pc.getCurrentWeapon()));
 				pc.broadcastPacket(new S_ChangeShape(pc.getId(), classId, pc.getCurrentWeapon()));
 			}
-		} else if (cha instanceof LsimulatorMonsterInstance) {
-			LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) cha;
+		} else if (cha instanceof MonsterInstance) {
+			MonsterInstance mob = (MonsterInstance) cha;
 			int gfxId = mob.getGfxId();
 			mob.setTempCharGfx(0);
 			mob.setStatus(LsimulatorNpcDefaultAction.getInstance().getStatus(gfxId));

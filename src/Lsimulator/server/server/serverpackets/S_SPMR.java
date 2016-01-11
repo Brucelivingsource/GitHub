@@ -16,7 +16,7 @@ package Lsimulator.server.server.serverpackets;
 
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.STATUS_WISDOM_POTION;
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_SPMR extends ServerBasePacket {
 
@@ -25,11 +25,11 @@ public class S_SPMR extends ServerBasePacket {
 	private byte[] _byte = null;
 
 	/** 更新魔防Mr以及魔攻Sp */
-	public S_SPMR(LsimulatorPcInstance pc) {
+	public S_SPMR(PcInstance pc) {
 		buildPacket(pc);
 	}
 
-	private void buildPacket(LsimulatorPcInstance pc) {
+	private void buildPacket(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_SPMR);
 		// ウィズダムポーションのSPはS_SkillBrave送信時に更新されるため差し引いておく
 		if (pc.hasSkillEffect(STATUS_WISDOM_POTION)) {

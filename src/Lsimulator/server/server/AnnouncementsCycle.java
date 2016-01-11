@@ -26,7 +26,7 @@ import java.util.List;
 import javolution.util.FastList;
 import Lsimulator.server.Config;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -191,8 +191,8 @@ public class AnnouncementsCycle {
      * 把字串廣播到伺服器上
      */
     private void ShowAnnouncementsCycle(String announcement) {
-        Collection<LsimulatorPcInstance> AllPlayer = LsimulatorWorld.getInstance().getAllPlayers();
-        for (LsimulatorPcInstance pc : AllPlayer) {
+        Collection<PcInstance> AllPlayer = LsimulatorWorld.getInstance().getAllPlayers();
+        for (PcInstance pc : AllPlayer) {
             pc.sendPackets(new S_SystemMessage(announcement));
         }
     }

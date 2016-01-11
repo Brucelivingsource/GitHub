@@ -16,12 +16,12 @@ package Lsimulator.server.server.model;
 
 import java.io.Serializable;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.map.LsimulatorMap;
 import Lsimulator.server.server.model.map.LsimulatorWorldMap;
 
 // Referenced classes of package Lsimulator.server.server.model:
-// LsimulatorPcInstance, LsimulatorCharacter
+// PcInstance, LsimulatorCharacter
 
 /**
  * 所有對象的基底
@@ -176,7 +176,7 @@ public class LsimulatorObject implements Serializable {
 	 * @param perceivedFrom
 	 *            進入螢幕範圍的玩家
 	 */
-	public void onPerceive(LsimulatorPcInstance perceivedFrom) {
+	public void onPerceive(PcInstance perceivedFrom) {
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class LsimulatorObject implements Serializable {
 	 * @param actionFrom
 	 *            要採取行動的玩家目標
 	 */
-	public void onAction(LsimulatorPcInstance actionFrom) {
+	public void onAction(PcInstance actionFrom) {
 	}
 
 	/**
@@ -194,12 +194,12 @@ public class LsimulatorObject implements Serializable {
 	 * @param talkFrom
 	 *            交談的玩家
 	 */
-	public void onTalkAction(LsimulatorPcInstance talkFrom) {
+	public void onTalkAction(PcInstance talkFrom) {
 	}
 
 	private int _id = 0;
 
-	public void onAction(LsimulatorPcInstance attacker, int skillId) {
+	public void onAction(PcInstance attacker, int skillId) {
 
 	}
 }

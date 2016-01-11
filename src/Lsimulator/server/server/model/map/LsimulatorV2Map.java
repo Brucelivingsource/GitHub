@@ -16,7 +16,7 @@ package Lsimulator.server.server.model.map;
 
 import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.datatables.DoorTable;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
 import Lsimulator.server.server.types.Point;
 
 public class LsimulatorV2Map extends LsimulatorMap {
@@ -45,7 +45,7 @@ public class LsimulatorV2Map extends LsimulatorMap {
 	private static final byte BITFLAG_IS_IMPASSABLE = (byte) 128; // 1000 0000
 
 	private int offset(int x, int y) {
-		return ((y - _yLoc) * _width * 2) + ((x - _xLoc) * 2);
+		return (   ( (y - _yLoc) * _width ) << 1 ) + ( (x - _xLoc) << 1 );
 	}
 
 	private int accessOriginalTile(int x, int y) {
@@ -350,7 +350,7 @@ public class LsimulatorV2Map extends LsimulatorMap {
 
 	@Override
 	public boolean isExistDoor(int x, int y) {
-		for (LsimulatorDoorInstance door : DoorTable.getInstance().getDoorList()) {
+		for (DoorInstance door : DoorTable.getInstance().getDoorList()) {
 			if (door.getOpenStatus() == ActionCodes.ACTION_Open) {
 				continue;
 			}

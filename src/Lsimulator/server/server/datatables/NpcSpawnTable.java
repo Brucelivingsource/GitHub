@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import Lsimulator.server.Config;
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.model.LsimulatorSpawn;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorNpc;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Maps;
@@ -148,7 +148,7 @@ public class NpcSpawnTable {
 		_log.fine("総NPC数 " + spawnCount + "件");
 	}
 
-	public void storeSpawn(LsimulatorPcInstance pc, LsimulatorNpc npc) {
+	public void storeSpawn(PcInstance pc, LsimulatorNpc npc) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 

@@ -65,14 +65,14 @@ import Lsimulator.server.server.model.LsimulatorQuest;
 import Lsimulator.server.server.model.LsimulatorTeleport;
 import Lsimulator.server.server.model.LsimulatorTownLocation;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorEffectInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorGuardianInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorTowerInstance;
+import Lsimulator.server.server.model.Instance.EffectInstance;
+import Lsimulator.server.server.model.Instance.GuardianInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.TowerInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.model.item.LsimulatorTreasureBox;
 import Lsimulator.server.server.model.item.action.Effect;
@@ -132,14 +132,14 @@ public class C_ItemUSe extends ClientBasePacket {
 	public C_ItemUSe(byte abyte0[], ClientThread client) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if ((pc == null) || pc.isGhost() || pc.isDead()) {
 			return;
 		}
 		
 		int itemObjid = readD();
 		
-		LsimulatorItemInstance l1iteminstance = pc.getInventory().getItem(itemObjid);
+		ItemInstance l1iteminstance = pc.getInventory().getItem(itemObjid);
 
 		if (l1iteminstance == null) {
 			return;
@@ -276,7 +276,7 @@ public class C_ItemUSe extends ClientBasePacket {
 				}
 			}
 
-			LsimulatorItemInstance l1iteminstance1 = pc.getInventory().getItem(l);
+			ItemInstance l1iteminstance1 = pc.getInventory().getItem(l);
 			_log.finest("request item use (obj) = " + itemObjid + " action = " + l + " value = " + s);
 			if ((itemId == 40077) || (itemId == LsimulatorItemId.SCROLL_OF_ENCHANT_WEAPON) || (itemId == LsimulatorItemId.SCROLL_OF_ENCHANT_QUEST_WEAPON)
 					|| (itemId == 40130) || (itemId == 140130) || (itemId == LsimulatorItemId.B_SCROLL_OF_ENCHANT_WEAPON)
@@ -377,7 +377,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					pc.sendPackets(new S_ServerMessage(452, l1iteminstance.getLogName()));
 				}
 				else if (itemId == 40003) { // ランタン オイル
-					for (LsimulatorItemInstance lightItem : pc.getInventory().getItems()) {
+					for (ItemInstance lightItem : pc.getInventory().getItems()) {
 						if (lightItem.getItem().getItemId() == 40002) {
 							lightItem.setRemainingTime(l1iteminstance.getItem().getLightFuel());
 							pc.sendPackets(new S_ItemName(lightItem));
@@ -880,7 +880,7 @@ public class C_ItemUSe extends ClientBasePacket {
 				}
 				else if ((itemId == 40097) || (itemId == 40119)
 						|| (itemId == 140119) || (itemId == 140329)) { // 解除咀咒的卷軸、原住民圖騰
-					for (LsimulatorItemInstance eachItem : pc.getInventory().getItems()) {
+					for (ItemInstance eachItem : pc.getInventory().getItems()) {
 						if ((eachItem.getItem().getBless() != 2)
 								&& (eachItem.getItem().getBless() != 130)) {
 							continue;
@@ -1122,7 +1122,7 @@ public class C_ItemUSe extends ClientBasePacket {
 								(// スクロール(Lv4)でレベル4以下の魔法
 								(itemId == 40094) && (blanksc_skillid <= 39))) { // ブランク
 							// スクロール(Lv5)でレベル5以下の魔法
-							LsimulatorItemInstance spellsc = ItemTable.getInstance().createItem(40859 + blanksc_skillid);
+							ItemInstance spellsc = ItemTable.getInstance().createItem(40859 + blanksc_skillid);
 							if (spellsc != null) {
 								if (pc.getInventory().checkAddItem(spellsc, 1) == LsimulatorInventory.OK) {
 									LsimulatorSkills l1skills = SkillsTable.getInstance().getTemplate(blanksc_skillid + 1); // blanksc_skillidは0始まり
@@ -1241,9 +1241,9 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if (itemId == 40315) { // ペットの笛
 					pc.sendPackets(new S_Sound(437));
 					pc.broadcastPacket(new S_Sound(437));
-					for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-						if (petNpc instanceof LsimulatorPetInstance) { // ペット
-							LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+					for (NpcInstance petNpc : pc.getPetList().values()) {
+						if (petNpc instanceof PetInstance) { // ペット
+							PetInstance pet = (PetInstance) petNpc;
 							pet.call();
 						}
 					}
@@ -1252,8 +1252,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					pc.sendPackets(new S_Sound(165));
 					pc.broadcastPacket(new S_Sound(165));
 					for (LsimulatorObject visible : pc.getKnownObjects()) {
-						if (visible instanceof LsimulatorGuardianInstance) {
-							LsimulatorGuardianInstance guardian = (LsimulatorGuardianInstance) visible;
+						if (visible instanceof GuardianInstance) {
+							GuardianInstance guardian = (GuardianInstance) visible;
 							if (guardian.getNpcTemplate().get_npcId() == 70850) { // パン
 								if (createNewItem(pc, 88, 1)) {
 									pc.getInventory().removeItem(l1iteminstance, 1);
@@ -1310,13 +1310,13 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if ((itemId == 40089) || (itemId == 140089)) { // 復活スクロール、祝福された復活スクロール
 					LsimulatorCharacter resobject = (LsimulatorCharacter) LsimulatorWorld.getInstance().findObject(resid);
 					if (resobject != null) {
-						if (resobject instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance target = (LsimulatorPcInstance) resobject;
+						if (resobject instanceof PcInstance) {
+							PcInstance target = (PcInstance) resobject;
 							if (pc.getId() == target.getId()) {
 								return;
 							}
 							if (LsimulatorWorld.getInstance().getVisiblePlayer(target, 0).size() > 0) {
-								for (LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(target, 0)) {
+								for (PcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(target, 0)) {
 									if (!visiblePc.isDead()) {
 										// \f1その場所に他の人が立っているので復活させることができません。
 										pc.sendPackets(new S_ServerMessage(592));
@@ -1341,15 +1341,15 @@ public class C_ItemUSe extends ClientBasePacket {
 								}
 							}
 						}
-						else if (resobject instanceof LsimulatorNpcInstance) {
-							if (!(resobject instanceof LsimulatorTowerInstance)) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) resobject;
-								if (npc.getNpcTemplate().isCantResurrect() && !(npc instanceof LsimulatorPetInstance)) {
+						else if (resobject instanceof NpcInstance) {
+							if (!(resobject instanceof TowerInstance)) {
+								NpcInstance npc = (NpcInstance) resobject;
+								if (npc.getNpcTemplate().isCantResurrect() && !(npc instanceof PetInstance)) {
 									pc.getInventory().removeItem(l1iteminstance, 1);
 									return;
 								}
-								if ((npc instanceof LsimulatorPetInstance) && (LsimulatorWorld.getInstance().getVisiblePlayer(npc, 0).size() > 0)) {
-									for (LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(npc, 0)) {
+								if ((npc instanceof PetInstance) && (LsimulatorWorld.getInstance().getVisiblePlayer(npc, 0).size() > 0)) {
+									for (PcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(npc, 0)) {
 										if (!visiblePc.isDead()) {
 											// \f1その場所に他の人が立っているので復活させることができません。
 											pc.sendPackets(new S_ServerMessage(592));
@@ -1358,10 +1358,10 @@ public class C_ItemUSe extends ClientBasePacket {
 									}
 								}
 								if ((npc.getCurrentHp() == 0) && npc.isDead()) {
-									npc.resurrect(npc.getMaxHp() / 4);
+									npc.resurrect(npc.getMaxHp() >> 2 );
 									npc.setResurrect(true);
-									if ((npc instanceof LsimulatorPetInstance)) {
-										LsimulatorPetInstance pet = (LsimulatorPetInstance) npc;
+									if ((npc instanceof PetInstance)) {
+										PetInstance pet = (PetInstance) npc;
 										// 開始飽食度計時
 										pet.startFoodTimer(pet);
 										// 開始回血回魔
@@ -1579,7 +1579,7 @@ public class C_ItemUSe extends ClientBasePacket {
 							short mapId = bookm.getMapId();
 
 							if (itemId == 40086) { // マステレポートスクロール
-								for (LsimulatorPcInstance member : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) {
+								for (PcInstance member : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) {
 									if ((pc.getLocation().getTileLineDistance(member.getLocation()) <= 3) && (member.getClanid() == pc.getClanid())
 											&& (pc.getClanid() != 0) && (member.getId() != pc.getId())) {
 										LsimulatorTeleport.teleport(member, newX, newY, mapId, 5, true);
@@ -1605,7 +1605,7 @@ public class C_ItemUSe extends ClientBasePacket {
 							short mapId = (short) newLocation.getMapId();
 
 							if (itemId == 40086) { // マステレポートスクロール
-								for (LsimulatorPcInstance member : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) {
+								for (PcInstance member : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) {
 									if ((pc.getLocation().getTileLineDistance(member.getLocation()) <= 3) && (member.getClanid() == pc.getClanid())
 											&& (pc.getClanid() != 0) && (member.getId() != pc.getId())) {
 										LsimulatorTeleport.teleport(member, newX, newY, mapId, 5, true);
@@ -1628,10 +1628,10 @@ public class C_ItemUSe extends ClientBasePacket {
 					pc.getInventory().removeItem(l1iteminstance, 1);
 				}
 				else if ((itemId >= 40901) && (itemId <= 40908)) { // 各種エンゲージリング
-					LsimulatorPcInstance partner = null;
+					PcInstance partner = null;
 					boolean partner_stat = false;
 					if (pc.getPartnerId() != 0) { // 結婚中
-						partner = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartnerId());
+						partner = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartnerId());
 						if ((partner != null) && (partner.getPartnerId() != 0) && (pc.getPartnerId() == partner.getId())
 								&& (partner.getPartnerId() == pc.getId())) {
 							partner_stat = true;
@@ -1790,8 +1790,8 @@ public class C_ItemUSe extends ClientBasePacket {
 							&& !pc.getInventory().checkItem(40548)) { // 亡霊の袋
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 45300) {
 										found = true;
@@ -1814,8 +1814,8 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if (itemId == 40557) { // 暗殺リスト(グルーディン)
 					if ((pc.getX() == 32620) && (pc.getY() == 32641) && (pc.getMapId() == 4)) {
 						for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-							if (object instanceof LsimulatorNpcInstance) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) object;
+							if (object instanceof NpcInstance) {
+								NpcInstance npc = (NpcInstance) object;
 								if (npc.getNpcTemplate().get_npcId() == 45883) {
 									pc.sendPackets(new S_ServerMessage(79));
 									return;
@@ -1831,8 +1831,8 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if (itemId == 40563) { // 暗殺リスト(火田村)
 					if ((pc.getX() == 32730) && (pc.getY() == 32426) && (pc.getMapId() == 4)) {
 						for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-							if (object instanceof LsimulatorNpcInstance) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) object;
+							if (object instanceof NpcInstance) {
+								NpcInstance npc = (NpcInstance) object;
 								if (npc.getNpcTemplate().get_npcId() == 45884) {
 									pc.sendPackets(new S_ServerMessage(79));
 									return;
@@ -1848,8 +1848,8 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if (itemId == 40561) { // 暗殺リスト(ケント)
 					if ((pc.getX() == 33046) && (pc.getY() == 32806) && (pc.getMapId() == 4)) {
 						for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-							if (object instanceof LsimulatorNpcInstance) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) object;
+							if (object instanceof NpcInstance) {
+								NpcInstance npc = (NpcInstance) object;
 								if (npc.getNpcTemplate().get_npcId() == 45885) {
 									pc.sendPackets(new S_ServerMessage(79));
 									return;
@@ -1865,8 +1865,8 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if (itemId == 40560) { // 暗殺リスト(ウッドベック)
 					if ((pc.getX() == 32580) && (pc.getY() == 33260) && (pc.getMapId() == 4)) {
 						for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-							if (object instanceof LsimulatorNpcInstance) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) object;
+							if (object instanceof NpcInstance) {
+								NpcInstance npc = (NpcInstance) object;
 								if (npc.getNpcTemplate().get_npcId() == 45886) {
 									pc.sendPackets(new S_ServerMessage(79));
 									return;
@@ -1882,8 +1882,8 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if (itemId == 40562) { // 暗殺リスト(ハイネ)
 					if ((pc.getX() == 33447) && (pc.getY() == 33476) && (pc.getMapId() == 4)) {
 						for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-							if (object instanceof LsimulatorNpcInstance) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) object;
+							if (object instanceof NpcInstance) {
+								NpcInstance npc = (NpcInstance) object;
 								if (npc.getNpcTemplate().get_npcId() == 45887) {
 									pc.sendPackets(new S_ServerMessage(79));
 									return;
@@ -1899,8 +1899,8 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if (itemId == 40559) { // 暗殺リスト(アデン)
 					if ((pc.getX() == 34215) && (pc.getY() == 33195) && (pc.getMapId() == 4)) {
 						for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-							if (object instanceof LsimulatorNpcInstance) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) object;
+							if (object instanceof NpcInstance) {
+								NpcInstance npc = (NpcInstance) object;
 								if (npc.getNpcTemplate().get_npcId() == 45888) {
 									pc.sendPackets(new S_ServerMessage(79));
 									return;
@@ -1916,8 +1916,8 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if (itemId == 40558) { // 暗殺リスト(ギラン)
 					if ((pc.getX() == 33513) && (pc.getY() == 32890) && (pc.getMapId() == 4)) {
 						for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-							if (object instanceof LsimulatorNpcInstance) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) object;
+							if (object instanceof NpcInstance) {
+								NpcInstance npc = (NpcInstance) object;
 								if (npc.getNpcTemplate().get_npcId() == 45889) {
 									pc.sendPackets(new S_ServerMessage(79));
 									return;
@@ -2033,7 +2033,7 @@ public class C_ItemUSe extends ClientBasePacket {
 				else if ((itemId >= 40280) && (itemId <= 40288)) {
 					// 封印された傲慢の塔11～91階テレポートアミュレット
 					pc.getInventory().removeItem(l1iteminstance, 1);
-					LsimulatorItemInstance item = pc.getInventory().storeItem(itemId + 9, 1);
+					ItemInstance item = pc.getInventory().storeItem(itemId + 9, 1);
 					if (item != null) {
 						pc.sendPackets(new S_ServerMessage(403, item.getLogName()));
 					}
@@ -2525,8 +2525,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					if (((pc.getX() >= 32619) && (pc.getX() <= 32623)) && ((pc.getY() >= 33120) && (pc.getY() <= 33124)) && (pc.getMapId() == 440)) { // 海賊島前半魔方陣座標
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 45875) {
 										found = true;
@@ -2582,8 +2582,8 @@ public class C_ItemUSe extends ClientBasePacket {
 				}
 				else if (itemId == 41260) { // 薪
 					for (LsimulatorObject object : LsimulatorWorld.getInstance().getVisibleObjects(pc, 3)) {
-						if (object instanceof LsimulatorEffectInstance) {
-							if (((LsimulatorNpcInstance) object).getNpcTemplate().get_npcId() == 81170) {
+						if (object instanceof EffectInstance) {
+							if (((NpcInstance) object).getNpcTemplate().get_npcId() == 81170) {
 								// すでに周囲に焚き火があります。
 								pc.sendPackets(new S_ServerMessage(1162));
 								return;
@@ -2723,7 +2723,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					Enchant.scrollOfEnchantAccessory(pc, l1iteminstance, l1iteminstance1, client);
 				}
 				else if (itemId == 41426) { // 封印スクロール
-					LsimulatorItemInstance lockItem = pc.getInventory().getItem(l);
+					ItemInstance lockItem = pc.getInventory().getItem(l);
 					if (((lockItem != null) && (lockItem.getItem().getType2() == 1)) || (lockItem.getItem().getType2() == 2)
 							|| ((lockItem.getItem().getType2() == 0) && lockItem.getItem().isCanSeal())) {
 						if ((lockItem.getBless() == 0) || (lockItem.getBless() == 1) || (lockItem.getBless() == 2) || (lockItem.getBless() == 3)) {
@@ -2756,7 +2756,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					}
 				}
 				else if (itemId == 41427) { // 封印解除スクロール
-					LsimulatorItemInstance lockItem = pc.getInventory().getItem(l);
+					ItemInstance lockItem = pc.getInventory().getItem(l);
 					if (((lockItem != null) && (lockItem.getItem().getType2() == 1)) || (lockItem.getItem().getType2() == 2)
 							|| ((lockItem.getItem().getType2() == 0) && lockItem.getItem().isCanSeal())) {
 						if ((lockItem.getBless() == 128) || (lockItem.getBless() == 129) || (lockItem.getBless() == 130)
@@ -2857,8 +2857,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					if (pc.isDragonKnight() && (pc.getMapId() == 61)) { 
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 46161) {
 										found = true;
@@ -2879,7 +2879,7 @@ public class C_ItemUSe extends ClientBasePacket {
 				}
 				else if (itemId == 49188) { // 索夏依卡靈魂之石
 					if (l1iteminstance1.getItem().getItemId() == 49186) {
-						LsimulatorItemInstance item1 = ItemTable.getInstance().createItem(49189);
+						ItemInstance item1 = ItemTable.getInstance().createItem(49189);
 						item1.setCount(1);
 						if (pc.getInventory().checkAddItem(item1, 1) == LsimulatorInventory.OK) {
 							pc.getInventory().storeItem(item1);
@@ -2896,8 +2896,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					if (pc.isIllusionist() && (pc.getMapId() == 4)) { // 古魯丁祭壇
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 46163) {// 艾爾摩索夏依卡將軍的冤魂
 										found = true;
@@ -2919,8 +2919,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					if (pc.isIllusionist() && (pc.getMapId() == 4)) { // 火龍窟
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 81254) {// 時空裂痕
 										found = true;
@@ -2942,8 +2942,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					if (pc.isIllusionist() && (pc.getMapId() == 2004)) { // 異界 奎斯特
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 81313) {// 塞維斯
 										found = true;
@@ -2965,8 +2965,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					if (pc.isDragonKnight() && (pc.getMapId() == 2004)) { // 異界 奎斯特
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 81312) {// 路西爾斯
 										found = true;
@@ -2988,8 +2988,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					if (pc.isCrown() && (pc.getMapId() == 2000) && (pc.getX() == 32807) && (pc.getY() == 32773)) {
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 81323) {
 										found = true;
@@ -3006,8 +3006,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					} else if (pc.isKnight() && (pc.getMapId() == 2001) && (pc.getX() == 32807) && (pc.getY() == 32773)) {
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 81324) {
 										found = true;
@@ -3024,8 +3024,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					} else if (pc.isElf() && (pc.getMapId() == 2002) && (pc.getX() == 32807) && (pc.getY() == 32773)) {
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 81325) {
 										found = true;
@@ -3042,8 +3042,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					} else if (pc.isWizard() && (pc.getMapId() == 2003) && (pc.getX() == 32807) && (pc.getY() == 32773)) {
 						boolean found = false;
 						for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-							if (obj instanceof LsimulatorMonsterInstance) {
-								LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+							if (obj instanceof MonsterInstance) {
+								MonsterInstance mob = (MonsterInstance) obj;
 								if (mob != null) {
 									if (mob.getNpcTemplate().get_npcId() == 81326) {
 										found = true;
@@ -3155,7 +3155,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		}
 	}
 
-	private boolean usePolyScroll(LsimulatorPcInstance pc, int item_id, String s) {
+	private boolean usePolyScroll(PcInstance pc, int item_id, String s) {
 		int awakeSkillId = pc.getAwakeSkillId();
 		if ((awakeSkillId == AWAKEN_ANTHARAS) || (awakeSkillId == AWAKEN_FAFURION) || (awakeSkillId == AWAKEN_VALAKAS)) {
 			pc.sendPackets(new S_ServerMessage(1384)); // 目前狀態中無法變身。
@@ -3190,7 +3190,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		return false;
 	}
 
-	private void usePolyScale(LsimulatorPcInstance pc, int itemId) {
+	private void usePolyScale(PcInstance pc, int itemId) {
 		int time = 900;
 		int awakeSkillId = pc.getAwakeSkillId();
 		if ((awakeSkillId == AWAKEN_ANTHARAS) || (awakeSkillId == AWAKEN_FAFURION) || (awakeSkillId == AWAKEN_VALAKAS)) {
@@ -3214,7 +3214,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		LsimulatorPolyMorph.doPoly(pc, polyId, time, LsimulatorPolyMorph.MORPH_BY_ITEMMAGIC);
 	}
 
-	private void usePolyPotion(LsimulatorPcInstance pc, int itemId) {
+	private void usePolyPotion(PcInstance pc, int itemId) {
 		int time = 1800;
 		int awakeSkillId = pc.getAwakeSkillId();
 		if ((awakeSkillId == AWAKEN_ANTHARAS) || (awakeSkillId == AWAKEN_FAFURION) || (awakeSkillId == AWAKEN_VALAKAS)) {
@@ -3536,7 +3536,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		LsimulatorPolyMorph.doPoly(pc, polyId, time, LsimulatorPolyMorph.MORPH_BY_ITEMMAGIC);
 	}
 
-	private void UseArmor(LsimulatorPcInstance activeChar, LsimulatorItemInstance armor) {
+	private void UseArmor(PcInstance activeChar, ItemInstance armor) {
 		int type = armor.getItem().getType();
 		LsimulatorPcInventory pcInventory = activeChar.getInventory();
 		boolean equipeSpace; // 装備する箇所が空いているか
@@ -3611,7 +3611,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		activeChar.sendPackets(new S_SPMR(activeChar));
 	}
 
-	private void UseWeapon(LsimulatorPcInstance activeChar, LsimulatorItemInstance weapon) {
+	private void UseWeapon(PcInstance activeChar, ItemInstance weapon) {
 		LsimulatorPcInventory pcInventory = activeChar.getInventory();
 		if ((activeChar.getWeapon() == null) || !activeChar.getWeapon().equals(weapon)) { // 指定された武器が装備している武器と違う場合、装備できるか確認
 			int weapon_type = weapon.getItem().getType();
@@ -3647,7 +3647,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		pcInventory.setEquipped(weapon, true, false, false);
 	}
 
-	private void useSpellBook(LsimulatorPcInstance pc, LsimulatorItemInstance item, int itemId) {
+	private void useSpellBook(PcInstance pc, ItemInstance item, int itemId) {
 		int itemAttr = 0;
 		int locAttr = 0; // 0:other 1:law 2:chaos
 		boolean isLawful = true;
@@ -3787,7 +3787,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		}
 	}
 
-	private void useElfSpellBook(LsimulatorPcInstance pc, LsimulatorItemInstance item, int itemId) {
+	private void useElfSpellBook(PcInstance pc, ItemInstance item, int itemId) {
 		int level = pc.getLevel();
 		if ((pc.isElf() || pc.isGm()) && isLearnElfMagic(pc)) {
 			if ((itemId >= 40232) && (itemId <= 40234) && (level >= 10)) {
@@ -3856,7 +3856,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		}
 	}
 
-	private boolean isLearnElfMagic(LsimulatorPcInstance pc) {
+	private boolean isLearnElfMagic(PcInstance pc) {
 		int pcX = pc.getX();
 		int pcY = pc.getY();
 		int pcMapId = pc.getMapId();
@@ -3868,7 +3868,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		return false;
 	}
 
-	private void SpellBook(LsimulatorPcInstance pc, LsimulatorItemInstance item, boolean isLawful) {
+	private void SpellBook(PcInstance pc, ItemInstance item, boolean isLawful) {
 		String s = "";
 		int i = 0;
 		int level1 = 0;
@@ -4022,7 +4022,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		pc.getInventory().removeItem(item, 1);
 	}
 
-	private void SpellBook1(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance, ClientThread clientthread) {
+	private void SpellBook1(PcInstance pc, ItemInstance l1iteminstance, ClientThread clientthread) {
 		String s = "";
 		int i = 0;
 		int j = 0;
@@ -4175,7 +4175,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		pc.getInventory().removeItem(l1iteminstance, 1);
 	}
 
-	private void SpellBook2(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance) {
+	private void SpellBook2(PcInstance pc, ItemInstance l1iteminstance) {
 		String s = "";
 		int i = 0;
 		int j = 0;
@@ -4335,7 +4335,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		pc.getInventory().removeItem(l1iteminstance, 1);
 	}
 
-	private void SpellBook3(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance, ClientThread clientthread) {
+	private void SpellBook3(PcInstance pc, ItemInstance l1iteminstance, ClientThread clientthread) {
 		String s = "";
 		int i = 0;
 		int j = 0;
@@ -4489,7 +4489,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		pc.getInventory().removeItem(l1iteminstance, 1);
 	}
 
-	private void SpellBook4(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance, ClientThread clientthread) {
+	private void SpellBook4(PcInstance pc, ItemInstance l1iteminstance, ClientThread clientthread) {
 		String s = "";
 		int i = 0;
 		int j = 0;
@@ -4642,7 +4642,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		pc.getInventory().removeItem(l1iteminstance, 1);
 	}
 
-	private void SpellBook5(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance, ClientThread clientthread) {
+	private void SpellBook5(PcInstance pc, ItemInstance l1iteminstance, ClientThread clientthread) {
 		String s = "";
 		int i = 0;
 		int j = 0;
@@ -4814,7 +4814,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		pc.getInventory().removeItem(l1iteminstance, 1);
 	}
 
-	private void SpellBook6(LsimulatorPcInstance pc, LsimulatorItemInstance l1iteminstance, ClientThread clientthread) {
+	private void SpellBook6(PcInstance pc, ItemInstance l1iteminstance, ClientThread clientthread) {
 		String s = "";
 		int i = 0;
 		int j = 0;
@@ -4986,7 +4986,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		pc.getInventory().removeItem(l1iteminstance, 1);
 	}
 
-	private int doWandAction(LsimulatorPcInstance user, LsimulatorObject target) {
+	private int doWandAction(PcInstance user, LsimulatorObject target) {
 		if (user.getId() == target.getId()) {
 			return 0; // 目標為自身
 		}
@@ -4998,8 +4998,8 @@ public class C_ItemUSe extends ClientBasePacket {
 		int dmg = (Random.nextInt(11) - 5) + user.getStr();
 		dmg = Math.max(1, dmg);
 
-		if (target instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) target;
+		if (target instanceof PcInstance) {
+			PcInstance pc = (PcInstance) target;
 			if (pc.getMap().isSafetyZone(pc.getLocation()) || user.checkNonPvP(user, pc)) {
 				return 0;
 			}
@@ -5019,18 +5019,18 @@ public class C_ItemUSe extends ClientBasePacket {
 			}
 			return dmg;
 		}
-		else if (target instanceof LsimulatorMonsterInstance) {
-			LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) target;
+		else if (target instanceof MonsterInstance) {
+			MonsterInstance mob = (MonsterInstance) target;
 			mob.receiveDamage(user, dmg);
 			return dmg;
 		}
 		return 0;
 	}
 
-	private void polyAction(LsimulatorPcInstance attacker, LsimulatorCharacter cha) {
+	private void polyAction(PcInstance attacker, LsimulatorCharacter cha) {
 		boolean isSameClan = false;
-		if (cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if (cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) cha;
 			if ((pc.getClanid() != 0) && (attacker.getClanid() == pc.getClanid())) { // 目標為盟友
 				isSameClan = true;
 			}
@@ -5053,8 +5053,8 @@ public class C_ItemUSe extends ClientBasePacket {
 		int pid = Random.nextInt(polyArray.length);
 		int polyId = polyArray[pid];
 
-		if (cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if (cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) cha;
 			int awakeSkillId = pc.getAwakeSkillId();
 			if ((awakeSkillId == AWAKEN_ANTHARAS) || (awakeSkillId == AWAKEN_FAFURION) || (awakeSkillId == AWAKEN_VALAKAS)) {
 				if (attacker.getId() == pc.getId()) {
@@ -5079,8 +5079,8 @@ public class C_ItemUSe extends ClientBasePacket {
 				LsimulatorPolyMorph.doPoly(pc, polyId, skillTemp.getBuffDuration(), LsimulatorPolyMorph.MORPH_BY_ITEMMAGIC, false);
 			}
 		}
-		else if (cha instanceof LsimulatorMonsterInstance) {
-			LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) cha;
+		else if (cha instanceof MonsterInstance) {
+			MonsterInstance mob = (MonsterInstance) cha;
 			if (mob.getLevel() < 50) {
 				int npcId = mob.getNpcTemplate().get_npcId();
 				if ((npcId != 45338) && (npcId != 45370) && (npcId != 45456 // クロコダイル、バンディットボス、ネクロマンサー
@@ -5094,8 +5094,8 @@ public class C_ItemUSe extends ClientBasePacket {
 		}
 	}
 
-	private boolean createNewItem(LsimulatorPcInstance pc, int item_id, int count) {
-		LsimulatorItemInstance item = ItemTable.getInstance().createItem(item_id);
+	private boolean createNewItem(PcInstance pc, int item_id, int count) {
+		ItemInstance item = ItemTable.getInstance().createItem(item_id);
 		if (item != null) {
 			item.setCount(count);
 			if (pc.getInventory().checkAddItem(item, count) == LsimulatorInventory.OK) {
@@ -5112,7 +5112,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		}
 	}
 
-	private void useToiTeleportAmulet(LsimulatorPcInstance pc, int itemId, LsimulatorItemInstance item) {
+	private void useToiTeleportAmulet(PcInstance pc, int itemId, ItemInstance item) {
 		boolean isTeleport = false;
 		if ((itemId == 40289) || (itemId == 40293)) { // 11,51Famulet
 			if ((pc.getX() >= 32816) && (pc.getX() <= 32821) && (pc.getY() >= 32778) && (pc.getY() <= 32783) && (pc.getMapId() == 101)) {
@@ -5148,7 +5148,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		}
 	}
 
-	private boolean writeLetter(int itemId, LsimulatorPcInstance pc, int letterCode, String letterReceiver, byte[] letterText) {
+	private boolean writeLetter(int itemId, PcInstance pc, int letterCode, String letterReceiver, byte[] letterText) {
 
 		int newItemId = 0;
 		if (itemId == 40310) {
@@ -5163,7 +5163,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		else if (itemId == 40732) {
 			newItemId = 49024;
 		}
-		LsimulatorItemInstance item = ItemTable.getInstance().createItem(newItemId);
+		ItemInstance item = ItemTable.getInstance().createItem(newItemId);
 		if (item == null) {
 			return false;
 		}
@@ -5178,7 +5178,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		return true;
 	}
 
-	private boolean writeClanLetter(int itemId, LsimulatorPcInstance pc, int letterCode, String letterReceiver, byte[] letterText) {
+	private boolean writeClanLetter(int itemId, PcInstance pc, int letterCode, String letterReceiver, byte[] letterText) {
 		LsimulatorClan targetClan = null;
 		for (LsimulatorClan clan : LsimulatorWorld.getInstance().getAllClans()) {
 			if (clan.getClanName().toLowerCase().equals(letterReceiver.toLowerCase())) {
@@ -5193,7 +5193,7 @@ public class C_ItemUSe extends ClientBasePacket {
 
 		String memberName[] = targetClan.getAllMembers();
 		for (String element : memberName) {
-			LsimulatorItemInstance item = ItemTable.getInstance().createItem(49016);
+			ItemInstance item = ItemTable.getInstance().createItem(49016);
 			if (item == null) {
 				return false;
 			}
@@ -5205,8 +5205,8 @@ public class C_ItemUSe extends ClientBasePacket {
 		return true;
 	}
 
-	private boolean sendLetter(LsimulatorPcInstance pc, String name, LsimulatorItemInstance item, boolean isFailureMessage) {
-		LsimulatorPcInstance target = LsimulatorWorld.getInstance().getPlayer(name);
+	private boolean sendLetter(PcInstance pc, String name, ItemInstance item, boolean isFailureMessage) {
+		PcInstance target = LsimulatorWorld.getInstance().getPlayer(name);
 		if (target != null) {
 			if (target.getInventory().checkAddItem(item, 1) == LsimulatorInventory.OK) {
 				target.getInventory().storeItem(item);
@@ -5285,16 +5285,16 @@ public class C_ItemUSe extends ClientBasePacket {
 		LetterTable.getInstance().writeLetter(itemObjectId, code, sender, receiver, date, 0, subject, content);
 	}
 
-	private boolean withdrawPet(LsimulatorPcInstance pc, int itemObjectId) {
+	private boolean withdrawPet(PcInstance pc, int itemObjectId) {
 		if (!pc.getMap().isTakePets()) {
 			pc.sendPackets(new S_ServerMessage(563)); // \f1ここでは使えません。
 			return false;
 		}
 
 		int petCost = 0;
-		for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-			if (petNpc instanceof LsimulatorPetInstance) {
-				if (((LsimulatorPetInstance) petNpc).getItemObjId() == itemObjectId) { // 既に引き出しているペット
+		for (NpcInstance petNpc : pc.getPetList().values()) {
+			if (petNpc instanceof PetInstance) {
+				if (((PetInstance) petNpc).getItemObjId() == itemObjectId) { // 既に引き出しているペット
 					return false;
 				}
 			}
@@ -5329,13 +5329,13 @@ public class C_ItemUSe extends ClientBasePacket {
 		LsimulatorPet l1pet = PetTable.getInstance().getTemplate(itemObjectId);
 		if (l1pet != null) {
 			LsimulatorNpc npcTemp = NpcTable.getInstance().getTemplate(l1pet.get_npcid());
-			LsimulatorPetInstance pet = new LsimulatorPetInstance(npcTemp, pc, l1pet);
+			PetInstance pet = new PetInstance(npcTemp, pc, l1pet);
 			pet.setPetcost(6);
 		}
 		return true;
 	}
 
-	private void startFishing(LsimulatorPcInstance pc, int itemId, int fishX, int fishY) {
+	private void startFishing(PcInstance pc, int itemId, int fishX, int fishY) {
 		if ((pc.getMapId() != 5300) && (pc.getMapId() != 5301)) {
 			// 無法在這個地區使用釣竿。
 			pc.sendPackets(new S_ServerMessage(1138));
@@ -5382,7 +5382,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		}
 	}
 
-	private void useResolvent(LsimulatorPcInstance pc, LsimulatorItemInstance item, LsimulatorItemInstance resolvent) {
+	private void useResolvent(PcInstance pc, ItemInstance item, ItemInstance resolvent) {
 		if ((item == null) || (resolvent == null)) {
 			pc.sendPackets(new S_ServerMessage(79)); // \f1沒有任何事情發生。
 			return;
@@ -5416,7 +5416,7 @@ public class C_ItemUSe extends ClientBasePacket {
 			pc.getInventory().storeItem(41246, (int) (crystalCount * 1.5));
 		}
 		if (crystalCount != 0) {
-			LsimulatorItemInstance crystal = ItemTable.getInstance().createItem(41246);
+			ItemInstance crystal = ItemTable.getInstance().createItem(41246);
 			crystal.setCount(crystalCount);
 			if (pc.getInventory().checkAddItem(crystal, 1) == LsimulatorInventory.OK) {
 				pc.getInventory().storeItem(crystal);
@@ -5430,11 +5430,11 @@ public class C_ItemUSe extends ClientBasePacket {
 		pc.getInventory().removeItem(resolvent, 1);
 	}
 
-	private void makeCooking(LsimulatorPcInstance pc, int cookNo) {
+	private void makeCooking(PcInstance pc, int cookNo) {
 		boolean isNearFire = false;
 		for (LsimulatorObject obj : LsimulatorWorld.getInstance().getVisibleObjects(pc, 3)) {
-			if (obj instanceof LsimulatorEffectInstance) {
-				LsimulatorEffectInstance effect = (LsimulatorEffectInstance) obj;
+			if (obj instanceof EffectInstance) {
+				EffectInstance effect = (EffectInstance) obj;
 				if (effect.getGfxId() == 5943) {
 					isNearFire = true;
 					break;

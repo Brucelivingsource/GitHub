@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.command.executor;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.skill.LsimulatorBuffUtil;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
@@ -27,7 +27,7 @@ public class LsimulatorSpeed implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			LsimulatorBuffUtil.haste(pc, 3600 * 1000);
 			LsimulatorBuffUtil.brave(pc, 3600 * 1000);

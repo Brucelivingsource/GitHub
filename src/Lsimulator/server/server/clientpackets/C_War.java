@@ -22,7 +22,7 @@ import Lsimulator.server.server.model.LsimulatorCastleLocation;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWar;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Message_YN;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -39,7 +39,7 @@ public class C_War extends ClientBasePacket {
 	public C_War(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance player = clientthread.getActiveChar();
+		PcInstance player = clientthread.getActiveChar();
 		if (player == null) {
 			return;
 		}
@@ -127,8 +127,8 @@ public class C_War extends ClientBasePacket {
 		if (enemyClan.getCastleId() != 0) { // 相手クランが城主
 			int castle_id = enemyClan.getCastleId();
 			if (WarTimeController.getInstance().isNowWar(castle_id)) { // 戦争時間内
-				LsimulatorPcInstance clanMember[] = clan.getOnlineClanMember();
-				for (LsimulatorPcInstance element : clanMember) {
+				PcInstance clanMember[] = clan.getOnlineClanMember();
+				for (PcInstance element : clanMember) {
 					if (LsimulatorCastleLocation.checkInWarArea(castle_id, element)) {
 						player.sendPackets(new S_ServerMessage(477)); // あなたを含む全ての血盟員が城の外に出なければ攻城戦は宣言できません。
 						return;
@@ -189,7 +189,7 @@ public class C_War extends ClientBasePacket {
 			}
 
 			// 攻城戦ではない場合、相手の血盟主の承認が必要
-			LsimulatorPcInstance enemyLeader = LsimulatorWorld.getInstance().getPlayer(enemyClan.getLeaderName());
+			PcInstance enemyLeader = LsimulatorWorld.getInstance().getPlayer(enemyClan.getLeaderName());
 
 			if (enemyLeader == null) { // 相手の血盟主が見つからなかった
 				player.sendPackets(new S_ServerMessage(218, enemyClanName)); // \f1%0血盟の君主は現在ワールドに居ません。

@@ -16,7 +16,7 @@ package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket, S_DoorPack
@@ -29,11 +29,11 @@ public class S_DoorPack extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_DoorPack(LsimulatorDoorInstance door) {
+	public S_DoorPack(DoorInstance door) {
 		buildPacket(door);
 	}
 
-	private void buildPacket(LsimulatorDoorInstance door) {
+	private void buildPacket(DoorInstance door) {
 		writeC(Opcodes.S_OPCODE_CHARPACK);
 		writeH(door.getX());
 		writeH(door.getY());

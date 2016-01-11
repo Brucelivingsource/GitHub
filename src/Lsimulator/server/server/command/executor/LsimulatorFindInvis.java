@@ -16,7 +16,7 @@ package Lsimulator.server.server.command.executor;
 
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.GMSTATUS_FINDINVIS;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_RemoveObject;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
@@ -29,7 +29,7 @@ public class LsimulatorFindInvis implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		if (arg.equalsIgnoreCase("on")) {
 			pc.setSkillEffect(GMSTATUS_FINDINVIS, 0);
 			pc.removeAllKnownObjects();
@@ -37,7 +37,7 @@ public class LsimulatorFindInvis implements LsimulatorCommandExecutor {
 		}
 		else if (arg.equalsIgnoreCase("off")) {
 			pc.removeSkillEffect(GMSTATUS_FINDINVIS);
-			for (LsimulatorPcInstance visible : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) {
+			for (PcInstance visible : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) {
 				if (visible.isInvisble()) {
 					pc.sendPackets(new S_RemoveObject(visible));
 				}

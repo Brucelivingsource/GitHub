@@ -20,8 +20,8 @@ import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.datatables.ShopTable;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.shop.LsimulatorAssessedItem;
 import Lsimulator.server.server.model.shop.LsimulatorShop;
 
@@ -32,12 +32,12 @@ public class S_ShopBuyList extends ServerBasePacket {
 
 	private static final String S_SHOP_BUY_LIST = "[S] S_ShopBuyList";
 
-	public S_ShopBuyList(int objid, LsimulatorPcInstance pc) {
+	public S_ShopBuyList(int objid, PcInstance pc) {
 		LsimulatorObject object = LsimulatorWorld.getInstance().findObject(objid);
-		if (!(object instanceof LsimulatorNpcInstance)) {
+		if (!(object instanceof NpcInstance)) {
 			return;
 		}
-		LsimulatorNpcInstance npc = (LsimulatorNpcInstance) object;
+		NpcInstance npc = (NpcInstance) object;
 		int npcId = npc.getNpcTemplate().get_npcId();
 		LsimulatorShop shop = ShopTable.getInstance().get(npcId);
 		if (shop == null) {

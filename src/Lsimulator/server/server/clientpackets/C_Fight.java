@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Message_YN;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.utils.FaceToFace;
@@ -33,11 +33,11 @@ public class C_Fight extends ClientBasePacket {
 	public C_Fight(byte abyte0[], ClientThread client) throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if ((pc == null) || pc.isGhost()) {
 			return;
 		}
-		LsimulatorPcInstance target = FaceToFace.faceToFace(pc, false);
+		PcInstance target = FaceToFace.faceToFace(pc, false);
 		if (target != null) {
 			if (!target.isParalyzed()) {
 				if (pc.getFightId() != 0) {

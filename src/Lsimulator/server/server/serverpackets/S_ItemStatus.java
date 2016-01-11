@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -27,7 +27,7 @@ public class S_ItemStatus extends ServerBasePacket {
 	/**
 	 * アイテムの名前、状態、特性、重量などの表示を変更する
 	 */
-	public S_ItemStatus(LsimulatorItemInstance item) {
+	public S_ItemStatus(ItemInstance item) {
 		writeC(Opcodes.S_OPCODE_ITEMSTATUS);
 		writeD(item.getId());
 		writeS(item.getViewName());

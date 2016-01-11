@@ -23,7 +23,7 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.CharacterTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorSystemMessageId;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -44,7 +44,7 @@ public class C_RestartMenu extends ClientBasePacket {
 	public C_RestartMenu(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -54,7 +54,7 @@ public class C_RestartMenu extends ClientBasePacket {
 		if(data == 1){ // 請求授予血盟RANK
 			int rank = readC();
 			String name = readS();
-			LsimulatorPcInstance targetPc = LsimulatorWorld.getInstance().getPlayer(name);
+			PcInstance targetPc = LsimulatorWorld.getInstance().getPlayer(name);
 
 			LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(pc.getClanname());
 			if (clan == null) {
@@ -174,7 +174,7 @@ public class C_RestartMenu extends ClientBasePacket {
 				}
 			}
 			else { // 離線盟友
-				LsimulatorPcInstance restorePc = CharacterTable.getInstance().restoreCharacter(name);
+				PcInstance restorePc = CharacterTable.getInstance().restoreCharacter(name);
 				if ((restorePc != null) && (restorePc.getClanid() == pc.getClanid())) { // 同じ血盟
 					pc.sendPackets(new S_ServerMessage(2069));
 					return;

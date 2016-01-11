@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.ClanTable;
 import Lsimulator.server.server.model.LsimulatorClan;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Emblem;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -33,7 +33,7 @@ public class C_Clan extends ClientBasePacket {
 	public C_Clan(byte abyte0[], ClientThread client) {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

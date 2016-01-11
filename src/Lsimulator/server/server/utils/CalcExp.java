@@ -36,10 +36,10 @@ import Lsimulator.server.server.datatables.PetTable;
 import Lsimulator.server.server.model.LsimulatorCharacter;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.serverpackets.S_PetPack;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorPet;
@@ -62,7 +62,7 @@ public class CalcExp {
 		return serialVersionUID;
 	}
 
-	public static void calcExp(LsimulatorPcInstance l1pcinstance, int targetid, List<LsimulatorCharacter> acquisitorList, List<Integer> hateList, int exp) {
+	public static void calcExp(PcInstance l1pcinstance, int targetid, List<LsimulatorCharacter> acquisitorList, List<Integer> hateList, int exp) {
 
 		int i = 0;
 		double party_level = 0;
@@ -70,7 +70,7 @@ public class CalcExp {
 		int member_exp = 0;
 		int member_lawful = 0;
 		LsimulatorObject l1object = LsimulatorWorld.getInstance().findObject(targetid);
-		LsimulatorNpcInstance npc = (LsimulatorNpcInstance) l1object;
+		NpcInstance npc = (NpcInstance) l1object;
 
 		// ヘイトの合計を取得
 		LsimulatorCharacter acquisitor;
@@ -93,7 +93,7 @@ public class CalcExp {
 			hate = hateList.get(i);
 			if ((acquisitor != null) && !acquisitor.isDead()) {
 				totalHateExp += hate;
-				if (acquisitor instanceof LsimulatorPcInstance) {
+				if (acquisitor instanceof PcInstance) {
 					totalHateLawful += hate;
 				}
 			}
@@ -106,7 +106,7 @@ public class CalcExp {
 			return;
 		}
 
-		if ((l1object != null) && !(npc instanceof LsimulatorPetInstance) && !(npc instanceof LsimulatorSummonInstance)) {
+		if ((l1object != null) && !(npc instanceof PetInstance) && !(npc instanceof SummonInstance)) {
 			// int exp = npc.get_exp();
 			/*if (!LsimulatorWorld.getInstance().isProcessingContributionTotal() && (l1pcinstance.getHomeTownId() > 0)) {
 				int contribution = npc.getLevel() / 10;
@@ -122,8 +122,8 @@ public class CalcExp {
 				for (i = hateList.size() - 1; i >= 0; i--) {
 					acquisitor = acquisitorList.get(i);
 					hate = hateList.get(i);
-					if (acquisitor instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance pc = (LsimulatorPcInstance) acquisitor;
+					if (acquisitor instanceof PcInstance) {
+						PcInstance pc = (PcInstance) acquisitor;
 						if (pc == l1pcinstance) {
 							partyHateExp += hate;
 							partyHateLawful += hate;
@@ -142,9 +142,9 @@ public class CalcExp {
 							AddExp(pc, acquire_exp, acquire_lawful);
 						}
 					}
-					else if (acquisitor instanceof LsimulatorPetInstance) {
-						LsimulatorPetInstance pet = (LsimulatorPetInstance) acquisitor;
-						LsimulatorPcInstance master = (LsimulatorPcInstance) pet.getMaster();
+					else if (acquisitor instanceof PetInstance) {
+						PetInstance pet = (PetInstance) acquisitor;
+						PcInstance master = (PcInstance) pet.getMaster();
 						if (master == l1pcinstance) {
 							partyHateExp += hate;
 						}
@@ -158,9 +158,9 @@ public class CalcExp {
 							AddExpPet(pet, acquire_exp);
 						}
 					}
-					else if (acquisitor instanceof LsimulatorSummonInstance) {
-						LsimulatorSummonInstance summon = (LsimulatorSummonInstance) acquisitor;
-						LsimulatorPcInstance master = (LsimulatorPcInstance) summon.getMaster();
+					else if (acquisitor instanceof SummonInstance) {
+						SummonInstance summon = (SummonInstance) acquisitor;
+						PcInstance master = (PcInstance) summon.getMaster();
 						if (master == l1pcinstance) {
 							partyHateExp += hate;
 						}
@@ -181,15 +181,15 @@ public class CalcExp {
 
 				// プリボーナス
 				double pri_bonus = 0;
-				LsimulatorPcInstance leader = l1pcinstance.getParty().getLeader();
+				PcInstance leader = l1pcinstance.getParty().getLeader();
 				if (leader.isCrown() && (l1pcinstance.knownsObject(leader) || l1pcinstance.equals(leader))) {
 					pri_bonus = 0.059;
 				}
 
 				// PT経験値の計算
-				LsimulatorPcInstance[] ptMembers = l1pcinstance.getParty().getMembers();
+				PcInstance[] ptMembers = l1pcinstance.getParty().getMembers();
 				double pt_bonus = 0;
-				for (LsimulatorPcInstance each : ptMembers) {
+				for (PcInstance each : ptMembers) {
 					if (l1pcinstance.knownsObject(each) || l1pcinstance.equals(each)) {
 						party_level += each.getLevel() * each.getLevel();
 					}
@@ -211,22 +211,22 @@ public class CalcExp {
 				for (i = hateList.size() - 1; i >= 0; i--) {
 					acquisitor = acquisitorList.get(i);
 					hate = hateList.get(i);
-					if (acquisitor instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance pc = (LsimulatorPcInstance) acquisitor;
+					if (acquisitor instanceof PcInstance) {
+						PcInstance pc = (PcInstance) acquisitor;
 						if (pc == l1pcinstance) {
 							ownHateExp += hate;
 						}
 					}
-					else if (acquisitor instanceof LsimulatorPetInstance) {
-						LsimulatorPetInstance pet = (LsimulatorPetInstance) acquisitor;
-						LsimulatorPcInstance master = (LsimulatorPcInstance) pet.getMaster();
+					else if (acquisitor instanceof PetInstance) {
+						PetInstance pet = (PetInstance) acquisitor;
+						PcInstance master = (PcInstance) pet.getMaster();
 						if (master == l1pcinstance) {
 							ownHateExp += hate;
 						}
 					}
-					else if (acquisitor instanceof LsimulatorSummonInstance) {
-						LsimulatorSummonInstance summon = (LsimulatorSummonInstance) acquisitor;
-						LsimulatorPcInstance master = (LsimulatorPcInstance) summon.getMaster();
+					else if (acquisitor instanceof SummonInstance) {
+						SummonInstance summon = (SummonInstance) acquisitor;
+						PcInstance master = (PcInstance) summon.getMaster();
 						if (master == l1pcinstance) {
 							ownHateExp += hate;
 						}
@@ -237,8 +237,8 @@ public class CalcExp {
 					for (i = hateList.size() - 1; i >= 0; i--) {
 						acquisitor = acquisitorList.get(i);
 						hate = hateList.get(i);
-						if (acquisitor instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) acquisitor;
+						if (acquisitor instanceof PcInstance) {
+							PcInstance pc = (PcInstance) acquisitor;
 							if (pc == l1pcinstance) {
 								if (ownHateExp > 0) {
 									acquire_exp = (member_exp * hate / ownHateExp);
@@ -246,9 +246,9 @@ public class CalcExp {
 								AddExp(pc, acquire_exp, member_lawful);
 							}
 						}
-						else if (acquisitor instanceof LsimulatorPetInstance) {
-							LsimulatorPetInstance pet = (LsimulatorPetInstance) acquisitor;
-							LsimulatorPcInstance master = (LsimulatorPcInstance) pet.getMaster();
+						else if (acquisitor instanceof PetInstance) {
+							PetInstance pet = (PetInstance) acquisitor;
+							PcInstance master = (PcInstance) pet.getMaster();
 							if (master == l1pcinstance) {
 								if (ownHateExp > 0) {
 									acquire_exp = (member_exp * hate / ownHateExp);
@@ -256,7 +256,7 @@ public class CalcExp {
 								AddExpPet(pet, acquire_exp);
 							}
 						}
-						else if (acquisitor instanceof LsimulatorSummonInstance) {}
+						else if (acquisitor instanceof SummonInstance) {}
 					}
 				}
 				else { // 攻撃に参加していなかった
@@ -265,7 +265,7 @@ public class CalcExp {
 				}
 
 				// パーティーメンバーとそのペット・サモンのヘイトの合計を算出
-				for (LsimulatorPcInstance ptMember : ptMembers) {
+				for (PcInstance ptMember : ptMembers) {
 					if (l1pcinstance.knownsObject(ptMember)) {
 						if (party_level > 0) {
 							dist = ((ptMember.getLevel() * ptMember.getLevel()) / party_level);
@@ -277,22 +277,22 @@ public class CalcExp {
 						for (i = hateList.size() - 1; i >= 0; i--) {
 							acquisitor = acquisitorList.get(i);
 							hate = hateList.get(i);
-							if (acquisitor instanceof LsimulatorPcInstance) {
-								LsimulatorPcInstance pc = (LsimulatorPcInstance) acquisitor;
+							if (acquisitor instanceof PcInstance) {
+								PcInstance pc = (PcInstance) acquisitor;
 								if (pc == ptMember) {
 									ownHateExp += hate;
 								}
 							}
-							else if (acquisitor instanceof LsimulatorPetInstance) {
-								LsimulatorPetInstance pet = (LsimulatorPetInstance) acquisitor;
-								LsimulatorPcInstance master = (LsimulatorPcInstance) pet.getMaster();
+							else if (acquisitor instanceof PetInstance) {
+								PetInstance pet = (PetInstance) acquisitor;
+								PcInstance master = (PcInstance) pet.getMaster();
 								if (master == ptMember) {
 									ownHateExp += hate;
 								}
 							}
-							else if (acquisitor instanceof LsimulatorSummonInstance) {
-								LsimulatorSummonInstance summon = (LsimulatorSummonInstance) acquisitor;
-								LsimulatorPcInstance master = (LsimulatorPcInstance) summon.getMaster();
+							else if (acquisitor instanceof SummonInstance) {
+								SummonInstance summon = (SummonInstance) acquisitor;
+								PcInstance master = (PcInstance) summon.getMaster();
 								if (master == ptMember) {
 									ownHateExp += hate;
 								}
@@ -303,8 +303,8 @@ public class CalcExp {
 							for (i = hateList.size() - 1; i >= 0; i--) {
 								acquisitor = acquisitorList.get(i);
 								hate = hateList.get(i);
-								if (acquisitor instanceof LsimulatorPcInstance) {
-									LsimulatorPcInstance pc = (LsimulatorPcInstance) acquisitor;
+								if (acquisitor instanceof PcInstance) {
+									PcInstance pc = (PcInstance) acquisitor;
 									if (pc == ptMember) {
 										if (ownHateExp > 0) {
 											acquire_exp = (member_exp * hate / ownHateExp);
@@ -312,9 +312,9 @@ public class CalcExp {
 										AddExp(pc, acquire_exp, member_lawful);
 									}
 								}
-								else if (acquisitor instanceof LsimulatorPetInstance) {
-									LsimulatorPetInstance pet = (LsimulatorPetInstance) acquisitor;
-									LsimulatorPcInstance master = (LsimulatorPcInstance) pet.getMaster();
+								else if (acquisitor instanceof PetInstance) {
+									PetInstance pet = (PetInstance) acquisitor;
+									PcInstance master = (PcInstance) pet.getMaster();
 									if (master == ptMember) {
 										if (ownHateExp > 0) {
 											acquire_exp = (member_exp * hate / ownHateExp);
@@ -322,7 +322,7 @@ public class CalcExp {
 										AddExpPet(pet, acquire_exp);
 									}
 								}
-								else if (acquisitor instanceof LsimulatorSummonInstance) {}
+								else if (acquisitor instanceof SummonInstance) {}
 							}
 						}
 						else { // 攻撃に参加していなかった
@@ -338,27 +338,27 @@ public class CalcExp {
 					acquisitor = acquisitorList.get(i);
 					hate = hateList.get(i);
 					acquire_exp = (exp * hate / totalHateExp);
-					if (acquisitor instanceof LsimulatorPcInstance) {
+					if (acquisitor instanceof PcInstance) {
 						if (totalHateLawful > 0) {
 							acquire_lawful = (lawful * hate / totalHateLawful);
 						}
 					}
 
-					if (acquisitor instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance pc = (LsimulatorPcInstance) acquisitor;
+					if (acquisitor instanceof PcInstance) {
+						PcInstance pc = (PcInstance) acquisitor;
 						AddExp(pc, acquire_exp, acquire_lawful);
 					}
-					else if (acquisitor instanceof LsimulatorPetInstance) {
-						LsimulatorPetInstance pet = (LsimulatorPetInstance) acquisitor;
+					else if (acquisitor instanceof PetInstance) {
+						PetInstance pet = (PetInstance) acquisitor;
 						AddExpPet(pet, acquire_exp);
 					}
-					else if (acquisitor instanceof LsimulatorSummonInstance) {}
+					else if (acquisitor instanceof SummonInstance) {}
 				}
 			}
 		}
 	}
 
-	private static void AddExp(LsimulatorPcInstance pc, int exp, int lawful) {
+	private static void AddExp(PcInstance pc, int exp, int lawful) {
 
 		int add_lawful = (int) (lawful * Config.RATE_LA) * -1;
 		pc.addLawful(add_lawful);
@@ -396,8 +396,8 @@ public class CalcExp {
 		pc.addMonsKill();
 	}
 
-	private static void AddExpPet(LsimulatorPetInstance pet, int exp) {
-		LsimulatorPcInstance pc = (LsimulatorPcInstance) pet.getMaster();
+	private static void AddExpPet(PetInstance pet, int exp) {
+		PcInstance pc = (PcInstance) pet.getMaster();
 
 		int petItemObjId = pet.getItemObjId();
 

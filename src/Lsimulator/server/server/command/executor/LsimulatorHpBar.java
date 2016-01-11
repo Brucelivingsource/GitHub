@@ -16,10 +16,10 @@ package Lsimulator.server.server.command.executor;
 
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.GMSTATUS_HPBAR;
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.serverpackets.S_HPMeter;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
@@ -32,7 +32,7 @@ public class LsimulatorHpBar implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		if (arg.equalsIgnoreCase("on")) {
 			pc.setSkillEffect(GMSTATUS_HPBAR, 0);
 		}
@@ -51,16 +51,16 @@ public class LsimulatorHpBar implements LsimulatorCommandExecutor {
 	}
 
 	public static boolean isHpBarTarget(LsimulatorObject obj) {
-		if (obj instanceof LsimulatorMonsterInstance) {
+		if (obj instanceof MonsterInstance) {
 			return true;
 		}
-		if (obj instanceof LsimulatorPcInstance) {
+		if (obj instanceof PcInstance) {
 			return true;
 		}
-		if (obj instanceof LsimulatorSummonInstance) {
+		if (obj instanceof SummonInstance) {
 			return true;
 		}
-		if (obj instanceof LsimulatorPetInstance) {
+		if (obj instanceof PetInstance) {
 			return true;
 		}
 		return false;

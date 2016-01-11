@@ -23,7 +23,7 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.CharacterTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_DeleteCharOK;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -43,7 +43,7 @@ public class C_DeleteChar extends ClientBasePacket {
 		String name = readS();
 
 		try {
-			LsimulatorPcInstance pc = CharacterTable.getInstance().restoreCharacter(name);
+			PcInstance pc = CharacterTable.getInstance().restoreCharacter(name);
 			if (pc != null && pc.getLevel() >= 5 && Config.DELETE_CHARACTER_AFTER_7DAYS) {
 				if (pc.getType() < 32) {
 					if (pc.isCrown()) {

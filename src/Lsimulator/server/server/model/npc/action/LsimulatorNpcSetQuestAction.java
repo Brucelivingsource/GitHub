@@ -17,7 +17,7 @@ package Lsimulator.server.server.model.npc.action;
 import org.w3c.dom.Element;
 
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.npc.LsimulatorNpcHtml;
 
 public class LsimulatorNpcSetQuestAction extends LsimulatorNpcXmlAction {
@@ -36,7 +36,7 @@ public class LsimulatorNpcSetQuestAction extends LsimulatorNpcXmlAction {
 	}
 
 	@Override
-	public LsimulatorNpcHtml execute(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj,
+	public LsimulatorNpcHtml execute(String actionName, PcInstance pc, LsimulatorObject obj,
 			byte[] args) {
 		pc.getQuest().set_step(_id, _step);
 		return null;

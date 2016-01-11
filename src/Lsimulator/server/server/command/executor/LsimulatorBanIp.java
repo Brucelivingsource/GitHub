@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
 
 import Lsimulator.server.server.datatables.IpTable;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
 /**
@@ -33,7 +33,7 @@ public class LsimulatorBanIp implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer stringtokenizer = new StringTokenizer(arg);
 			// IPを指定
@@ -49,7 +49,7 @@ public class LsimulatorBanIp implements LsimulatorCommandExecutor {
 			IpTable iptable = IpTable.getInstance();
 			boolean isBanned = iptable.isBannedIp(s1);
 
-			for (LsimulatorPcInstance tg : LsimulatorWorld.getInstance().getAllPlayers()) {
+			for (PcInstance tg : LsimulatorWorld.getInstance().getAllPlayers()) {
 				if (s1.equals(tg.getNetConnection().getIp())) {
 					String msg = new StringBuilder().append("IP:").append(s1).append(" 連線中的角色名稱:").append(tg.getName()).toString();
 					pc.sendPackets(new S_SystemMessage(msg));

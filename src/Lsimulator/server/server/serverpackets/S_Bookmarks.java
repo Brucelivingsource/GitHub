@@ -21,7 +21,7 @@ import java.sql.SQLException;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorBookMark;
 import Lsimulator.server.server.utils.SQLUtil;
 
@@ -38,7 +38,7 @@ public class S_Bookmarks extends ServerBasePacket {
 	 * 角色重登載入
 	 * @param pc
 	 */
-	public S_Bookmarks(LsimulatorPcInstance pc){
+	public S_Bookmarks(PcInstance pc){
 		Connection con = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;

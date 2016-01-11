@@ -15,12 +15,12 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
 
 public class S_MoveNpcPacket extends ServerBasePacket {
 	private static final String _S__1F_S_MOVENPCPACKET = "[S] S_MoveNpcPacket";
 
-	public S_MoveNpcPacket(LsimulatorMonsterInstance npc, int x, int y, int heading) {
+	public S_MoveNpcPacket(MonsterInstance npc, int x, int y, int heading) {
 		// npc.set_moving(true);
 
 		writeC(Opcodes.S_OPCODE_MOVEOBJECT);

@@ -21,11 +21,10 @@ import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.datatables.CharacterTable;
 import Lsimulator.server.server.datatables.ClanTable;
 import Lsimulator.server.server.model.LsimulatorClan;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 //Referenced classes of package Lsimulator.server.server.serverpackets:
 //ServerBasePacket
-
 
 public class S_Pledge extends ServerBasePacket {
 	
@@ -63,7 +62,7 @@ public class S_Pledge extends ServerBasePacket {
 	 * @param clanName 
 	 * @throws Exception 
 	 */
-	public S_Pledge(LsimulatorPcInstance pc) throws Exception {
+	public S_Pledge(PcInstance pc) throws Exception {
 		LsimulatorClan clan = ClanTable.getInstance().getTemplate(pc.getClanid());
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
 		writeC(S_PacketBox.HTML_PLEDGE_MEMBERS);
@@ -73,7 +72,7 @@ public class S_Pledge extends ServerBasePacket {
 		// 血盟成員資料
 		/* Name/Rank/Level/Notes/MemberId/ClassType */
 		for (String member : clan.getAllMembers()) {
-			LsimulatorPcInstance clanMember = CharacterTable.getInstance().restoreCharacter(member);
+			PcInstance clanMember = CharacterTable.getInstance().restoreCharacter(member);
 			writeS(clanMember.getName());
 			writeC(clanMember.getClanRank());
 			writeC(clanMember.getLevel());

@@ -3,8 +3,8 @@ package Lsimulator.server.server.templates;
 import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.datatables.MagicDollTable;
 import Lsimulator.server.server.model.LsimulatorCharacter;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SkillSound;
 import Lsimulator.server.server.utils.Random;
 
@@ -12,7 +12,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getHitAddByDoll(LsimulatorCharacter _master) { // 近距離的命中率增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getHit();
@@ -25,7 +25,7 @@ public class LsimulatorMagicDoll {
 		int s = 0;
 		int chance = Random.nextInt(100) + 1;
 		boolean isAdd = false;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				if (doll.getDmgChance() > 0 && !isAdd) { // 額外傷害發動機率
@@ -39,8 +39,8 @@ public class LsimulatorMagicDoll {
 			}
 		}
 		if (isAdd) {
-			if (_master instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) _master;
+			if (_master instanceof PcInstance) {
+				PcInstance pc = (PcInstance) _master;
 				pc.sendPackets(new S_SkillSound(_master.getId(), 6319));
 			}
 			_master.broadcastPacket(new S_SkillSound(_master.getId(), 6319));
@@ -52,7 +52,7 @@ public class LsimulatorMagicDoll {
 		int s = 0;
 		int chance = Random.nextInt(100) + 1;
 		boolean isReduction = false;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				if (doll.getDmgReductionChance() > 0 && !isReduction) { // 傷害減免發動機率
@@ -66,8 +66,8 @@ public class LsimulatorMagicDoll {
 			}
 		}
 		if (isReduction ) {
-			if (_master instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) _master;
+			if (_master instanceof PcInstance) {
+				PcInstance pc = (PcInstance) _master;
 				pc.sendPackets(new S_SkillSound(_master.getId(), 6320));
 			}
 			_master.broadcastPacket(new S_SkillSound(_master.getId(), 6320));
@@ -77,12 +77,12 @@ public class LsimulatorMagicDoll {
 
 	public static int getDamageEvasionByDoll(LsimulatorCharacter _master) { // 傷害迴避
 		int chance = Random.nextInt(100) + 1;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				if (doll.getDmgEvasionChance() >= chance) { // 傷害迴避發動機率
-					if (_master instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance pc = (LsimulatorPcInstance) _master;
+					if (_master instanceof PcInstance) {
+						PcInstance pc = (PcInstance) _master;
 						pc.sendPackets(new S_SkillSound(_master.getId(), 6320));
 					}
 					_master.broadcastPacket(new S_SkillSound(_master.getId(), 6320));
@@ -95,7 +95,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getBowHitAddByDoll(LsimulatorCharacter _master) { // 弓的命中率增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getBowHit();
@@ -106,7 +106,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getBowDamageByDoll(LsimulatorCharacter _master) { // 弓的攻擊力增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getBowDmg();
@@ -117,7 +117,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getAcByDoll(LsimulatorCharacter _master) { // 防禦力增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getAc();
@@ -128,7 +128,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getRegistStoneByDoll(LsimulatorCharacter _master) { // 石化耐性增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getRegistStone();
@@ -139,7 +139,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getRegistStunByDoll(LsimulatorCharacter _master) { // 昏迷耐性增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getRegistStun();
@@ -150,7 +150,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getRegistSustainByDoll(LsimulatorCharacter _master) { // 支撐耐性增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getRegistSustain();
@@ -161,7 +161,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getRegistBlindByDoll(LsimulatorCharacter _master) { // 闇黑耐性增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getRegistBlind();
@@ -172,7 +172,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getRegistFreezeByDoll(LsimulatorCharacter _master) { // 寒冰耐性增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getRegistFreeze();
@@ -183,7 +183,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getRegistSleepByDoll(LsimulatorCharacter _master) { // 睡眠耐性增加
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getRegistSleep();
@@ -194,7 +194,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getWeightReductionByDoll(LsimulatorCharacter _master) { // 負重減輕
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				s += doll.getWeightReduction();
@@ -205,7 +205,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getHprByDoll(LsimulatorCharacter _master) { // 體力回覆量
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				if (!doll.getHprTime() && doll.getHpr() != 0) {
@@ -218,7 +218,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getMprByDoll(LsimulatorCharacter _master) { // 魔力回覆量
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				if (!doll.getMprTime() && doll.getMpr() != 0) {
@@ -230,7 +230,7 @@ public class LsimulatorMagicDoll {
 	}
 
 	public static boolean isItemMake(LsimulatorCharacter _master) {
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				LsimulatorItem item = ItemTable.getInstance().getTemplate((doll.getMakeItemId()));
@@ -243,7 +243,7 @@ public class LsimulatorMagicDoll {
 	}
 
 	public static int getMakeItemId(LsimulatorCharacter _master) { // 獲得道具
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				LsimulatorItem item = ItemTable.getInstance().getTemplate((doll.getMakeItemId()));
@@ -256,7 +256,7 @@ public class LsimulatorMagicDoll {
 	}
 
 	public static boolean isHpRegeneration(LsimulatorCharacter _master) { // 回血判斷 (時間固定性)
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				if (doll.getHprTime() && doll.getHpr() != 0) {
@@ -269,7 +269,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getHpByDoll(LsimulatorCharacter _master) { // 體力回覆量 (時間固定性)
 		int s = 0;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				if (doll.getHprTime() && doll.getHpr() != 0) {
@@ -281,7 +281,7 @@ public class LsimulatorMagicDoll {
 	}
 
 	public static boolean isMpRegeneration(LsimulatorCharacter _master) { // 回魔判斷 (時間固定性)
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				if (doll.getMprTime() && doll.getMpr() != 0) {
@@ -295,7 +295,7 @@ public class LsimulatorMagicDoll {
 	public static int getMpByDoll(LsimulatorCharacter _master) { // 魔力回覆量 (時間固定性)
 		int s = 0;
 
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll != null) {
 				if (doll.getMprTime() && doll.getMpr() != 0) {
@@ -308,7 +308,7 @@ public class LsimulatorMagicDoll {
 
 	public static int getEffectByDoll(LsimulatorCharacter _master, byte type) { // 效果
 		int chance = Random.nextInt(100) + 1;
-		for ( LsimulatorDollInstance dollIns : _master.getDollList().values()) {
+		for ( DollInstance dollIns : _master.getDollList().values()) {
 			LsimulatorMagicDoll doll = MagicDollTable.getInstance().getTemplate(dollIns.getItemId());
 			if (doll.getEffectChance() > chance) {
 				if (doll != null) {

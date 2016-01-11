@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Maps;
 
@@ -91,15 +91,15 @@ public class LsimulatorQuest {
 
 	public static final int QUEST_END = 255; // 終了済みクエストのステップ
 
-	private LsimulatorPcInstance _owner = null;
+	private PcInstance _owner = null;
 
 	private Map<Integer, Integer> _quest = null;
 
-	public LsimulatorQuest(LsimulatorPcInstance owner) {
+	public LsimulatorQuest(PcInstance owner) {
 		_owner = owner;
 	}
 
-	public LsimulatorPcInstance get_owner() {
+	public PcInstance get_owner() {
 		return _owner;
 	}
 

@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -27,11 +27,11 @@ public class S_OwnCharAttrDef extends ServerBasePacket {
 	private byte[] _byte = null;
 
 	/** 更新防禦以及四種屬性 */
-	public S_OwnCharAttrDef(LsimulatorPcInstance pc) {
+	public S_OwnCharAttrDef(PcInstance pc) {
 		buildPacket(pc);
 	}
 
-	private void buildPacket(LsimulatorPcInstance pc) {
+	private void buildPacket(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_OWNCHARATTRDEF);
 		writeC(pc.getAc());
 		writeH(pc.getFire());

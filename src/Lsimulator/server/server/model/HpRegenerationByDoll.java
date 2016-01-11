@@ -18,7 +18,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SkillSound; //TODO HPR効果
 import Lsimulator.server.server.templates.LsimulatorMagicDoll;
 
@@ -26,9 +26,9 @@ public class HpRegenerationByDoll extends TimerTask {
 	private static Logger _log = Logger.getLogger(HpRegenerationByDoll.class
 			.getName());
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
-	public HpRegenerationByDoll(LsimulatorPcInstance pc) {
+	public HpRegenerationByDoll(PcInstance pc) {
 		_pc = pc;
 	}
 

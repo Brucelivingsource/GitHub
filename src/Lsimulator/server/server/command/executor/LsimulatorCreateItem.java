@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.model.LsimulatorInventory;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.templates.LsimulatorItem;
@@ -40,7 +40,7 @@ public class LsimulatorCreateItem implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer st = new StringTokenizer(arg);
 			String nameid = st.nextToken();
@@ -78,7 +78,7 @@ public class LsimulatorCreateItem implements LsimulatorCommandExecutor {
 			LsimulatorItem temp = ItemTable.getInstance().getTemplate(itemid);
 			if (temp != null) {
 				if (temp.isStackable()) {
-					LsimulatorItemInstance item = ItemTable.getInstance().createItem(
+					ItemInstance item = ItemTable.getInstance().createItem(
 							itemid);
 					item.setEnchantLevel(0);
 					item.setCount(count);
@@ -91,7 +91,7 @@ public class LsimulatorCreateItem implements LsimulatorCommandExecutor {
 								item.getLogName() + "(ID:" + itemid + ")"));
 					}
 				} else {
-					LsimulatorItemInstance item = null;
+					ItemInstance item = null;
 					int createCount;
 					for (createCount = 0; createCount < count; createCount++) {
 						item = ItemTable.getInstance().createItem(itemid);

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import Lsimulator.server.Config;
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.model.LsimulatorSpawn;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorNpc;
 import Lsimulator.server.server.utils.NumberUtil;
 import Lsimulator.server.server.utils.PerformanceTimer;
@@ -162,7 +162,7 @@ public class SpawnTable {
 		_spawntable.put(new Integer(spawn.getId()), spawn);
 	}
 
-	public static void storeSpawn(LsimulatorPcInstance pc, LsimulatorNpc npc) {
+	public static void storeSpawn(PcInstance pc, LsimulatorNpc npc) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {

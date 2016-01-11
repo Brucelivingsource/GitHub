@@ -22,7 +22,7 @@ import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorDragonSlayer;
 import Lsimulator.server.server.model.LsimulatorTeleport;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 import Lsimulator.server.server.serverpackets.S_SendLocation;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -57,9 +57,9 @@ public class C_SendLocation extends ClientBasePacket {
 			if (name.isEmpty()) {
 				return;
 			}
-			LsimulatorPcInstance target = LsimulatorWorld.getInstance().getPlayer(name);
+			PcInstance target = LsimulatorWorld.getInstance().getPlayer(name);
 			if (target != null) {
-				LsimulatorPcInstance pc = client.getActiveChar();
+				PcInstance pc = client.getActiveChar();
 				String sender = pc.getName();
 				target.sendPackets(new S_SendLocation(type, sender, mapId, x, y, msgId));
 				// 将来的にtypeを使う可能性があるので送る
@@ -70,7 +70,7 @@ public class C_SendLocation extends ClientBasePacket {
 			int objectId = readD();
 			int gate = readD();
 			int dragonGate[] = { 81273, 81274, 81275, 81276 };
-			LsimulatorPcInstance pc = client.getActiveChar();
+			PcInstance pc = client.getActiveChar();
 			if (gate >= 0 && gate <= 3) {
 				Calendar nowTime = Calendar.getInstance();
 				if (nowTime.get(Calendar.HOUR_OF_DAY) >= 8 && nowTime.get(Calendar.HOUR_OF_DAY) < 12) {
@@ -103,7 +103,7 @@ public class C_SendLocation extends ClientBasePacket {
 				}
 			}
 		} else if(type == 0x2e){ // 識別盟徽 狀態
-			LsimulatorPcInstance pc = client.getActiveChar();
+			PcInstance pc = client.getActiveChar();
 			// 如果不是君主或聯盟王
 			if(pc.getClanRank() != 4 && pc.getClanRank() != 10){
 				return;
@@ -115,7 +115,7 @@ public class C_SendLocation extends ClientBasePacket {
 			clan.setEmblemStatus(emblemStatus);
 			ClanTable.getInstance().updateClan(clan);
 			
-			for(LsimulatorPcInstance member: clan.getOnlineClanMember()){
+			for(PcInstance member: clan.getOnlineClanMember()){
 				member.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, emblemStatus));
 			}
 		} else if(type == 0x30){ // 村莊便利傳送
@@ -123,7 +123,7 @@ public class C_SendLocation extends ClientBasePacket {
 			int point = readH();
 			int locx = 0;
 			int locy = 0;
-			LsimulatorPcInstance pc = client.getActiveChar();
+			PcInstance pc = client.getActiveChar();
 			if(mapIndex == 1){ 
 				if(point == 0){ // 亞丁-村莊北邊地區
 					//X34079 Y33136 右下角 X 34090 Y 33150

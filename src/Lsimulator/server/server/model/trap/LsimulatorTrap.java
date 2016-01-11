@@ -16,7 +16,7 @@ package Lsimulator.server.server.model.trap;
 
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_EffectLocation;
 import Lsimulator.server.server.storage.TrapStorage;
 
@@ -52,15 +52,15 @@ public abstract class LsimulatorTrap {
 		S_EffectLocation effect = new S_EffectLocation(trapObj.getLocation(),
 				getGfxId());
 
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance()
+		for (PcInstance pc : LsimulatorWorld.getInstance()
 				.getRecognizePlayer(trapObj)) {
 			pc.sendPackets(effect);
 		}
 	}
 
-	public abstract void onTrod(LsimulatorPcInstance trodFrom, LsimulatorObject trapObj);
+	public abstract void onTrod(PcInstance trodFrom, LsimulatorObject trapObj);
 
-	public void onDetection(LsimulatorPcInstance caster, LsimulatorObject trapObj) {
+	public void onDetection(PcInstance caster, LsimulatorObject trapObj) {
 		if (_isDetectionable) {
 			sendEffect(trapObj);
 		}
@@ -77,6 +77,6 @@ class LsimulatorNullTrap extends LsimulatorTrap {
 	}
 
 	@Override
-	public void onTrod(LsimulatorPcInstance trodFrom, LsimulatorObject trapObj) {
+	public void onTrod(PcInstance trodFrom, LsimulatorObject trapObj) {
 	}
 }

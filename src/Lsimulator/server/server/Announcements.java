@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.utils.StreamUtil;
 import Lsimulator.server.server.utils.collections.Lists;
@@ -59,7 +59,7 @@ public class Announcements {
 		}
 	}
 
-	public void showAnnouncements(LsimulatorPcInstance showTo) {
+	public void showAnnouncements(PcInstance showTo) {
 		for (String msg : _announcements) {
 			showTo.sendPackets(new S_SystemMessage(msg));
 		}

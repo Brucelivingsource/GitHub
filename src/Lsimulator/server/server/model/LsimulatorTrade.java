@@ -17,8 +17,8 @@ package Lsimulator.server.server.model;
 import java.util.List;
 
 import Lsimulator.server.Config;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_TradeAddItem;
 import Lsimulator.server.server.serverpackets.S_TradeStatus;
 import Lsimulator.server.server.utils.LogRecorder;
@@ -48,20 +48,20 @@ public class LsimulatorTrade {
     * @param itemcount
     *          物品數量
     */
-	public void TradeAddItem(LsimulatorPcInstance player, int itemid, int itemcount) {
+	public void TradeAddItem(PcInstance player, int itemid, int itemcount) {
 		//未在交易狀態中
 		if (player.getTradeID() == 0) {
 			return;
 		}
 	      
 		// 交易對象
-		LsimulatorPcInstance trading_partner = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(player.getTradeID());
+		PcInstance trading_partner = (PcInstance) LsimulatorWorld.getInstance().findObject(player.getTradeID());
 		if (trading_partner == null) {
 			TradeCancel(player);
 	        return;
 		}
 		
-		LsimulatorItemInstance l1iteminstance = player.getInventory().getItem(itemid);
+		ItemInstance l1iteminstance = player.getInventory().getItem(itemid);
 		if (l1iteminstance == null) {
 	        return;
 		}
@@ -98,27 +98,27 @@ public class LsimulatorTrade {
     * 交易完成
     * @param player
     */
-	public void TradeOK(LsimulatorPcInstance player) {
+	public void TradeOK(PcInstance player) {
 		//未在交易狀態中
 	    if (player.getTradeID() == 0) {
 	    	return;
 	    }	      
 		
 		// 交易對象
-		LsimulatorPcInstance trading_partner = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(player.getTradeID());
+		PcInstance trading_partner = (PcInstance) LsimulatorWorld.getInstance().findObject(player.getTradeID());
 		if (trading_partner == null) {
 	         TradeCancel(player);
 	         return;
 		}
 
-		List<LsimulatorItemInstance> player_tradelist = player.getTradeWindowInventory().getItems();
+		List<ItemInstance> player_tradelist = player.getTradeWindowInventory().getItems();
 		int player_tradecount = player.getTradeWindowInventory().getSize();
 
-		List<LsimulatorItemInstance> trading_partner_tradelist = trading_partner.getTradeWindowInventory().getItems();
+		List<ItemInstance> trading_partner_tradelist = trading_partner.getTradeWindowInventory().getItems();
 		int trading_partner_tradecount = trading_partner.getTradeWindowInventory().getSize();
 
 		for (int cnt = 0; cnt < player_tradecount; cnt++) {
-			LsimulatorItemInstance l1iteminstance1 = player_tradelist.get(0);
+			ItemInstance l1iteminstance1 = player_tradelist.get(0);
 			player.getTradeWindowInventory().tradeItem(l1iteminstance1,
 					l1iteminstance1.getCount(),
 					trading_partner.getInventory());
@@ -129,7 +129,7 @@ public class LsimulatorTrade {
 			}
 		}
 		for (int cnt = 0; cnt < trading_partner_tradecount; cnt++) {
-			LsimulatorItemInstance l1iteminstance2 = trading_partner_tradelist.get(0);
+			ItemInstance l1iteminstance2 = trading_partner_tradelist.get(0);
 			trading_partner.getTradeWindowInventory().tradeItem(
 					l1iteminstance2, l1iteminstance2.getCount(),
 					player.getInventory());
@@ -154,21 +154,21 @@ public class LsimulatorTrade {
     * 取消交易
     * @param player
     */
-	public void TradeCancel(LsimulatorPcInstance player) {
+	public void TradeCancel(PcInstance player) {
 		//未在交易狀態中
 		if (player.getTradeID() == 0) {
 			return;
 		}
 	      
 		// 交易對象
-		LsimulatorPcInstance trading_partner = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(player.getTradeID());
+		PcInstance trading_partner = (PcInstance) LsimulatorWorld.getInstance().findObject(player.getTradeID());
 		
 		//自己的欲交易的物品, 放回自己的包包
-		List<LsimulatorItemInstance> player_tradelist = player.getTradeWindowInventory().getItems();
+		List<ItemInstance> player_tradelist = player.getTradeWindowInventory().getItems();
 		int player_tradecount = player.getTradeWindowInventory().getSize();
 
 		for (int cnt = 0; cnt < player_tradecount; cnt++) {
-			LsimulatorItemInstance l1iteminstance1 = player_tradelist.get(0);
+			ItemInstance l1iteminstance1 = player_tradelist.get(0);
 			player.getTradeWindowInventory().tradeItem(l1iteminstance1,
 					l1iteminstance1.getCount(), player.getInventory());
 		}
@@ -179,11 +179,11 @@ public class LsimulatorTrade {
 
 		//交易對象的欲交易的物品, 放回他自己的包包
 	    if (trading_partner != null) {
-	    	List<LsimulatorItemInstance> trading_partner_tradelist = trading_partner.getTradeWindowInventory().getItems();
+	    	List<ItemInstance> trading_partner_tradelist = trading_partner.getTradeWindowInventory().getItems();
 	    	int trading_partner_tradecount = trading_partner.getTradeWindowInventory().getSize();
 	         
 	    	for (int cnt = 0; cnt < trading_partner_tradecount; cnt++) {
-	    		LsimulatorItemInstance l1iteminstance2 = trading_partner_tradelist.get(0);
+	    		ItemInstance l1iteminstance2 = trading_partner_tradelist.get(0);
 	    		trading_partner.getTradeWindowInventory().tradeItem(
 	    				l1iteminstance2, l1iteminstance2.getCount(),
 	    				trading_partner.getInventory());

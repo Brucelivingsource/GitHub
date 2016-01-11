@@ -15,18 +15,18 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 
 public class S_NpcChatPacket extends ServerBasePacket {
 	private static final String S_NPC_CHAT_PACKET = "[S] S_NpcChatPacket";
 
 	private byte[] _byte = null;
 
-	public S_NpcChatPacket(LsimulatorNpcInstance npc, String chat, int type) {
+	public S_NpcChatPacket(NpcInstance npc, String chat, int type) {
 		buildPacket(npc, chat, type);
 	}
 
-	private void buildPacket(LsimulatorNpcInstance npc, String chat, int type) {
+	private void buildPacket(NpcInstance npc, String chat, int type) {
 		switch (type) {
 			case 0: // normal chat
 				writeC(Opcodes.S_OPCODE_NPCSHOUT); // Key is 16 , can use

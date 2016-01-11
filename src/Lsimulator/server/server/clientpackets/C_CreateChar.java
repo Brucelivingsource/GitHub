@@ -27,7 +27,7 @@ import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.datatables.CharacterTable;
 import Lsimulator.server.server.datatables.SkillsTable;
 import Lsimulator.server.server.model.Beginner;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_AddSkill;
 import Lsimulator.server.server.serverpackets.S_CharCreateStatus;
 import Lsimulator.server.server.serverpackets.S_NewCharPacket;
@@ -64,7 +64,7 @@ public class C_CreateChar extends ClientBasePacket {
 
 	public C_CreateChar(byte[] abyte0, ClientThread client) throws Exception {
 		super(abyte0);
-		LsimulatorPcInstance pc = new LsimulatorPcInstance();
+		PcInstance pc = new PcInstance();
 		String name = readS();
 
 		Account account = Account.load(client.getAccountName());
@@ -153,7 +153,7 @@ public class C_CreateChar extends ClientBasePacket {
 
 	private static final short MAPID = 2005;
 
-	private static void initNewChar(ClientThread client, LsimulatorPcInstance pc) throws IOException, Exception {
+	private static void initNewChar(ClientThread client, PcInstance pc) throws IOException, Exception {
 
 		pc.setId(IdFactory.getInstance().nextId());
 		pc.setBirthday();

@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket , S_DollPack
@@ -26,7 +26,7 @@ public class S_DollPack extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_DollPack(LsimulatorDollInstance doll) {
+	public S_DollPack(DollInstance doll) {
 		/*
 		 * int addbyte = 0; int addbyte1 = 1; int addbyte2 = 13; int setting =
 		 * 4;

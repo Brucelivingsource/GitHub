@@ -15,8 +15,8 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorFollowerInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.FollowerInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket, S_NPCPack
@@ -29,7 +29,7 @@ public class S_FollowerPack extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_FollowerPack(LsimulatorFollowerInstance follower, LsimulatorPcInstance pc) {
+	public S_FollowerPack(FollowerInstance follower, PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_CHARPACK);
 		writeH(follower.getX());
 		writeH(follower.getY());

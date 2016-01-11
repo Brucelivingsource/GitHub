@@ -17,10 +17,10 @@ package Lsimulator.server.server.serverpackets;
 import java.io.IOException;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorTrapInstance;
+import Lsimulator.server.server.model.Instance.TrapInstance;
 
 public class S_Trap extends ServerBasePacket {
-	public S_Trap(LsimulatorTrapInstance trap, String name) {
+	public S_Trap(TrapInstance trap, String name) {
 
 		writeC(Opcodes.S_OPCODE_DROPITEM);
 		writeH(trap.getX());

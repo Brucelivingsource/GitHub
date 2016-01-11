@@ -16,29 +16,29 @@ package Lsimulator.server.server.model;
 
 import java.util.List;
 
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 import Lsimulator.server.server.utils.collections.Lists;
 
 // Referenced classes of package Lsimulator.server.server.model:
 // LsimulatorMobGroupInfo
 
 public class LsimulatorMobGroupInfo {
-	private final List<LsimulatorNpcInstance> _membersList = Lists.newList();
+	private final List<NpcInstance> _membersList = Lists.newList();
 
-	private LsimulatorNpcInstance _leader;
+	private NpcInstance _leader;
 
 	public LsimulatorMobGroupInfo() {
 	}
 
-	public void setLeader(LsimulatorNpcInstance npc) {
+	public void setLeader(NpcInstance npc) {
 		_leader = npc;
 	}
 
-	public LsimulatorNpcInstance getLeader() {
+	public NpcInstance getLeader() {
 		return _leader;
 	}
 
-	public boolean isLeader(LsimulatorNpcInstance npc) {
+	public boolean isLeader(NpcInstance npc) {
 		return npc.getId() == _leader.getId();
 	}
 
@@ -52,7 +52,7 @@ public class LsimulatorMobGroupInfo {
 		return _spawn;
 	}
 
-	public void addMember(LsimulatorNpcInstance npc) {
+	public void addMember(NpcInstance npc) {
 		if (npc == null) {
 			throw new NullPointerException();
 		}
@@ -73,7 +73,7 @@ public class LsimulatorMobGroupInfo {
 		npc.setMobGroupId(_leader.getId());
 	}
 
-	public synchronized int removeMember(LsimulatorNpcInstance npc) {
+	public synchronized int removeMember(NpcInstance npc) {
 		if (npc == null) {
 			throw new NullPointerException();
 		}
@@ -86,7 +86,7 @@ public class LsimulatorMobGroupInfo {
 		// リーダーで他のメンバーがいる場合は、新リーダーにする
 		if (isLeader(npc)) {
 			if (isRemoveGroup() && (_membersList.size() != 0)) { // リーダーが死亡したらグループ解除する場合
-				for (LsimulatorNpcInstance minion : _membersList) {
+				for (NpcInstance minion : _membersList) {
 					minion.setMobGroupInfo(null);
 					minion.setSpawn(null);
 					minion.setreSpawn(false);

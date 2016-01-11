@@ -19,7 +19,7 @@ import Lsimulator.server.server.datatables.ClanMembersTable;
 import Lsimulator.server.server.datatables.ClanTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_ClanAttention;
 import Lsimulator.server.server.serverpackets.S_ClanName;
@@ -39,7 +39,7 @@ public class C_CreateClan extends ClientBasePacket {
 	public C_CreateClan(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}

@@ -15,8 +15,8 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket, S_NPCPack
@@ -29,11 +29,11 @@ public class S_PetPack extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_PetPack(LsimulatorPetInstance pet, LsimulatorPcInstance pc) {
+	public S_PetPack(PetInstance pet, PcInstance pc) {
 		buildPacket(pet, pc);
 	}
 
-	private void buildPacket(LsimulatorPetInstance pet, LsimulatorPcInstance pc) {
+	private void buildPacket(PetInstance pet, PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_CHARPACK);
 		writeH(pet.getX());
 		writeH(pet.getY());

@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.IdFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.SQLUtil;
 
 public class ClanMembersTable {
@@ -41,7 +41,7 @@ public class ClanMembersTable {
 	/**
 	 * 寫入新的血盟成員紀錄
 	 */
-	public void newMember(LsimulatorPcInstance pc){
+	public void newMember(PcInstance pc){
 		Connection con = null;
 		PreparedStatement pstm1 = null;
 		ResultSet rs = null;
@@ -72,7 +72,7 @@ public class ClanMembersTable {
 	/**
 	 * 更新血盟成員資料
 	 */
-	public void updateMember(LsimulatorPcInstance pc){
+	public void updateMember(PcInstance pc){
 		Connection con = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
@@ -96,7 +96,7 @@ public class ClanMembersTable {
 	/**
 	 * 更新血盟成員備註欄位
 	 */
-	public void updateMemberNotes(LsimulatorPcInstance pc, String notes){
+	public void updateMemberNotes(PcInstance pc, String notes){
 		Connection con = null;
 		PreparedStatement pstm1 = null;
 		ResultSet rs = null;

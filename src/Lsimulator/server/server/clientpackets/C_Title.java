@@ -21,7 +21,7 @@ import Lsimulator.server.Config;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_CharTitle;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -39,7 +39,7 @@ public class C_Title extends ClientBasePacket {
 	public C_Title(byte abyte0[], ClientThread clientthread) {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -52,7 +52,7 @@ public class C_Title extends ClientBasePacket {
 			pc.sendPackets(new S_ServerMessage(196));
 			return;
 		}
-		LsimulatorPcInstance target = LsimulatorWorld.getInstance().getPlayer(charName);
+		PcInstance target = LsimulatorWorld.getInstance().getPlayer(charName);
 		if (target == null) {
 			return;
 		}
@@ -84,7 +84,7 @@ public class C_Title extends ClientBasePacket {
 				changeTitle(target, title);
 				LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(pc.getClanname());
 				if (clan != null) {
-					for (LsimulatorPcInstance clanPc : clan.getOnlineClanMember()) {
+					for (PcInstance clanPc : clan.getOnlineClanMember()) {
 						// \f1%0が%1に「%2」という呼称を与えました。
 						clanPc.sendPackets(new S_ServerMessage(203, pc
 								.getName(), charName, title));
@@ -117,7 +117,7 @@ public class C_Title extends ClientBasePacket {
 		}
 	}
 
-	private void changeTitle(LsimulatorPcInstance pc, String title) {
+	private void changeTitle(PcInstance pc, String title) {
 		int objectId = pc.getId();
 		pc.setTitle(title);
 		pc.sendPackets(new S_CharTitle(objectId, title));
@@ -129,7 +129,7 @@ public class C_Title extends ClientBasePacket {
 		}
 	}
 
-	private boolean isClanLeader(LsimulatorPcInstance pc) {
+	private boolean isClanLeader(PcInstance pc) {
 		boolean isClanLeader = false;
 		if (pc.getClanid() != 0) { // 有血盟
 			LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(pc.getClanname());

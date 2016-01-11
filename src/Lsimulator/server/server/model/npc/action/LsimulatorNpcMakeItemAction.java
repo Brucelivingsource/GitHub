@@ -20,9 +20,9 @@ import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorObjectAmount;
 import Lsimulator.server.server.model.LsimulatorPcInventory;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.npc.LsimulatorNpcHtml;
 import Lsimulator.server.server.serverpackets.S_HowManyMake;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -74,7 +74,7 @@ public class LsimulatorNpcMakeItemAction extends LsimulatorNpcXmlAction {
 		_actionOnFail = elem == null ? null : new LsimulatorNpcListedAction(elem);
 	}
 
-	private boolean makeItems(LsimulatorPcInstance pc, String npcName, int amount) {
+	private boolean makeItems(PcInstance pc, String npcName, int amount) {
 		if (amount <= 0) {
 			return false;
 		}
@@ -125,7 +125,7 @@ public class LsimulatorNpcMakeItemAction extends LsimulatorNpcXmlAction {
 		}
 
 		for (LsimulatorObjectAmount<Integer> makingItem : _items) {
-			LsimulatorItemInstance item = pc.getInventory().storeItem(makingItem.getObject(), makingItem.getAmount() * amount);
+			ItemInstance item = pc.getInventory().storeItem(makingItem.getObject(), makingItem.getAmount() * amount);
 			if (item != null) {
 				String itemName = ItemTable.getInstance().getTemplate(makingItem.getObject()).getName();
 				if (makingItem.getAmount() * amount > 1) {
@@ -150,7 +150,7 @@ public class LsimulatorNpcMakeItemAction extends LsimulatorNpcXmlAction {
 	}
 
 	@Override
-	public LsimulatorNpcHtml execute(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj, byte[] args) {
+	public LsimulatorNpcHtml execute(String actionName, PcInstance pc, LsimulatorObject obj, byte[] args) {
 		int numOfMaterials = countNumOfMaterials(pc.getInventory());
 		if ((1 < numOfMaterials) && _isAmountInputable) {
 			pc.sendPackets(new S_HowManyMake(obj.getId(), numOfMaterials, actionName));
@@ -160,8 +160,8 @@ public class LsimulatorNpcMakeItemAction extends LsimulatorNpcXmlAction {
 	}
 
 	@Override
-	public LsimulatorNpcHtml executeWithAmount(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj, int amount) {
-		LsimulatorNpcInstance npc = (LsimulatorNpcInstance) obj;
+	public LsimulatorNpcHtml executeWithAmount(String actionName, PcInstance pc, LsimulatorObject obj, int amount) {
+		NpcInstance npc = (NpcInstance) obj;
 		LsimulatorNpcHtml result = null;
 		if (makeItems(pc, npc.getNpcTemplate().get_name(), amount)) {
 			if (_actionOnSucceed != null) {

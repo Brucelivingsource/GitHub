@@ -65,7 +65,7 @@ import Lsimulator.server.server.model.LsimulatorCastleLocation;
 import Lsimulator.server.server.model.LsimulatorDeleteItemOnGround;
 import Lsimulator.server.server.model.LsimulatorNpcRegenerationTimer;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.game.LsimulatorBugBearRace;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTimeClock;
 import Lsimulator.server.server.model.item.LsimulatorTreasureBox;
@@ -299,14 +299,14 @@ public class GameServer extends Thread {
 	 * 踢掉世界地圖中所有的玩家與儲存資料。
 	 */
 	public void disconnectAllCharacters() {
-		Collection<LsimulatorPcInstance> players = LsimulatorWorld.getInstance()
+		Collection<PcInstance> players = LsimulatorWorld.getInstance()
 				.getAllPlayers();
-		for (LsimulatorPcInstance pc : players) {
+		for (PcInstance pc : players) {
 			pc.getNetConnection().setActiveChar(null);
 			pc.getNetConnection().kick();
 		}
 		// 踢除所有在線上的玩家
-		for (LsimulatorPcInstance pc : players) {
+		for (PcInstance pc : players) {
 			ClientThread.quitGame(pc);
 			LsimulatorWorld.getInstance().removeObject(pc);
 			Account account = Account.load(pc.getAccountName());

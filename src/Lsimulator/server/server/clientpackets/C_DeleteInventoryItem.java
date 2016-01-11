@@ -15,11 +15,11 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -35,14 +35,14 @@ public class C_DeleteInventoryItem extends ClientBasePacket {
 	public C_DeleteInventoryItem(byte[] decrypt, ClientThread client) {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}
 
 		int itemObjectId = readD();
 		int deleteCount = 0;
-		LsimulatorItemInstance item = pc.getInventory().getItem(itemObjectId);
+		ItemInstance item = pc.getInventory().getItem(itemObjectId);
 
 		// 沒有要刪除的道具
 		if (item == null) {
@@ -56,9 +56,9 @@ public class C_DeleteInventoryItem extends ClientBasePacket {
 		}
 
 		// 使用中的寵物項鍊 - 無法刪除
-		for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-			if (petNpc instanceof LsimulatorPetInstance) {
-				LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+		for (NpcInstance petNpc : pc.getPetList().values()) {
+			if (petNpc instanceof PetInstance) {
+				PetInstance pet = (PetInstance) petNpc;
 				if (item.getId() == pet.getItemObjId()) {
 					pc.sendPackets(new S_ServerMessage(1187)); // 寵物項鍊正在使用中。
 					return;
@@ -66,7 +66,7 @@ public class C_DeleteInventoryItem extends ClientBasePacket {
 			}
 		}
 		// 使用中的魔法娃娃 - 無法刪除
-		for (LsimulatorDollInstance doll : pc.getDollList().values()) {
+		for (DollInstance doll : pc.getDollList().values()) {
 			if (doll.getItemObjId() == item.getId()) {
 				pc.sendPackets(new S_ServerMessage(1181)); // 這個魔法娃娃目前正在使用中。
 				return;

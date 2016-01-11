@@ -15,14 +15,14 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
 
 public class S_Dexup extends ServerBasePacket {
 
-	public S_Dexup(LsimulatorPcInstance pc, int type, int time) {
+	public S_Dexup(PcInstance pc, int type, int time) {
 		writeC(Opcodes.S_OPCODE_DEXUP);
 		writeH(time);
 		writeC(pc.getDex());

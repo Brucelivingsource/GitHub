@@ -16,7 +16,7 @@ package Lsimulator.server.server.command.executor;
 
 import Lsimulator.server.server.Account;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Disconnect;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
@@ -32,9 +32,9 @@ public class LsimulatorAccountBanKick implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
-			LsimulatorPcInstance target = LsimulatorWorld.getInstance().getPlayer(arg);
+			PcInstance target = LsimulatorWorld.getInstance().getPlayer(arg);
 
 			if (target != null) {
 				// アカウントをBANする

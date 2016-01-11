@@ -26,7 +26,7 @@ import Lsimulator.server.server.datatables.CharacterTable;
 import Lsimulator.server.server.datatables.ClanRecommendTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.SQLUtil;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
@@ -217,7 +217,7 @@ public class S_PledgeRecommendation extends ServerBasePacket{
 					
 					while(rs2.next()){
 						writeD(rs2.getInt("id"));
-						LsimulatorPcInstance pc = LsimulatorWorld.getInstance().getPlayer(rs2.getString("char_name"));
+						PcInstance pc = LsimulatorWorld.getInstance().getPlayer(rs2.getString("char_name"));
 						if(pc == null){
 							pc = CharacterTable.getInstance().restoreCharacter(rs2.getString("char_name"));
 						}

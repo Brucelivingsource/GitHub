@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
 // ClientBasePacket
@@ -30,7 +30,7 @@ public class C_LoginToServerOK extends ClientBasePacket {
 	public C_LoginToServerOK(byte[] decrypt, ClientThread client) {
 		super(decrypt);
 
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

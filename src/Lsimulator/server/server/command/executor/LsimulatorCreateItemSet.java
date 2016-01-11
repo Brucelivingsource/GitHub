@@ -19,8 +19,8 @@ import java.util.StringTokenizer;
 
 import Lsimulator.server.server.GMCommandsConfig;
 import Lsimulator.server.server.datatables.ItemTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.templates.LsimulatorItem;
 import Lsimulator.server.server.templates.LsimulatorItemSetItem;
@@ -37,7 +37,7 @@ public class LsimulatorCreateItemSet implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			String name = new StringTokenizer(arg).nextToken();
 			List<LsimulatorItemSetItem> list = GMCommandsConfig.ITEM_SETS.get(name);
@@ -49,7 +49,7 @@ public class LsimulatorCreateItemSet implements LsimulatorCommandExecutor {
 				LsimulatorItem temp = ItemTable.getInstance().getTemplate(item.getId());
 				if (!temp.isStackable() && (0 != item.getEnchant())) {
 					for (int i = 0; i < item.getAmount(); i++) {
-						LsimulatorItemInstance inst = ItemTable.getInstance().createItem(item.getId());
+						ItemInstance inst = ItemTable.getInstance().createItem(item.getId());
 						inst.setEnchantLevel(item.getEnchant());
 						pc.getInventory().storeItem(inst);
 					}

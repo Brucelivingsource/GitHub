@@ -35,12 +35,12 @@ import Lsimulator.server.server.model.LsimulatorDragonSlayer;
 import Lsimulator.server.server.model.Getback;
 import Lsimulator.server.server.model.LsimulatorTrade;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorFollowerInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.FollowerInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.serverpackets.S_Disconnect;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 import Lsimulator.server.server.serverpackets.S_SummonPack;
@@ -64,7 +64,7 @@ public class ClientThread implements Runnable, PacketOutput {
 
 	private Account _account;
 
-	private LsimulatorPcInstance _activeChar;
+	private PcInstance _activeChar;
 
 	private String _ip;
 
@@ -492,11 +492,11 @@ public class ClientThread implements Runnable, PacketOutput {
 		}
 	}
 
-	public void setActiveChar(LsimulatorPcInstance pc) {
+	public void setActiveChar(PcInstance pc) {
 		_activeChar = pc;
 	}
 
-	public LsimulatorPcInstance getActiveChar() {
+	public PcInstance getActiveChar() {
 		return _activeChar;
 	}
 
@@ -515,7 +515,7 @@ public class ClientThread implements Runnable, PacketOutput {
 		return _account.getName();
 	}
 
-	public static void quitGame(LsimulatorPcInstance pc) {
+	public static void quitGame(PcInstance pc) {
 		// 如果死掉回到城中，設定飽食度
 		if (pc.isDead()) {
 			try {
@@ -541,7 +541,7 @@ public class ClientThread implements Runnable, PacketOutput {
 
 		// 終止決鬥
 		if (pc.getFightId() != 0) {
-			LsimulatorPcInstance fightPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getFightId());
+			PcInstance fightPc = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getFightId());
 			pc.setFightId(0);
 			if (fightPc != null) {
 				fightPc.setFightId(0);
@@ -561,28 +561,28 @@ public class ClientThread implements Runnable, PacketOutput {
 
 		// 移除世界地圖上的寵物
 		// 變更召喚怪物的名稱
-		for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-			if (petNpc instanceof LsimulatorPetInstance) {
-				LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+		for (NpcInstance petNpc : pc.getPetList().values()) {
+			if (petNpc instanceof PetInstance) {
+				PetInstance pet = (PetInstance) petNpc;
 				// 停止飽食度計時
 				pet.stopFoodTimer(pet);
 				pet.dropItem();
 				pc.getPetList().remove(pet.getId());
 				pet.deleteMe();
-			} else if (petNpc instanceof LsimulatorSummonInstance) {
-				LsimulatorSummonInstance summon = (LsimulatorSummonInstance) petNpc;
-				for (LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(summon)) {
+			} else if (petNpc instanceof SummonInstance) {
+				SummonInstance summon = (SummonInstance) petNpc;
+				for (PcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(summon)) {
 					visiblePc.sendPackets(new S_SummonPack(summon, visiblePc,false));
 				}
 			}
 		}
 
 		// 移除世界地圖上的魔法娃娃
-		for (LsimulatorDollInstance doll : pc.getDollList().values())
+		for (DollInstance doll : pc.getDollList().values())
 			doll.deleteDoll();
 
 		// 重新建立跟隨者
-		for (LsimulatorFollowerInstance follower : pc.getFollowerList().values()) {
+		for (FollowerInstance follower : pc.getFollowerList().values()) {
 			follower.setParalyzed(true);
 			follower.spawn(follower.getNpcTemplate().get_npcId(),follower.getX(), follower.getY(), follower.getHeading(),follower.getMapId());
 			follower.deleteMe();

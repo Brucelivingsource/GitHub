@@ -23,8 +23,8 @@ import Lsimulator.server.server.datatables.NpcTable;
 import Lsimulator.server.server.model.LsimulatorDragonSlayer;
 import Lsimulator.server.server.model.LsimulatorNpcDeleteTimer;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_CharVisualUpdate;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
 import Lsimulator.server.server.serverpackets.S_NPCPack;
@@ -33,10 +33,10 @@ import Lsimulator.server.server.serverpackets.S_ServerMessage;
 public class LsimulatorSpawnUtil {
 	private static Logger _log = Logger.getLogger(LsimulatorSpawnUtil.class.getName());
 
-	public static void spawn(LsimulatorPcInstance pc, int npcId, int randomRange,
+	public static void spawn(PcInstance pc, int npcId, int randomRange,
 			int timeMillisToDelete) {
 		try {
-			LsimulatorNpcInstance npc = NpcTable.getInstance().newNpcInstance(npcId);
+			NpcInstance npc = NpcTable.getInstance().newNpcInstance(npcId);
 			npc.setId(IdFactory.getInstance().nextId());
 			npc.setMap(pc.getMapId());
 			if (randomRange == 0) {
@@ -97,7 +97,7 @@ public class LsimulatorSpawnUtil {
 				npc.broadcastPacket(new S_DoActionGFX(npc.getId(), ActionCodes.ACTION_AxeWalk));
 			} else if (npc.getTempCharGfx() == 7539 || npc.getTempCharGfx() == 7557 || npc.getTempCharGfx() == 7558
 					|| npc.getTempCharGfx() == 7864 || npc.getTempCharGfx() == 7869 || npc.getTempCharGfx() == 7870) {
-				for (LsimulatorPcInstance _pc : LsimulatorWorld.getInstance().getVisiblePlayer(npc, 50)) {
+				for (PcInstance _pc : LsimulatorWorld.getInstance().getVisiblePlayer(npc, 50)) {
 					if (npc.getTempCharGfx() == 7539) {
 						_pc.sendPackets(new S_ServerMessage(1570));
 					} else if (npc.getTempCharGfx() == 7864) {
@@ -107,7 +107,7 @@ public class LsimulatorSpawnUtil {
 					S_DoActionGFX gfx = new S_DoActionGFX(npc.getId(), ActionCodes.ACTION_AxeWalk);
 					_pc.sendPackets(gfx);
 				}
-				npc.npcSleepTime(ActionCodes.ACTION_AxeWalk, LsimulatorNpcInstance.ATTACK_SPEED);
+				npc.npcSleepTime(ActionCodes.ACTION_AxeWalk, NpcInstance.ATTACK_SPEED);
 			} else if (npc.getTempCharGfx() == 145) { // 史巴托
 				npc.setStatus(11);
 				npc.broadcastPacket(new S_NPCPack(npc));
@@ -117,7 +117,7 @@ public class LsimulatorSpawnUtil {
 			}
 
 			npc.turnOnOffLight();
-			npc.startChat(LsimulatorNpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
+			npc.startChat(NpcInstance.CHAT_TIMING_APPEARANCE); // チャット開始
 			if (0 < timeMillisToDelete) {
 				LsimulatorNpcDeleteTimer timer = new LsimulatorNpcDeleteTimer(npc,
 						timeMillisToDelete);

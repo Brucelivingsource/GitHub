@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 import Lsimulator.server.server.templates.LsimulatorNpcChat;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Maps;
@@ -79,16 +79,16 @@ public class NpcChatTable {
 				npcChat.setRepeatInterval(rs.getInt("repeat_interval"));
 				npcChat.setGameTime(rs.getInt("game_time"));
 
-				if (npcChat.getChatTiming() == LsimulatorNpcInstance.CHAT_TIMING_APPEARANCE) {
+				if (npcChat.getChatTiming() == NpcInstance.CHAT_TIMING_APPEARANCE) {
 					_npcChatAppearance.put(new Integer(npcChat.getNpcId()), npcChat);
 				}
-				else if (npcChat.getChatTiming() == LsimulatorNpcInstance.CHAT_TIMING_DEAD) {
+				else if (npcChat.getChatTiming() == NpcInstance.CHAT_TIMING_DEAD) {
 					_npcChatDead.put(new Integer(npcChat.getNpcId()), npcChat);
 				}
-				else if (npcChat.getChatTiming() == LsimulatorNpcInstance.CHAT_TIMING_HIDE) {
+				else if (npcChat.getChatTiming() == NpcInstance.CHAT_TIMING_HIDE) {
 					_npcChatHide.put(new Integer(npcChat.getNpcId()), npcChat);
 				}
-				else if (npcChat.getChatTiming() == LsimulatorNpcInstance.CHAT_TIMING_GAME_TIME) {
+				else if (npcChat.getChatTiming() == NpcInstance.CHAT_TIMING_GAME_TIME) {
 					_npcChatGameTime.put(new Integer(npcChat.getNpcId()), npcChat);
 				}
 			}

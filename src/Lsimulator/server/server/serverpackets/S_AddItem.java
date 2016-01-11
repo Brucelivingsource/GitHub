@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -27,7 +27,7 @@ public class S_AddItem extends ServerBasePacket {
 	/**
 	 * 增加物品到背包處理封包。
 	 */
-	public S_AddItem(LsimulatorItemInstance item) {
+	public S_AddItem(ItemInstance item) {
 		writeC(Opcodes.S_OPCODE_ADDITEM);
 		writeD(item.getId());
 		writeH(item.getItem().getMagicCatalystType() > 0 ? item.getItem().getMagicCatalystType() :

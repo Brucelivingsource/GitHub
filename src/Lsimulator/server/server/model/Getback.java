@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.Random;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Lists;
@@ -127,7 +127,7 @@ public class Getback {
 	 *            (未使用)
 	 * @return locx,locy,mapidの順に格納されている配列
 	 */
-	public static int[] GetBack_Location(LsimulatorPcInstance pc, boolean bScroll_Escape) {
+	public static int[] GetBack_Location(PcInstance pc, boolean bScroll_Escape) {
 
 		int[] loc = new int[3];
 

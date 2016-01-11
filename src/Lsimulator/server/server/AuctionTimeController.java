@@ -26,8 +26,8 @@ import Lsimulator.server.server.datatables.HouseTable;
 import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.storage.CharactersItemStorage;
@@ -81,7 +81,7 @@ public class AuctionTimeController implements Runnable {
 		int bidderId = board.getBidderId();
 
 		if (oldOwnerId != 0 && bidderId != 0) { // 在前主人與得標者都存在的情況下
-			LsimulatorPcInstance oldOwnerPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance()
+			PcInstance oldOwnerPc = (PcInstance) LsimulatorWorld.getInstance()
 					.findObject(oldOwnerId);
 			int payPrice = (int) (price * 0.9);
 			if (oldOwnerPc != null) { // 如果有前主人
@@ -91,7 +91,7 @@ public class AuctionTimeController implements Runnable {
 				oldOwnerPc.sendPackets(new S_ServerMessage(527, String
 						.valueOf(payPrice)));
 			} else { // 沒有前主人
-				LsimulatorItemInstance item = ItemTable.getInstance().createItem(
+				ItemInstance item = ItemTable.getInstance().createItem(
 						LsimulatorItemId.ADENA);
 				item.setCount(payPrice);
 				try {
@@ -103,7 +103,7 @@ public class AuctionTimeController implements Runnable {
 				}
 			}
 
-			LsimulatorPcInstance bidderPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance()
+			PcInstance bidderPc = (PcInstance) LsimulatorWorld.getInstance()
 					.findObject(bidderId);
 			if (bidderPc != null) { // 如果有得標者
 				// おめでとうございます。%nあなたが参加された競売は最終価格%0アデナの価格で落札されました。%n
@@ -115,7 +115,7 @@ public class AuctionTimeController implements Runnable {
 			setHouseInfo(houseId, bidderId);
 			deleteNote(houseId);
 		} else if (oldOwnerId == 0 && bidderId != 0) { // 在先前的擁有者沒有中標
-			LsimulatorPcInstance bidderPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance()
+			PcInstance bidderPc = (PcInstance) LsimulatorWorld.getInstance()
 					.findObject(bidderId);
 			if (bidderPc != null) { // 落札者がオンライン中
 				// おめでとうございます。%nあなたが参加された競売は最終価格%0アデナの価格で落札されました。%n
@@ -127,7 +127,7 @@ public class AuctionTimeController implements Runnable {
 			setHouseInfo(houseId, bidderId);
 			deleteNote(houseId);
 		} else if (oldOwnerId != 0 && bidderId == 0) { // 以前沒有人成功競投無
-			LsimulatorPcInstance oldOwnerPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance()
+			PcInstance oldOwnerPc = (PcInstance) LsimulatorWorld.getInstance()
 					.findObject(oldOwnerId);
 			if (oldOwnerPc != null) { // 以前の所有者がオンライン中
 				// あなたが申請なさった競売は、競売期間内に提示した金額以上での支払いを表明した方が現れなかったため、結局取り消されました。%n

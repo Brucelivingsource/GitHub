@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Message_YN;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.utils.FaceToFace;
@@ -33,7 +33,7 @@ public class C_Propose extends ClientBasePacket {
 	public C_Propose(byte abyte0[], ClientThread clientthread) {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -44,7 +44,7 @@ public class C_Propose extends ClientBasePacket {
 			if (pc.isGhost()) {
 				return;
 			}
-			LsimulatorPcInstance target = FaceToFace.faceToFace(pc, false);
+			PcInstance target = FaceToFace.faceToFace(pc, false);
 			if (target != null) {
 				if (pc.getPartnerId() != 0) {
 					pc.sendPackets(new S_ServerMessage(657)); // \f1あなたはすでに結婚しています。

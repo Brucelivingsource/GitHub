@@ -18,8 +18,8 @@ import java.lang.reflect.Constructor;
 
 import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.datatables.NpcTable;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_NPCPack;
 import Lsimulator.server.server.templates.LsimulatorNpc;
 
@@ -106,7 +106,7 @@ public class LsimulatorWarSpawn {
 						(new StringBuilder()).append("Lsimulator.server.server.model.Instance.").append(s).append("Instance").toString()).getConstructors()[0];
 				Object aobj[] =
 				{ l1npc };
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) _constructor.newInstance(aobj);
+				NpcInstance npc = (NpcInstance) _constructor.newInstance(aobj);
 				npc.setId(IdFactory.getInstance().nextId());
 				npc.setX(locx);
 				npc.setY(locy);
@@ -117,7 +117,7 @@ public class LsimulatorWarSpawn {
 				LsimulatorWorld.getInstance().storeObject(npc);
 				LsimulatorWorld.getInstance().addVisibleObject(npc);
 
-				for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
+				for (PcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
 					npc.addKnownObject(pc);
 					pc.addKnownObject(npc);
 					pc.sendPackets(new S_NPCPack(npc));

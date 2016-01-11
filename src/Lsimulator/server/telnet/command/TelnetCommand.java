@@ -22,7 +22,7 @@ import Lsimulator.server.server.datatables.ChatLogTable;
 import Lsimulator.server.server.model.LsimulatorCharacter;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ChatPacket;
 import Lsimulator.server.server.storage.mysql.MySqlCharacterStorage;
 import Lsimulator.server.server.utils.IntRange;
@@ -42,7 +42,7 @@ class EchoCommand implements TelnetCommand {
 class PlayerIdCommand implements TelnetCommand {
 	@Override
 	public TelnetCommandResult execute(String args) {
-		LsimulatorPcInstance pc = LsimulatorWorld.getInstance().getPlayer(args);
+		PcInstance pc = LsimulatorWorld.getInstance().getPlayer(args);
 		String result = pc == null ? "0" : String.valueOf(pc.getId());
 		return new TelnetCommandResult(CMD_OK, result);
 	}
@@ -79,7 +79,7 @@ class GlobalChatCommand implements TelnetCommand {
 		StringTokenizer tok = new StringTokenizer(args, " ");
 		String name = tok.nextToken();
 		String text = args.substring(name.length() + 1);
-		LsimulatorPcInstance pc = new MySqlCharacterStorage().loadCharacter(name);
+		PcInstance pc = new MySqlCharacterStorage().loadCharacter(name);
 		if (pc == null) {
 			return new TelnetCommandResult(CMD_INTERNAL_ERROR, "キャラクターが存在しません。");
 		}

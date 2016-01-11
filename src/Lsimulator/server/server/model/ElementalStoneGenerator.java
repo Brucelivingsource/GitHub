@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.Config;
 import Lsimulator.server.server.datatables.ItemTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 import Lsimulator.server.server.model.map.LsimulatorMap;
 import Lsimulator.server.server.model.map.LsimulatorWorldMap;
 import Lsimulator.server.server.types.Point;
@@ -102,7 +102,7 @@ public class ElementalStoneGenerator implements Runnable {
 	private void putElementalStone(LsimulatorLocation loc) {
 		LsimulatorGroundInventory gInventory = LsimulatorWorld.getInstance().getInventory(loc);
 
-		LsimulatorItemInstance item = ItemTable.getInstance().createItem(
+		ItemInstance item = ItemTable.getInstance().createItem(
 				ELEMENTAL_STONE_ID);
 		item.setEnchantLevel(0);
 		item.setCount(1);

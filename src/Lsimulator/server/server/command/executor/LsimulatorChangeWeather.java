@@ -17,7 +17,7 @@ package Lsimulator.server.server.command.executor;
 import java.util.StringTokenizer;
 
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.serverpackets.S_Weather;
 
@@ -33,7 +33,7 @@ public class LsimulatorChangeWeather implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer tok = new StringTokenizer(arg);
 			int weather = Integer.parseInt(tok.nextToken());

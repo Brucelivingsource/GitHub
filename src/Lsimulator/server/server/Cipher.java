@@ -62,7 +62,7 @@ public class Cipher {
 
 		for (int i = 0; i < keys.length; i++) {
 			for (int j = 0; j < tb.length; j++) {
-				eb[(i * 4) + j] = db[(i * 4) + j] = (byte) (keys[i] >> (j * 8) & 0xff);
+				eb[(i << 2 ) + j] = db[(i  << 2 ) + j] = (byte) (keys[i] >> (j  << 3 ) & 0xff);
 			}
 		}
 	}
@@ -132,7 +132,7 @@ public class Cipher {
 				+ _4;
 
 		for (int i = 0; i < tb.length; i++) {
-			data[i + 4] = (byte) (int32 >> (i * 8) & 0xff);
+			data[i + 4] = (byte) (int32 >> (i  << 3 ) & 0xff);
 		}
 	}
 }

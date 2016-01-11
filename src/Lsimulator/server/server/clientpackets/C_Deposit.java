@@ -18,7 +18,7 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.CastleTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.templates.LsimulatorCastle;
 
@@ -35,7 +35,7 @@ public class C_Deposit extends ClientBasePacket {
 	public C_Deposit(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance player = clientthread.getActiveChar();
+		PcInstance player = clientthread.getActiveChar();
 		if (player == null) {
 			return;
 		}

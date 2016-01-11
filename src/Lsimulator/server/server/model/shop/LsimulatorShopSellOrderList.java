@@ -16,7 +16,7 @@ package Lsimulator.server.server.model.shop;
 
 import java.util.List;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.collections.Lists;
 
 class LsimulatorShopSellOrder {
@@ -42,11 +42,11 @@ class LsimulatorShopSellOrder {
 public class LsimulatorShopSellOrderList {
 	private final LsimulatorShop _shop;
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
 	private final List<LsimulatorShopSellOrder> _list = Lists.newList();
 
-	LsimulatorShopSellOrderList(LsimulatorShop shop, LsimulatorPcInstance pc) {
+	LsimulatorShopSellOrderList(LsimulatorShop shop, PcInstance pc) {
 		_shop = shop;
 		_pc = pc;
 	}
@@ -63,7 +63,7 @@ public class LsimulatorShopSellOrderList {
 		_list.add(new LsimulatorShopSellOrder(assessedItem, count));
 	}
 
-	LsimulatorPcInstance getPc() {
+	PcInstance getPc() {
 		return _pc;
 	}
 

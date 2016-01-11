@@ -20,8 +20,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import Lsimulator.server.server.model.TimeInform;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * Log Recorder 紀錄存取
@@ -49,7 +49,7 @@ public class LogRecorder {
 	 * @param pc
 	 *            玩家
 	 */
-	public static void writeWeaponLog(String messenge, LsimulatorPcInstance pc) {
+	public static void writeWeaponLog(String messenge, PcInstance pc) {
 		try {
 			File WeaponLog = new File("log\\WeaponLog.log");
 			if (WeaponLog.createNewFile()) {
@@ -74,7 +74,7 @@ public class LogRecorder {
 	 * @param pc
 	 *            玩家
 	 */
-	public static void writeBugLog(String messenge, LsimulatorPcInstance pc) {
+	public static void writeBugLog(String messenge, PcInstance pc) {
 		try {
 			File BugLog = new File("log\\BugLog.log");
 			if (BugLog.createNewFile()) {
@@ -100,7 +100,7 @@ public class LogRecorder {
 	 * @param pc
 	 *            玩家
 	 */
-	public static void writeArmorLog(String messenge, LsimulatorPcInstance pc) {
+	public static void writeArmorLog(String messenge, PcInstance pc) {
 		try {
 			File ArmorLog = new File("log\\ArmorLog.log");
 			if (ArmorLog.createNewFile()) {
@@ -130,8 +130,8 @@ public class LogRecorder {
 	 *            物品
 	 * 
 	 **/
-	public static void writeTradeLog(LsimulatorPcInstance sender,
-			LsimulatorPcInstance receiver, LsimulatorItemInstance l1iteminstance1) {
+	public static void writeTradeLog(PcInstance sender,
+			PcInstance receiver, ItemInstance l1iteminstance1) {
 		try {
 			File TradeLog = new File("log\\TradeLog.log");
 			if (TradeLog.createNewFile()) {
@@ -160,7 +160,7 @@ public class LogRecorder {
 	 * @param player
 	 *            使用外掛或加速器的玩家
 	 */
-	public static void writeRobotsLog(LsimulatorPcInstance player) {
+	public static void writeRobotsLog(PcInstance player) {
 		try {
 			File RobotsLog = new File("log\\RobotsLog.log");
 			if (RobotsLog.createNewFile()) {
@@ -185,7 +185,7 @@ public class LogRecorder {
 	 * 丟棄物品紀錄
 	 * @param player
 	 */
-	public static void writeDropLog(LsimulatorPcInstance player, LsimulatorItemInstance item) {
+	public static void writeDropLog(PcInstance player, ItemInstance item) {
 		try {
 			File DropLog = new File("log\\DropLog.log");
 			if (DropLog.createNewFile()) {

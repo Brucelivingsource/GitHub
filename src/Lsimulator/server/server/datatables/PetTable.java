@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 import Lsimulator.server.server.templates.LsimulatorPet;
 import Lsimulator.server.server.templates.LsimulatorPetType;
 import Lsimulator.server.server.utils.Random;
@@ -87,7 +87,7 @@ public class PetTable {
 		}
 	}
 
-	public void storeNewPet(LsimulatorNpcInstance pet, int objid, int itemobjid) {
+	public void storeNewPet(NpcInstance pet, int objid, int itemobjid) {
 		// XXX 呼ばれる前と処理の重複
 		LsimulatorPet l1pet = new LsimulatorPet();
 		l1pet.set_itemobjid(itemobjid);
@@ -246,8 +246,8 @@ public class PetTable {
 		int hpUpMax = petType.getHpUpRange().getHigh();
 		int mpUpMin = petType.getMpUpRange().getLow();
 		int mpUpMax = petType.getMpUpRange().getHigh();
-		short randomhp = (short) ((hpUpMin + hpUpMax) / 2);
-		short randommp = (short) ((mpUpMin + mpUpMax) / 2);
+		short randomhp = (short) ((hpUpMin + hpUpMax) >> 1);
+		short randommp = (short) ((mpUpMin + mpUpMax) >> 1);
 		for (int i = 1; i < upLv; i++) {
 			randomhp += (Random.nextInt(hpUpMax - hpUpMin) + hpUpMin + 1);
 			randommp += (Random.nextInt(mpUpMax - mpUpMin) + mpUpMin + 1);

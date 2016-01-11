@@ -15,8 +15,8 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket, S_SummonPack
@@ -29,15 +29,15 @@ public class S_SummonPack extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_SummonPack(LsimulatorSummonInstance pet, LsimulatorPcInstance pc) {
+	public S_SummonPack(SummonInstance pet, PcInstance pc) {
 		buildPacket(pet, pc, true);
 	}
 
-	public S_SummonPack(LsimulatorSummonInstance pet, LsimulatorPcInstance pc, boolean isCheckMaster) {
+	public S_SummonPack(SummonInstance pet, PcInstance pc, boolean isCheckMaster) {
 		buildPacket(pet, pc, isCheckMaster);
 	}
 
-	private void buildPacket(LsimulatorSummonInstance pet, LsimulatorPcInstance pc, boolean isCheckMaster) {
+	private void buildPacket(SummonInstance pet, PcInstance pc, boolean isCheckMaster) {
 		writeC(Opcodes.S_OPCODE_CHARPACK);
 		writeH(pet.getX());
 		writeH(pet.getY());

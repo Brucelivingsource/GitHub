@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.datatables.InnKeyTable;
 import Lsimulator.server.server.datatables.ItemTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 import Lsimulator.server.server.storage.CharactersItemStorage;
 import Lsimulator.server.server.templates.LsimulatorItem;
 import Lsimulator.server.server.utils.SQLUtil;
@@ -37,8 +37,8 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 			.getLogger(MySqlCharactersItemStorage.class.getName());
 
 	@Override
-	public List<LsimulatorItemInstance> loadItems(int objId) throws Exception {
-		List<LsimulatorItemInstance> items = Lists.newList();
+	public List<ItemInstance> loadItems(int objId) throws Exception {
+		List<ItemInstance> items = Lists.newList();
 
 		Connection con = null;
 		PreparedStatement pstm = null;
@@ -49,7 +49,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 					.prepareStatement("SELECT * FROM character_items WHERE char_id = ?");
 			pstm.setInt(1, objId);
 
-			LsimulatorItemInstance item;
+			ItemInstance item;
 			rs = pstm.executeQuery();
 			while (rs.next()) {
 				int itemId = rs.getInt("item_id");
@@ -59,7 +59,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 					_log.warning(String.format("item id:%d not found", itemId));
 					continue;
 				}
-				item = new LsimulatorItemInstance();
+				item = new ItemInstance();
 				item.setId(rs.getInt("id"));
 				item.setItem(itemTemplate);
 				item.setCount(rs.getInt("count"));
@@ -101,7 +101,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void storeItem(int objId, LsimulatorItemInstance item) throws Exception {
+	public void storeItem(int objId, ItemInstance item) throws Exception {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -144,7 +144,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void deleteItem(LsimulatorItemInstance item) throws Exception {
+	public void deleteItem(ItemInstance item) throws Exception {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -162,7 +162,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemId(LsimulatorItemInstance item) throws Exception {
+	public void updateItemId(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET item_id = ? WHERE id = ?",
 				item.getItemId());
@@ -170,7 +170,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemCount(LsimulatorItemInstance item) throws Exception {
+	public void updateItemCount(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET count = ? WHERE id = ?",
 				item.getCount());
@@ -178,7 +178,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemDurability(LsimulatorItemInstance item) throws Exception {
+	public void updateItemDurability(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET durability = ? WHERE id = ?",
 				item.get_durability());
@@ -186,7 +186,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemChargeCount(LsimulatorItemInstance item) throws Exception {
+	public void updateItemChargeCount(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET charge_count = ? WHERE id = ?",
 				item.getChargeCount());
@@ -194,7 +194,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemRemainingTime(LsimulatorItemInstance item) throws Exception {
+	public void updateItemRemainingTime(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET remaining_time = ? WHERE id = ?",
 				item.getRemainingTime());
@@ -202,7 +202,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemEnchantLevel(LsimulatorItemInstance item) throws Exception {
+	public void updateItemEnchantLevel(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET enchantlvl = ? WHERE id = ?",
 				item.getEnchantLevel());
@@ -210,7 +210,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemEquipped(LsimulatorItemInstance item) throws Exception {
+	public void updateItemEquipped(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET is_equipped = ? WHERE id = ?",
 				(item.isEquipped() ? 1 : 0));
@@ -218,7 +218,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemIdentified(LsimulatorItemInstance item) throws Exception {
+	public void updateItemIdentified(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET is_id = ? WHERE id = ?",
 				(item.isIdentified() ? 1 : 0));
@@ -226,7 +226,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemDelayEffect(LsimulatorItemInstance item) throws Exception {
+	public void updateItemDelayEffect(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET last_used = ? WHERE id = ?",
 				item.getLastUsed());
@@ -234,7 +234,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemBless(LsimulatorItemInstance item) throws Exception {
+	public void updateItemBless(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET bless = ? WHERE id = ?",
 				item.getBless());
@@ -242,7 +242,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemAttrEnchantKind(LsimulatorItemInstance item) throws Exception {
+	public void updateItemAttrEnchantKind(ItemInstance item) throws Exception {
 		executeUpdate(
 				item.getId(),
 				"UPDATE character_items SET attr_enchant_kind = ? WHERE id = ?",
@@ -251,7 +251,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateItemAttrEnchantLevel(LsimulatorItemInstance item)
+	public void updateItemAttrEnchantLevel(ItemInstance item)
 			throws Exception {
 		executeUpdate(
 				item.getId(),
@@ -262,7 +262,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 
 	/** 飾品強化卷軸 */
 	@Override
-	public void updateFireMr(LsimulatorItemInstance item) throws Exception {
+	public void updateFireMr(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET firemr = ? WHERE id = ?",
 				item.getFireMr());
@@ -270,7 +270,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateWaterMr(LsimulatorItemInstance item) throws Exception {
+	public void updateWaterMr(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET watermr = ? WHERE id = ?",
 				item.getWaterMr());
@@ -278,7 +278,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateEarthMr(LsimulatorItemInstance item) throws Exception {
+	public void updateEarthMr(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET earthmr = ? WHERE id = ?",
 				item.getEarthMr());
@@ -286,7 +286,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateWindMr(LsimulatorItemInstance item) throws Exception {
+	public void updateWindMr(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET windmr = ? WHERE id = ?",
 				item.getWindMr());
@@ -294,7 +294,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateaddSp(LsimulatorItemInstance item) throws Exception {
+	public void updateaddSp(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET addsp = ? WHERE id = ?",
 				item.getaddSp());
@@ -302,7 +302,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateaddHp(LsimulatorItemInstance item) throws Exception {
+	public void updateaddHp(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET addhp = ? WHERE id = ?",
 				item.getaddHp());
@@ -310,7 +310,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateaddMp(LsimulatorItemInstance item) throws Exception {
+	public void updateaddMp(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET addmp = ? WHERE id = ?",
 				item.getaddMp());
@@ -318,7 +318,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateHpr(LsimulatorItemInstance item) throws Exception {
+	public void updateHpr(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET hpr = ? WHERE id = ?",
 				item.getHpr());
@@ -326,7 +326,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateMpr(LsimulatorItemInstance item) throws Exception {
+	public void updateMpr(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET mpr = ? WHERE id = ?",
 				item.getMpr());
@@ -334,7 +334,7 @@ public class MySqlCharactersItemStorage extends CharactersItemStorage {
 	}
 
 	@Override
-	public void updateM_Def(LsimulatorItemInstance item) throws Exception {
+	public void updateM_Def(ItemInstance item) throws Exception {
 		executeUpdate(item.getId(),
 				"UPDATE character_items SET m_def = ? WHERE id = ?",
 				item.getM_Def());

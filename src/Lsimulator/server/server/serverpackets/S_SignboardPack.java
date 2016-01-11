@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorSignboardInstance;
+import Lsimulator.server.server.model.Instance.SignboardInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket, S_SignboardPack
@@ -28,7 +28,7 @@ public class S_SignboardPack extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_SignboardPack(LsimulatorSignboardInstance signboard) {
+	public S_SignboardPack(SignboardInstance signboard) {
 		writeC(Opcodes.S_OPCODE_CHARPACK);
 		writeH(signboard.getX());
 		writeH(signboard.getY());

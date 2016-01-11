@@ -64,8 +64,8 @@ import static Lsimulator.server.server.model.skill.LsimulatorSkillId.COOKING_3_7
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.COOKING_3_7_S;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.COOKING_WONDER_DRUG;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_HPUpdate;
 import Lsimulator.server.server.serverpackets.S_MPUpdate;
 import Lsimulator.server.server.serverpackets.S_OwnCharAttrDef;
@@ -81,7 +81,7 @@ public class LsimulatorCooking {
 	private LsimulatorCooking() {
 	}
 
-	public static void useCookingItem(LsimulatorPcInstance pc, LsimulatorItemInstance item) {
+	public static void useCookingItem(PcInstance pc, ItemInstance item) {
 		int itemId = item.getItem().getItemId();
 		if ((itemId == 41284) || (itemId == 41292) || (itemId == 49056) || (itemId == 49064) || (itemId == 49251) || (itemId == 49259)) { // デザート
 			if (pc.get_food() != 225) {
@@ -337,7 +337,7 @@ public class LsimulatorCooking {
 		pc.getInventory().removeItem(item, 1);
 	}
 
-	public static void eatCooking(LsimulatorPcInstance pc, int cookingId, int time) {
+	public static void eatCooking(PcInstance pc, int cookingId, int time) {
 		int cookingType = 0;
 		if ((cookingId == COOKING_1_0_N) || (cookingId == COOKING_1_0_S)) { // フローティングアイステーキ
 			cookingType = 0;

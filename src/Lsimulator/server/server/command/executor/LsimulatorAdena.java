@@ -16,8 +16,8 @@ package Lsimulator.server.server.command.executor;
 
 import java.util.StringTokenizer;
 
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
@@ -33,12 +33,12 @@ public class LsimulatorAdena implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer stringtokenizer = new StringTokenizer(arg);
 			int count = Integer.parseInt(stringtokenizer.nextToken());
 
-			LsimulatorItemInstance adena = pc.getInventory().storeItem(LsimulatorItemId.ADENA, count);
+			ItemInstance adena = pc.getInventory().storeItem(LsimulatorItemId.ADENA, count);
 			if (adena != null) {
 				pc.sendPackets(new S_SystemMessage((new StringBuilder()).append(count).append(" 金幣產生。").toString()));
 			}

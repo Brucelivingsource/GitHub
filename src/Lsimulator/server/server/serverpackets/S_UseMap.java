@@ -15,12 +15,12 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_UseMap extends ServerBasePacket {
 	private static final String S_USE_MAP = "[S] S_UseMap";
 
-	public S_UseMap(LsimulatorPcInstance pc, int objid, int itemid) {
+	public S_UseMap(PcInstance pc, int objid, int itemid) {
 
 		//writeC(Opcodes.S_OPCODE_USEMAP);
 		writeD(objid);

@@ -25,13 +25,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.Random;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Maps;
 
 // Referenced classes of package Lsimulator.server.server.model:
-// LsimulatorTeleport, LsimulatorPcInstance
+// LsimulatorTeleport, PcInstance
 
 public class DungeonRandom {
 
@@ -118,7 +118,7 @@ public class DungeonRandom {
 		}
 	}
 
-	public boolean dg(int locX, int locY, int mapId, LsimulatorPcInstance pc) {
+	public boolean dg(int locX, int locY, int mapId, PcInstance pc) {
 		String key = new StringBuilder().append(mapId).append(locX).append(locY).toString();
 		if (_dungeonMap.containsKey(key)) {
 			int rnd = Random.nextInt(5);

@@ -17,11 +17,11 @@ package Lsimulator.server.server.model;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Disconnect;
 
 public class LsimulatorPcDeleteTimer extends TimerTask {
-	public LsimulatorPcDeleteTimer(LsimulatorPcInstance pc) {
+	public LsimulatorPcDeleteTimer(PcInstance pc) {
 		_pc = pc;
 	}
 
@@ -36,6 +36,6 @@ public class LsimulatorPcDeleteTimer extends TimerTask {
 		timer.schedule(this, 10 * 60 * 1000);
 	}
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
 }

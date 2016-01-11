@@ -16,11 +16,11 @@ package Lsimulator.server.server.model;
 
 import java.util.TimerTask;
 
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class LsimulatorEquipmentTimer extends TimerTask {
-	public LsimulatorEquipmentTimer(LsimulatorPcInstance pc, LsimulatorItemInstance item) {
+	public LsimulatorEquipmentTimer(PcInstance pc, ItemInstance item) {
 		_pc = pc;
 		_item = item;
 	}
@@ -37,7 +37,7 @@ public class LsimulatorEquipmentTimer extends TimerTask {
 		}
 	}
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
-	private final LsimulatorItemInstance _item;
+	private final ItemInstance _item;
 }

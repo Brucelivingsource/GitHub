@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -24,11 +24,11 @@ public class S_NewCharPacket extends ServerBasePacket {
 	private static final String _S__25_NEWCHARPACK = "[S] New Char Packet";
 	private byte[] _byte = null;
 
-	public S_NewCharPacket(LsimulatorPcInstance pc) {
+	public S_NewCharPacket(PcInstance pc) {
 		buildPacket(pc);
 	}
 
-	private void buildPacket(LsimulatorPcInstance pc) {
+	private void buildPacket(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_NEWCHARPACK);
 		writeS(pc.getName());
 		writeS("");

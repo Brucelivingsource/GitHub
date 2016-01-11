@@ -16,12 +16,12 @@ package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.model.LsimulatorCharacter;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_CharVisualUpdate extends ServerBasePacket {
 	private static final String _S__0B_S_CharVisualUpdate = "[C] S_CharVisualUpdate";
 
-	public S_CharVisualUpdate(LsimulatorPcInstance pc) {
+	public S_CharVisualUpdate(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_CHARVISUALUPDATE);
 		writeD(pc.getId());
 		writeC(pc.getCurrentWeapon());

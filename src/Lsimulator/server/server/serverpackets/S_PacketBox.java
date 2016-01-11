@@ -22,7 +22,7 @@ import Lsimulator.server.Config;
 import Lsimulator.server.server.Account;
 import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * スキルアイコンや遮断リストの表示など複数の用途に使われるパケットのクラス
@@ -252,7 +252,7 @@ public class S_PacketBox extends ServerBasePacket {
 		}
 	}
 	
-	public S_PacketBox(int subCode, LsimulatorPcInstance pc){
+	public S_PacketBox(int subCode, PcInstance pc){
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
 		writeC(subCode);
 		switch(subCode){
@@ -467,7 +467,7 @@ public class S_PacketBox extends ServerBasePacket {
 			case HTML_PLEDGE_ONLINE_MEMBERS:
 				writeH(names.length);
 				for(Object name : names){
-					LsimulatorPcInstance pc = (LsimulatorPcInstance)name;
+					PcInstance pc = (PcInstance)name;
 					writeS(pc.getName());
 				}
 				break;
@@ -503,12 +503,12 @@ public class S_PacketBox extends ServerBasePacket {
 	}
 
 	private void callSomething() {
-		Iterator<LsimulatorPcInstance> itr = LsimulatorWorld.getInstance().getAllPlayers().iterator();
+		Iterator<PcInstance> itr = LsimulatorWorld.getInstance().getAllPlayers().iterator();
 
 		writeC(LsimulatorWorld.getInstance().getAllPlayers().size());
 
 		while (itr.hasNext()) {
-			LsimulatorPcInstance pc = itr.next();
+			PcInstance pc = itr.next();
 			Account acc = Account.load(pc.getAccountName());
 
 			// 時間情報 とりあえずログイン時間を入れてみる

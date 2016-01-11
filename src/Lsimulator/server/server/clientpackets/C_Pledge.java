@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 import Lsimulator.server.server.serverpackets.S_Pledge;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -35,7 +35,7 @@ public class C_Pledge extends ClientBasePacket {
 	public C_Pledge(byte abyte0[], ClientThread clientthread) throws Exception{
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}

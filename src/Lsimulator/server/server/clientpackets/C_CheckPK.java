@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -31,7 +31,7 @@ public class C_CheckPK extends ClientBasePacket {
 	public C_CheckPK(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance player = clientthread.getActiveChar();
+		PcInstance player = clientthread.getActiveChar();
 		if (player == null) {
 			return;
 		}

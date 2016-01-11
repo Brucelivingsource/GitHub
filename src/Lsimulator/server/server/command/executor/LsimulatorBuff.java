@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
 
 import Lsimulator.server.server.datatables.SkillsTable;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.skill.LsimulatorSkillUse;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.templates.LsimulatorSkills;
@@ -37,10 +37,10 @@ public class LsimulatorBuff implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer tok = new StringTokenizer(arg);
-			Collection<LsimulatorPcInstance> players = null;
+			Collection<PcInstance> players = null;
 			String s = tok.nextToken();
 			if (s.equalsIgnoreCase("me")) {
 				players = Lists.newList();
@@ -64,12 +64,12 @@ public class LsimulatorBuff implements LsimulatorCommandExecutor {
 			LsimulatorSkills skill = SkillsTable.getInstance().getTemplate(skillId);
 
 			if (skill.getTarget().equals("buff")) {
-				for (LsimulatorPcInstance tg : players) {
+				for (PcInstance tg : players) {
 					new LsimulatorSkillUse().handleCommands(pc, skillId, tg.getId(), tg.getX(), tg.getY(), null, time, LsimulatorSkillUse.TYPE_SPELLSC);
 				}
 			}
 			else if (skill.getTarget().equals("none")) {
-				for (LsimulatorPcInstance tg : players) {
+				for (PcInstance tg : players) {
 					new LsimulatorSkillUse().handleCommands(tg, skillId, tg.getId(), tg.getX(), tg.getY(), null, time, LsimulatorSkillUse.TYPE_GMBUFF);
 				}
 			}

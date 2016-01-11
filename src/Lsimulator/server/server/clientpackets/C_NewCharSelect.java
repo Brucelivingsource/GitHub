@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import java.util.logging.Logger;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 
 /**
@@ -32,7 +32,7 @@ public class C_NewCharSelect extends ClientBasePacket {
 		client.sendPacket(new S_PacketBox(S_PacketBox.LOGOUT)); // 2.70C->3.0追加
 		client.CharReStart(true);
 		if (client.getActiveChar() != null) {
-			LsimulatorPcInstance pc = client.getActiveChar();
+			PcInstance pc = client.getActiveChar();
 			_log.fine("Disconnect from: " + pc.getName());
 			ClientThread.quitGame(pc);
 

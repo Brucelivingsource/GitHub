@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.npc.LsimulatorNpcHtml;
 import Lsimulator.server.server.utils.IntRange;
 import Lsimulator.server.server.utils.collections.Maps;
@@ -92,10 +92,10 @@ public abstract class LsimulatorNpcXmlAction implements LsimulatorNpcAction {
 
 	private boolean acceptsNpcId(LsimulatorObject obj) {
 		if (0 < _npcIds.length) {
-			if (!(obj instanceof LsimulatorNpcInstance)) {
+			if (!(obj instanceof NpcInstance)) {
 				return false;
 			}
-			int npcId = ((LsimulatorNpcInstance) obj).getNpcTemplate().get_npcId();
+			int npcId = ((NpcInstance) obj).getNpcTemplate().get_npcId();
 
 			if (Arrays.binarySearch(_npcIds, npcId) < 0) {
 				return false;
@@ -124,7 +124,7 @@ public abstract class LsimulatorNpcXmlAction implements LsimulatorNpcAction {
 		return name.equals(_name);
 	}
 
-	private boolean acceptsQuest(LsimulatorPcInstance pc) {
+	private boolean acceptsQuest(PcInstance pc) {
 		if (_questId == -1) {
 			return true;
 		}
@@ -135,7 +135,7 @@ public abstract class LsimulatorNpcXmlAction implements LsimulatorNpcAction {
 	}
 
 	@Override
-	public boolean acceptsRequest(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj) {
+	public boolean acceptsRequest(String actionName, PcInstance pc, LsimulatorObject obj) {
 		if (!acceptsNpcId(obj)) {
 			return false;
 		}
@@ -155,10 +155,10 @@ public abstract class LsimulatorNpcXmlAction implements LsimulatorNpcAction {
 	}
 
 	@Override
-	public abstract LsimulatorNpcHtml execute(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj, byte args[]);
+	public abstract LsimulatorNpcHtml execute(String actionName, PcInstance pc, LsimulatorObject obj, byte args[]);
 
 	@Override
-	public LsimulatorNpcHtml executeWithAmount(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj, int amount) {
+	public LsimulatorNpcHtml executeWithAmount(String actionName, PcInstance pc, LsimulatorObject obj, int amount) {
 		return null;
 	}
 }

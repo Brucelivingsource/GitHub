@@ -19,7 +19,7 @@ import java.util.logging.Level;
 
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorExcludingList;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -40,7 +40,7 @@ public class C_Exclude extends ClientBasePacket {
 	public C_Exclude(byte[] decrypt, ClientThread client) {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

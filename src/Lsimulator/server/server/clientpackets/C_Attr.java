@@ -37,9 +37,9 @@ import Lsimulator.server.server.model.LsimulatorQuest;
 import Lsimulator.server.server.model.LsimulatorTeleport;
 import Lsimulator.server.server.model.LsimulatorWar;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.model.map.LsimulatorMap;
 import Lsimulator.server.server.serverpackets.S_ChangeName;
@@ -75,7 +75,7 @@ public class C_Attr extends ClientBasePacket {
 	public C_Attr(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -97,7 +97,7 @@ public class C_Attr extends ClientBasePacket {
 		switch (attrcode) {
 		case 97: // \f3%0%s 想加入你的血盟。你接受嗎。(Y/N)
 			c = readH();
-			LsimulatorPcInstance joinPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
+			PcInstance joinPc = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
 			pc.setTempID(0);
 			if (joinPc != null) {
 				if (c == 0) { // No
@@ -131,7 +131,7 @@ public class C_Attr extends ClientBasePacket {
 									return;
 								}
 							}
-							for (LsimulatorPcInstance clanMembers : clan.getOnlineClanMember()) {
+							for (PcInstance clanMembers : clan.getOnlineClanMember()) {
 								clanMembers.sendPackets(new S_ServerMessage(94,joinPc.getName())); // \f1你接受%0當你的血盟成員。
 							}
 							joinPc.setClanid(clan_id);
@@ -150,7 +150,7 @@ public class C_Attr extends ClientBasePacket {
 							joinPc.sendPackets(new S_CharReset(joinPc.getId(), clan.getClanId()));
 							joinPc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.getClan().getEmblemStatus())); // TODO
 							joinPc.sendPackets(new S_ClanAttention());
-							for(LsimulatorPcInstance player : clan.getOnlineClanMember()){
+							for(PcInstance player : clan.getOnlineClanMember()){
 								player.sendPackets(new S_CharReset(joinPc.getId(), joinPc.getClan().getEmblemId()));
 								player.broadcastPacket(new S_CharReset(player.getId(), joinPc.getClan().getEmblemId()));
 							}
@@ -169,7 +169,7 @@ public class C_Attr extends ClientBasePacket {
 		case 221: // %0 血盟要向你投降。是否接受？(Y/N)
 		case 222: // %0 血盟要結束戰爭。是否接受？(Y/N)
 			c = readH();
-			LsimulatorPcInstance enemyLeader = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
+			PcInstance enemyLeader = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
 			if (enemyLeader == null) {
 				return;
 			}
@@ -206,7 +206,7 @@ public class C_Attr extends ClientBasePacket {
 
 		case 252: // \f2%0%s 要與你交易。願不願交易？ (Y/N)
 			c = readH();
-			LsimulatorPcInstance trading_partner = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getTradeID());
+			PcInstance trading_partner = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getTradeID());
 			if (trading_partner != null) {
 				if (c == 0) // No
 				{
@@ -224,20 +224,20 @@ public class C_Attr extends ClientBasePacket {
 
 		case 321: // 是否要復活？ (Y/N)
 			c = readH();
-			LsimulatorPcInstance resusepc1 = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
+			PcInstance resusepc1 = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
 			pc.setTempID(0);
 			if (resusepc1 != null) { // 如果有這個人
 				if (c == 0) { // No
 
 				} else if (c == 1) { // Yes
-					resurrection( pc, resusepc1, (short) (pc.getMaxHp() / 2));
+					resurrection( pc, resusepc1, (short) ( pc.getMaxHp() >> 1 ));
 				}
 			}
 			break;
 
 		case 322: // 是否要復活？ (Y/N)
 			c = readH();
-			LsimulatorPcInstance resusepc2 = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
+			PcInstance resusepc2 = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
 			pc.setTempID(0);
 			if (resusepc2 != null) { // 祝福された 復活スクロール、リザレクション、グレーター リザレクション
 				if (c == 0) { // No
@@ -258,7 +258,7 @@ public class C_Attr extends ClientBasePacket {
 		case 325: // 你想叫牠什麼名字？
 			c = readC(); // ?
 			name = readS();
-			LsimulatorPetInstance pet = (LsimulatorPetInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
+			PetInstance pet = (PetInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
 			pc.setTempID(0);
 			renamePet(pet, name);
 			break;
@@ -279,7 +279,7 @@ public class C_Attr extends ClientBasePacket {
 
 		case 630: // %0%s 要與你決鬥。你是否同意？(Y/N)
 			c = readH();
-			LsimulatorPcInstance fightPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getFightId());
+			PcInstance fightPc = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getFightId());
 			if (c == 0) {
 				pc.setFightId(0);
 				fightPc.setFightId(0);
@@ -292,7 +292,7 @@ public class C_Attr extends ClientBasePacket {
 
 		case 653: // 若你離婚，你的結婚戒指將會消失。你決定要離婚嗎？(Y/N)
 			c = readH();
-			LsimulatorPcInstance target653 = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartnerId());
+			PcInstance target653 = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartnerId());
 			if (c == 0) { // No
 				return;
 			} else if (c == 1) { // Yes
@@ -312,7 +312,7 @@ public class C_Attr extends ClientBasePacket {
 
 		case 654: // %0 向你(妳)求婚，你(妳)答應嗎?
 			c = readH();
-			LsimulatorPcInstance partner = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
+			PcInstance partner = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getTempID());
 			pc.setTempID(0);
 			if (partner != null) {
 				if (c == 0) { // No
@@ -353,7 +353,7 @@ public class C_Attr extends ClientBasePacket {
 					cost = level * level * 200;
 				}
 				if (lawful >= 0) {
-					cost = (cost / 2);
+					cost >>= 1 ;
 				}
 				if (pc.getInventory().consumeItem(LsimulatorItemId.ADENA, cost)) {
 					pc.resExp();
@@ -366,7 +366,7 @@ public class C_Attr extends ClientBasePacket {
 
 		case 951: // 您要接受玩家 %0%s 提出的隊伍對話邀請嗎？(Y/N)
 			c = readH();
-			LsimulatorPcInstance chatPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartyID());
+			PcInstance chatPc = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartyID());
 			if (chatPc != null) {
 				if (c == 0) { // No
 					chatPc.sendPackets(new S_ServerMessage(423, pc.getName())); // %0%s
@@ -391,7 +391,7 @@ public class C_Attr extends ClientBasePacket {
 
 		case 953: // 玩家 %0%s 邀請您加入隊伍？(Y/N)
 			c = readH();
-			LsimulatorPcInstance target = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartyID());
+			PcInstance target = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartyID());
 			if (target != null) {
 				if (c == 0) // No
 				{
@@ -422,7 +422,7 @@ public class C_Attr extends ClientBasePacket {
 
 			case 954: // 玩家 %0%s 邀請您加入自動分配隊伍？(Y/N)
 				c = readH();
-				LsimulatorPcInstance target2 = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartyID());
+				PcInstance target2 = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartyID());
 				if (target2 != null) {
 					if (c == 0) { // No
 						target2.sendPackets(new S_ServerMessage(423, pc.getName())); // %0%s
@@ -544,7 +544,7 @@ public class C_Attr extends ClientBasePacket {
 		}
 	}
 
-	private void resurrection(LsimulatorPcInstance pc, LsimulatorPcInstance resusepc, short resHp) {
+	private void resurrection(PcInstance pc, PcInstance resusepc, short resHp) {
 		// 由其他角色復活
 		pc.sendPackets(new S_SkillSound(pc.getId(), '\346'));
 		pc.broadcastPacket(new S_SkillSound(pc.getId(), '\346'));
@@ -561,7 +561,7 @@ public class C_Attr extends ClientBasePacket {
 		pc.broadcastPacket(new S_CharVisualUpdate(pc));    // 3.80C可能已經不需要
 	}
 
-	private void changeClan(ClientThread clientthread, LsimulatorPcInstance pc, LsimulatorPcInstance joinPc, int maxMember) {
+	private void changeClan(ClientThread clientthread, PcInstance pc, PcInstance joinPc, int maxMember) {
 		int clanId = pc.getClanid();
 		String clanName = pc.getClanname();
 		LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(clanName);
@@ -576,7 +576,7 @@ public class C_Attr extends ClientBasePacket {
 				return;
 			}
 			
-			for (LsimulatorPcInstance element : clan.getOnlineClanMember()) {
+			for (PcInstance element : clan.getOnlineClanMember()) {
 				element.sendPackets(new S_ServerMessage(94, joinPc.getName())); // \f1你接受%0當你的血盟成員。
 			}
 			
@@ -590,7 +590,7 @@ public class C_Attr extends ClientBasePacket {
 			}
 
 			for (String element : oldClan.getAllMembers()) {
-				LsimulatorPcInstance oldClanMember = LsimulatorWorld.getInstance().getPlayer(element);
+				PcInstance oldClanMember = LsimulatorWorld.getInstance().getPlayer(element);
 				if (oldClanMember != null) { // 舊血盟成員在線上
 					ClanMembersTable.getInstance().deleteMember(oldClanMember.getId());
 					oldClanMember.setClanid(clanId);
@@ -610,13 +610,13 @@ public class C_Attr extends ClientBasePacket {
 					oldClanMember.sendPackets(new S_CharReset(oldClanMember.getId(), clan.getClanId()));
 					oldClanMember.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.getClan().getEmblemStatus()));
 					oldClanMember.sendPackets(new S_ClanAttention());
-					for(LsimulatorPcInstance player : clan.getOnlineClanMember()){
+					for(PcInstance player : clan.getOnlineClanMember()){
 						player.sendPackets(new S_CharReset(oldClanMember.getId(), oldClanMember.getClan().getEmblemId()));
 						player.broadcastPacket(new S_CharReset(player.getId(), oldClanMember.getClan().getEmblemId()));
 					}
 				} else { // 舊血盟成員不在線上
 					try {
-						LsimulatorPcInstance offClanMember = CharacterTable.getInstance().restoreCharacter(element);
+						PcInstance offClanMember = CharacterTable.getInstance().restoreCharacter(element);
 						ClanMembersTable.getInstance().deleteMember(offClanMember.getId());
 						offClanMember.setClanid(clanId);
 						offClanMember.setClanname(clanName);
@@ -637,7 +637,7 @@ public class C_Attr extends ClientBasePacket {
 		}
 	}
 
-	private static void renamePet(LsimulatorPetInstance pet, String name) {
+	private static void renamePet(PetInstance pet, String name) {
 		if ((pet == null) || (name == null)) {
 			throw new NullPointerException();
 		}
@@ -648,7 +648,7 @@ public class C_Attr extends ClientBasePacket {
 			throw new NullPointerException();
 		}
 
-		LsimulatorPcInstance pc = (LsimulatorPcInstance) pet.getMaster();
+		PcInstance pc = (PcInstance) pet.getMaster();
 		if (PetTable.isNameExists(name)) {
 			pc.sendPackets(new S_ServerMessage(327)); // 同樣的名稱已經存在。
 			return;
@@ -661,14 +661,14 @@ public class C_Attr extends ClientBasePacket {
 		pet.setName(name);
 		petTemplate.set_name(name);
 		PetTable.getInstance().storePet(petTemplate); // 儲存寵物資料到資料庫中
-		LsimulatorItemInstance item = pc.getInventory().getItem(pet.getItemObjId());
+		ItemInstance item = pc.getInventory().getItem(pet.getItemObjId());
 		pc.getInventory().updateItem(item);
 		pc.sendPackets(new S_ChangeName(pet.getId(), name));
 		pc.broadcastPacket(new S_ChangeName(pet.getId(), name));
 	}
 
-	private void callClan(LsimulatorPcInstance pc) {
-		LsimulatorPcInstance callClanPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance()
+	private void callClan(PcInstance pc) {
+		PcInstance callClanPc = (PcInstance) LsimulatorWorld.getInstance()
 				.findObject(pc.getTempID());
 		pc.setTempID(0);
 		if (callClanPc == null) {

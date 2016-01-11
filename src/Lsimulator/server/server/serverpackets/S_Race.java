@@ -16,7 +16,7 @@ package Lsimulator.server.server.serverpackets;
 
 import javolution.util.FastTable;
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * 屬於PacketBox的封包 只是抓出來另外寫
@@ -45,12 +45,12 @@ public class S_Race extends ServerBasePacket {
 		}
 	}
 
-	public S_Race(FastTable<LsimulatorPcInstance> playerList, LsimulatorPcInstance pc) {
+	public S_Race(FastTable<PcInstance> playerList, PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
 		writeC(PlayerInfo);
 		writeH(playerList.size()); //參賽者人數
 		writeH(playerList.indexOf(pc)); //名次
-		for (LsimulatorPcInstance player : playerList) {
+		for (PcInstance player : playerList) {
 			if (player == null) {
 				continue;
 			}

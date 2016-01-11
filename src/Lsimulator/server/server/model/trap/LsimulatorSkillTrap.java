@@ -15,7 +15,7 @@
 package Lsimulator.server.server.model.trap;
 
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.skill.LsimulatorSkillUse;
 import Lsimulator.server.server.storage.TrapStorage;
 
@@ -31,7 +31,7 @@ public class LsimulatorSkillTrap extends LsimulatorTrap {
 	}
 
 	@Override
-	public void onTrod(LsimulatorPcInstance trodFrom, LsimulatorObject trapObj) {
+	public void onTrod(PcInstance trodFrom, LsimulatorObject trapObj) {
 		sendEffect(trapObj);
 
 		new LsimulatorSkillUse().handleCommands(trodFrom, _skillId, trodFrom.getId(),

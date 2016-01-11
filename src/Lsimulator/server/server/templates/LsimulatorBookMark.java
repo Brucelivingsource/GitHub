@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.IdFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Bookmarks;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.utils.SQLUtil;
@@ -45,7 +45,7 @@ public class LsimulatorBookMark {
 	public LsimulatorBookMark() {
 	}
 
-	public static void deleteBookmark(LsimulatorPcInstance player, String s) {
+	public static void deleteBookmark(PcInstance player, String s) {
 		LsimulatorBookMark book = player.getBookMark(s);
 		if (book != null) {
 			Connection con = null;
@@ -67,7 +67,7 @@ public class LsimulatorBookMark {
 		}
 	}
 
-	public static void addBookmark(LsimulatorPcInstance pc, String s) {
+	public static void addBookmark(PcInstance pc, String s) {
 		// クライアント側でチェックされるため不要
 //		if (s.length() > 12) {
 //			pc.sendPackets(new S_ServerMessage(204));

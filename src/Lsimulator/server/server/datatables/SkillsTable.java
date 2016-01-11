@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorSkills;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Maps;
@@ -118,7 +118,7 @@ public class SkillsTable {
 		if (spellCheck(playerobjid, skillid)) {
 			return;
 		}
-		LsimulatorPcInstance pc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(playerobjid);
+		PcInstance pc = (PcInstance) LsimulatorWorld.getInstance().findObject(playerobjid);
 		if (pc != null) {
 			pc.setSkillMastery(skillid);
 		}
@@ -147,7 +147,7 @@ public class SkillsTable {
 	}
 
 	public void spellLost(int playerobjid, int skillid) {
-		LsimulatorPcInstance pc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(playerobjid);
+		PcInstance pc = (PcInstance) LsimulatorWorld.getInstance().findObject(playerobjid);
 		if (pc != null) {
 			pc.removeSkillMastery(skillid);
 		}

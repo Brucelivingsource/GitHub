@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.serverpackets;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -25,7 +25,7 @@ public class S_ChatPacket extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_ChatPacket(LsimulatorPcInstance pc, String chat, int opcode, int type) {
+	public S_ChatPacket(PcInstance pc, String chat, int opcode, int type) {
 
 		if (type == 0) { // 一般頻道
 			writeC(opcode);

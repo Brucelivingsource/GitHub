@@ -15,7 +15,7 @@
 package Lsimulator.server.server.model.trap;
 
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.poison.LsimulatorDamagePoison;
 import Lsimulator.server.server.model.poison.LsimulatorParalysisPoison;
 import Lsimulator.server.server.model.poison.LsimulatorSilencePoison;
@@ -37,7 +37,7 @@ public class LsimulatorPoisonTrap extends LsimulatorTrap {
 	}
 
 	@Override
-	public void onTrod(LsimulatorPcInstance trodFrom, LsimulatorObject trapObj) {
+	public void onTrod(PcInstance trodFrom, LsimulatorObject trapObj) {
 		sendEffect(trapObj);
 
 		if (_type.equals("d")) {

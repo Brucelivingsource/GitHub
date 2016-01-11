@@ -29,8 +29,8 @@ import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.datatables.TrapTable;
 import Lsimulator.server.server.model.LsimulatorLocation;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorTrapInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.TrapInstance;
 import Lsimulator.server.server.types.Point;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Lists;
@@ -38,9 +38,9 @@ import Lsimulator.server.server.utils.collections.Lists;
 public class LsimulatorWorldTraps {
 	private static Logger _log = Logger.getLogger(LsimulatorWorldTraps.class.getName());
 
-	private List<LsimulatorTrapInstance> _allTraps = Lists.newList();
+	private List<TrapInstance> _allTraps = Lists.newList();
 
-	private List<LsimulatorTrapInstance> _allBases = Lists.newList();
+	private List<TrapInstance> _allBases = Lists.newList();
 
 	private Timer _timer = new Timer();
 
@@ -83,11 +83,11 @@ public class LsimulatorWorldTraps {
 				int span = rs.getInt("span");
 
 				for (int i = 0; i < count; i++) {
-					LsimulatorTrapInstance trap = new LsimulatorTrapInstance(IdFactory.getInstance().nextId(), trapTemp, loc, rndPt, span);
+					TrapInstance trap = new TrapInstance(IdFactory.getInstance().nextId(), trapTemp, loc, rndPt, span);
 					LsimulatorWorld.getInstance().addVisibleObject(trap);
 					_allTraps.add(trap);
 				}
-				LsimulatorTrapInstance base = new LsimulatorTrapInstance(IdFactory.getInstance().nextId(), loc);
+				TrapInstance base = new TrapInstance(IdFactory.getInstance().nextId(), loc);
 				LsimulatorWorld.getInstance().addVisibleObject(base);
 				_allBases.add(base);
 			}
@@ -112,8 +112,8 @@ public class LsimulatorWorldTraps {
 		removeTraps(oldInstance._allBases);
 	}
 
-	private static void removeTraps(List<LsimulatorTrapInstance> traps) {
-		for (LsimulatorTrapInstance trap : traps) {
+	private static void removeTraps(List<TrapInstance> traps) {
+		for (TrapInstance trap : traps) {
 			trap.disableTrap();
 			LsimulatorWorld.getInstance().removeVisibleObject(trap);
 		}
@@ -126,7 +126,7 @@ public class LsimulatorWorldTraps {
 		}
 	}
 
-	private void disableTrap(LsimulatorTrapInstance trap) {
+	private void disableTrap(TrapInstance trap) {
 		trap.disableTrap();
 
 		synchronized (this) {
@@ -135,16 +135,16 @@ public class LsimulatorWorldTraps {
 	}
 
 	public void resetAllTraps() {
-		for (LsimulatorTrapInstance trap : _allTraps) {
+		for (TrapInstance trap : _allTraps) {
 			trap.resetLocation();
 			trap.enableTrap();
 		}
 	}
 
-	public void onPlayerMoved(LsimulatorPcInstance player) {
+	public void onPlayerMoved(PcInstance player) {
 		LsimulatorLocation loc = player.getLocation();
 
-		for (LsimulatorTrapInstance trap : _allTraps) {
+		for (TrapInstance trap : _allTraps) {
 			if (trap.isEnable() && loc.equals(trap.getLocation())) {
 				trap.onTrod(player);
 				disableTrap(trap);
@@ -152,10 +152,10 @@ public class LsimulatorWorldTraps {
 		}
 	}
 
-	public void onDetection(LsimulatorPcInstance caster) {
+	public void onDetection(PcInstance caster) {
 		LsimulatorLocation loc = caster.getLocation();
 
-		for (LsimulatorTrapInstance trap : _allTraps) {
+		for (TrapInstance trap : _allTraps) {
 			if (trap.isEnable() && loc.isInScreen(trap.getLocation())) {
 				trap.onDetection(caster);
 				disableTrap(trap);
@@ -164,9 +164,9 @@ public class LsimulatorWorldTraps {
 	}
 
 	private class TrapSpawnTimer extends TimerTask {
-		private final LsimulatorTrapInstance _targetTrap;
+		private final TrapInstance _targetTrap;
 
-		public TrapSpawnTimer(LsimulatorTrapInstance trap) {
+		public TrapSpawnTimer(TrapInstance trap) {
 			_targetTrap = trap;
 		}
 

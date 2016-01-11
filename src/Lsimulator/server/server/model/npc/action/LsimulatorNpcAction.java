@@ -15,18 +15,18 @@
 package Lsimulator.server.server.model.npc.action;
 
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.npc.LsimulatorNpcHtml;
 
 public interface LsimulatorNpcAction {
 
-	public boolean acceptsRequest(String actionName, LsimulatorPcInstance pc,
+	public boolean acceptsRequest(String actionName, PcInstance pc,
 			LsimulatorObject obj);
 
-	public LsimulatorNpcHtml execute(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj,
+	public LsimulatorNpcHtml execute(String actionName, PcInstance pc, LsimulatorObject obj,
 			byte args[]);
 
-	public LsimulatorNpcHtml executeWithAmount(String actionName, LsimulatorPcInstance pc,
+	public LsimulatorNpcHtml executeWithAmount(String actionName, PcInstance pc,
 			LsimulatorObject obj, int amount);
 
 }

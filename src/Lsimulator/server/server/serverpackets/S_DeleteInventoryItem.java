@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 public class S_DeleteInventoryItem extends ServerBasePacket {
 
@@ -27,7 +27,7 @@ public class S_DeleteInventoryItem extends ServerBasePacket {
 	 * @param item
 	 *            - 削除するアイテム
 	 */
-	public S_DeleteInventoryItem(LsimulatorItemInstance item) {
+	public S_DeleteInventoryItem(ItemInstance item) {
 		if (item != null) {
 			writeC(Opcodes.S_OPCODE_DELETEINVENTORYITEM);
 			writeD(item.getId());

@@ -30,7 +30,7 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.SkillsTable;
 import Lsimulator.server.server.model.AcceleratorChecker;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.skill.LsimulatorSkillUse;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -45,14 +45,14 @@ public class C_UseSkill extends ClientBasePacket {
 	public C_UseSkill(byte abyte0[], ClientThread client) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if ((pc == null) || pc.isTeleport() || pc.isDead()) {
 			return;
 		}
 		
 		int row = readC();
 		int column = readC();
-		int skillId = (row * 8) + column + 1;
+		int skillId = (row << 3 ) + column + 1;  // row * 8 + column +1 
 		String charName = null;
 		String message = null;
 		int targetId = 0;
@@ -134,7 +134,7 @@ public class C_UseSkill extends ClientBasePacket {
 					return;
 				}
 
-				LsimulatorPcInstance target = LsimulatorWorld.getInstance().getPlayer(charName);
+				PcInstance target = LsimulatorWorld.getInstance().getPlayer(charName);
 
 				if (target == null) {
 					// メッセージが正確であるか未調査

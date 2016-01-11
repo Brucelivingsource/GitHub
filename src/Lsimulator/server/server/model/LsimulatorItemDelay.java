@@ -16,8 +16,8 @@ package Lsimulator.server.server.model;
 
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.GeneralThreadPool;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Paralysis;
 import Lsimulator.server.server.templates.LsimulatorEtcItem;
 
@@ -50,9 +50,9 @@ public class LsimulatorItemDelay {
 	}
 
 	static class TeleportUnlockTimer implements Runnable {
-		private LsimulatorPcInstance _pc;
+		private PcInstance _pc;
 
-		public TeleportUnlockTimer(LsimulatorPcInstance pc) {
+		public TeleportUnlockTimer(PcInstance pc) {
 			_pc = pc;
 		}
 
@@ -63,11 +63,11 @@ public class LsimulatorItemDelay {
 		}
 	}
 
-	public static void onItemUse(ClientThread client, LsimulatorItemInstance item) {
+	public static void onItemUse(ClientThread client, ItemInstance item) {
 		int delayId = 0;
 		int delayTime = 0;
 
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 
 		if (item.getItem().getType2() == 0) {
 			// 種別：一般道具
@@ -97,7 +97,7 @@ public class LsimulatorItemDelay {
 		
 	}
 
-	public static void teleportUnlock(LsimulatorPcInstance pc, LsimulatorItemInstance item) {
+	public static void teleportUnlock(PcInstance pc, ItemInstance item) {
 		int delayTime = ((LsimulatorEtcItem) item.getItem()).get_delaytime();
 		TeleportUnlockTimer timer = new TeleportUnlockTimer(pc);
 		GeneralThreadPool.getInstance().schedule(timer, delayTime);

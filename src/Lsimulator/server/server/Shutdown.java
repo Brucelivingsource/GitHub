@@ -16,7 +16,7 @@ package Lsimulator.server.server;
 
 import java.util.logging.Logger;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * 
@@ -139,7 +139,7 @@ public class Shutdown extends Thread {
 	 * @param restart
 	 *            true if the server will restart after shutdown
 	 */
-	public void startShutdown(LsimulatorPcInstance activeChar, int seconds,
+	public void startShutdown(PcInstance activeChar, int seconds,
 			boolean restart) {
 		Announcements _an = Announcements.getInstance();
 		_log.warning("GM: " + activeChar.getId() + " issued shutdown command. "
@@ -163,7 +163,7 @@ public class Shutdown extends Thread {
 	 * @param activeChar
 	 *            GM who issued the abort command
 	 */
-	public void abort(LsimulatorPcInstance activeChar) {
+	public void abort(PcInstance activeChar) {
 		Announcements _an = Announcements.getInstance();
 		_log.warning("GM: " + activeChar.getName() + " issued shutdown ABORT. ");
 		_an.announceToAll("Server aborts shutdown and continues normal operation!");

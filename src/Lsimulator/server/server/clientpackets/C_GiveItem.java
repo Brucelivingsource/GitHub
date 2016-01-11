@@ -22,12 +22,12 @@ import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorPcInventory;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.serverpackets.S_ItemName;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorNpc;
@@ -45,7 +45,7 @@ public class C_GiveItem extends ClientBasePacket {
 	public C_GiveItem(byte decrypt[], ClientThread client) {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if ((pc == null) || pc.isGhost()) {
 			return;
 		}
@@ -57,17 +57,17 @@ public class C_GiveItem extends ClientBasePacket {
 		int count = readD();
 		
 		LsimulatorObject object = LsimulatorWorld.getInstance().findObject(targetId);
-		if ((object == null) || !(object instanceof LsimulatorNpcInstance)) {
+		if ((object == null) || !(object instanceof NpcInstance)) {
 			return;
 		}
-		LsimulatorNpcInstance target = (LsimulatorNpcInstance) object;
+		NpcInstance target = (NpcInstance) object;
 		if (!isNpcItemReceivable(target.getNpcTemplate())) {
 			return;
 		}
 		LsimulatorInventory targetInv = target.getInventory();
 
 		LsimulatorInventory inv = pc.getInventory();
-		LsimulatorItemInstance item = inv.getItem(itemId);
+		ItemInstance item = inv.getItem(itemId);
 		if (item == null) {
 			return;
 		}
@@ -85,9 +85,9 @@ public class C_GiveItem extends ClientBasePacket {
 			return;
 		}
 		// 使用中的寵物項鍊 - 無法給予
-		for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-			if (petNpc instanceof LsimulatorPetInstance) {
-				LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+		for (NpcInstance petNpc : pc.getPetList().values()) {
+			if (petNpc instanceof PetInstance) {
+				PetInstance pet = (PetInstance) petNpc;
 				if (item.getId() == pet.getItemObjId()) {
 					pc.sendPackets(new S_ServerMessage(1187)); // 寵物項鍊正在使用中。
 					return;
@@ -95,7 +95,7 @@ public class C_GiveItem extends ClientBasePacket {
 			}
 		}
 		// 使用中的魔法娃娃 - 無法給予
-		for (LsimulatorDollInstance doll : pc.getDollList().values()) {
+		for (DollInstance doll : pc.getDollList().values()) {
 			if (doll.getItemObjId() == item.getId()) {
 				pc.sendPackets(new S_ServerMessage(1181)); // 這個魔法娃娃目前正在使用中。
 				return;
@@ -139,12 +139,12 @@ public class C_GiveItem extends ClientBasePacket {
 
 	}
 
-	private void eatFood(LsimulatorPcInstance pc, LsimulatorNpcInstance target,
-			LsimulatorItemInstance item, int count) {
-		if (!(target instanceof LsimulatorPetInstance)) {
+	private void eatFood(PcInstance pc, NpcInstance target,
+			ItemInstance item, int count) {
+		if (!(target instanceof PetInstance)) {
 			return;
 		}
-		LsimulatorPetInstance pet = (LsimulatorPetInstance) target;
+		PetInstance pet = (PetInstance) target;
 		LsimulatorPet _l1pet = PetTable.getInstance().getTemplate(item.getId());
 		int food = 0;
 		int foodCount = 0;
@@ -181,11 +181,11 @@ public class C_GiveItem extends ClientBasePacket {
 		}
 	}
 
-	private void usePetWeaponArmor(LsimulatorNpcInstance target, LsimulatorItemInstance item) {
-		if (!(target instanceof LsimulatorPetInstance)) {
+	private void usePetWeaponArmor(NpcInstance target, ItemInstance item) {
+		if (!(target instanceof PetInstance)) {
 			return;
 		}
-		LsimulatorPetInstance pet = (LsimulatorPetInstance) target;
+		PetInstance pet = (PetInstance) target;
 		LsimulatorPetItem petItem = PetItemTable.getInstance().getTemplate(
 				item.getItemId());
 		if (petItem.getUseType() == 1) { // 牙齒
@@ -210,14 +210,14 @@ public class C_GiveItem extends ClientBasePacket {
 		return false;
 	}
 
-	private void tamePet(LsimulatorPcInstance pc, LsimulatorNpcInstance target) {
-		if ((target instanceof LsimulatorPetInstance)
-				|| (target instanceof LsimulatorSummonInstance)) {
+	private void tamePet(PcInstance pc, NpcInstance target) {
+		if ((target instanceof PetInstance)
+				|| (target instanceof SummonInstance)) {
 			return;
 		}
 
 		int petcost = 0;
-		for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
+		for (NpcInstance petNpc : pc.getPetList().values()) {
 			petcost += petNpc.getPetcost();
 		}
 		int charisma = pc.getCha();
@@ -239,9 +239,9 @@ public class C_GiveItem extends ClientBasePacket {
 		LsimulatorPcInventory inv = pc.getInventory();
 		if ((charisma >= 6) && (inv.getSize() < 180)) {
 			if (isTamePet(target)) {
-				LsimulatorItemInstance petamu = inv.storeItem(40314, 1); // 漂浮之眼的肉
+				ItemInstance petamu = inv.storeItem(40314, 1); // 漂浮之眼的肉
 				if (petamu != null) {
-					new LsimulatorPetInstance(target, pc, petamu.getId());
+					new PetInstance(target, pc, petamu.getId());
 					pc.sendPackets(new S_ItemName(petamu));
 				}
 			} else {
@@ -250,17 +250,17 @@ public class C_GiveItem extends ClientBasePacket {
 		}
 	}
 
-	private void evolvePet(LsimulatorPcInstance pc, LsimulatorNpcInstance target, int itemId) {
-		if (!(target instanceof LsimulatorPetInstance)) {
+	private void evolvePet(PcInstance pc, NpcInstance target, int itemId) {
+		if (!(target instanceof PetInstance)) {
 			return;
 		}
 		LsimulatorPcInventory inv = pc.getInventory();
-		LsimulatorPetInstance pet = (LsimulatorPetInstance) target;
-		LsimulatorItemInstance petamu = inv.getItem(pet.getItemObjId());
+		PetInstance pet = (PetInstance) target;
+		ItemInstance petamu = inv.getItem(pet.getItemObjId());
 		if (((pet.getLevel() >= 30) || (itemId == 41310)) && // Lv30以上或是使用勝利果實
 				(pc == pet.getMaster()) && // 自分のペット
 				(petamu != null)) {
-			LsimulatorItemInstance highpetamu = inv.storeItem(40316, 1);
+			ItemInstance highpetamu = inv.storeItem(40316, 1);
 			if (highpetamu != null) {
 				pet.evolvePet( // 寵物進化
 				highpetamu.getId());
@@ -270,7 +270,7 @@ public class C_GiveItem extends ClientBasePacket {
 		}
 	}
 
-	private boolean isTamePet(LsimulatorNpcInstance npc) {
+	private boolean isTamePet(NpcInstance npc) {
 		boolean isSuccess = false;
 		int npcId = npc.getNpcTemplate().get_npcId();
 		if (npcId == 45313) { // タイガー

@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -30,7 +30,7 @@ public class S_CharReset extends ServerBasePacket {
 	 * 重置升級能力更新 [Server] opcode = 43 0000: 2b /02/ 01 2d/ 0f 00/ 04 00/ 0a 00
 	 * /0c 0c 0c 0c 12 09 +..-............
 	 */
-	public S_CharReset(LsimulatorPcInstance pc, int lv, int hp, int mp, int ac, int str, int intel, int wis, int dex, int con, int cha) {
+	public S_CharReset(PcInstance pc, int lv, int hp, int mp, int ac, int str, int intel, int wis, int dex, int con, int cha) {
 		writeC(Opcodes.S_OPCODE_CHARRESET);
 		writeC(0x02);
 		writeC(lv);
@@ -57,7 +57,7 @@ public class S_CharReset extends ServerBasePacket {
      *  0000:  40 01 10 00 01 00 0a 34                     @......4<br>
      *  52等騎士重置
 	 */
-	public S_CharReset(LsimulatorPcInstance pc) {
+	public S_CharReset(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_CHARRESET);
 		writeC(0x01);
 		if (pc.isCrown()) {

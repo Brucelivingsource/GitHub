@@ -15,7 +15,7 @@
 package Lsimulator.server.server.model.trap;
 
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.storage.TrapStorage;
 import Lsimulator.server.server.utils.Dice;
 
@@ -33,7 +33,7 @@ public class LsimulatorDamageTrap extends LsimulatorTrap {
 	}
 
 	@Override
-	public void onTrod(LsimulatorPcInstance trodFrom, LsimulatorObject trapObj) {
+	public void onTrod(PcInstance trodFrom, LsimulatorObject trapObj) {
 		sendEffect(trapObj);
 
 		int dmg = _dice.roll(_diceCount) + _base;

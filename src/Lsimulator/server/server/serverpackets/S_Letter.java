@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.serverpackets;
 
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -25,11 +25,11 @@ public class S_Letter extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_Letter(LsimulatorItemInstance item) {
+	public S_Letter(ItemInstance item) {
 		buildPacket(item);
 	}
 
-	private void buildPacket(LsimulatorItemInstance item) {
+	private void buildPacket(ItemInstance item) {
 		/*
 		 * Connection con = null; PreparedStatement pstm = null; ResultSet rs =
 		 * null; try { con = LsimulatorDatabaseFactory.getInstance().getConnection();

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 import Lsimulator.server.server.templates.LsimulatorArmor;
 import Lsimulator.server.server.templates.LsimulatorEtcItem;
 import Lsimulator.server.server.templates.LsimulatorItem;
@@ -511,12 +511,12 @@ public class ItemTable {
 		return _allTemplates[id];
 	}
 
-	public LsimulatorItemInstance createItem(int itemId) {
+	public ItemInstance createItem(int itemId) {
 		LsimulatorItem temp = getTemplate(itemId);
 		if (temp == null) {
 			return null;
 		}
-		LsimulatorItemInstance item = new LsimulatorItemInstance();
+		ItemInstance item = new ItemInstance();
 		item.setId(IdFactory.getInstance().nextId());
 		item.setItem(temp);
 		LsimulatorWorld.getInstance().storeObject(item);

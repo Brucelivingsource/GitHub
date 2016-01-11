@@ -16,71 +16,71 @@ package Lsimulator.server.server.storage;
 
 import java.util.List;
 
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 import Lsimulator.server.server.storage.mysql.MySqlCharactersItemStorage;
 
 public abstract class CharactersItemStorage {
-	public abstract List<LsimulatorItemInstance> loadItems(int objId) throws Exception;
+	public abstract List<ItemInstance> loadItems(int objId) throws Exception;
 
-	public abstract void storeItem(int objId, LsimulatorItemInstance item)
+	public abstract void storeItem(int objId, ItemInstance item)
 			throws Exception;
 
-	public abstract void deleteItem(LsimulatorItemInstance item) throws Exception;
+	public abstract void deleteItem(ItemInstance item) throws Exception;
 
-	public abstract void updateItemId(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateItemId(ItemInstance item) throws Exception;
 
-	public abstract void updateItemCount(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateItemCount(ItemInstance item) throws Exception;
 
-	public abstract void updateItemIdentified(LsimulatorItemInstance item)
+	public abstract void updateItemIdentified(ItemInstance item)
 			throws Exception;
 
-	public abstract void updateItemEquipped(LsimulatorItemInstance item)
+	public abstract void updateItemEquipped(ItemInstance item)
 			throws Exception;
 
-	public abstract void updateItemEnchantLevel(LsimulatorItemInstance item)
+	public abstract void updateItemEnchantLevel(ItemInstance item)
 			throws Exception;
 
-	public abstract void updateItemDurability(LsimulatorItemInstance item)
+	public abstract void updateItemDurability(ItemInstance item)
 			throws Exception;
 
-	public abstract void updateItemChargeCount(LsimulatorItemInstance item)
+	public abstract void updateItemChargeCount(ItemInstance item)
 			throws Exception;
 
-	public abstract void updateItemRemainingTime(LsimulatorItemInstance item)
+	public abstract void updateItemRemainingTime(ItemInstance item)
 			throws Exception;
 
-	public abstract void updateItemDelayEffect(LsimulatorItemInstance item)
+	public abstract void updateItemDelayEffect(ItemInstance item)
 			throws Exception;
 
 	public abstract int getItemCount(int objId) throws Exception;
 
-	public abstract void updateItemBless(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateItemBless(ItemInstance item) throws Exception;
 
-	public abstract void updateItemAttrEnchantKind(LsimulatorItemInstance item)
+	public abstract void updateItemAttrEnchantKind(ItemInstance item)
 			throws Exception;
 
-	public abstract void updateItemAttrEnchantLevel(LsimulatorItemInstance item)
+	public abstract void updateItemAttrEnchantLevel(ItemInstance item)
 			throws Exception;
 
-	public abstract void updateaddHp(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateaddHp(ItemInstance item) throws Exception;
 
-	public abstract void updateaddMp(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateaddMp(ItemInstance item) throws Exception;
 
-	public abstract void updateHpr(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateHpr(ItemInstance item) throws Exception;
 
-	public abstract void updateMpr(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateMpr(ItemInstance item) throws Exception;
 
-	public abstract void updateFireMr(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateFireMr(ItemInstance item) throws Exception;
 
-	public abstract void updateWaterMr(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateWaterMr(ItemInstance item) throws Exception;
 
-	public abstract void updateEarthMr(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateEarthMr(ItemInstance item) throws Exception;
 
-	public abstract void updateWindMr(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateWindMr(ItemInstance item) throws Exception;
 
-	public abstract void updateaddSp(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateaddSp(ItemInstance item) throws Exception;
 
-	public abstract void updateM_Def(LsimulatorItemInstance item) throws Exception;
+	public abstract void updateM_Def(ItemInstance item) throws Exception;
 
 	public static CharactersItemStorage create() {
 		if (_instance == null) {

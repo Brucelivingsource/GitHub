@@ -18,7 +18,7 @@ import java.util.Collection;
 
 import Lsimulator.server.server.model.LsimulatorTeleport;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.utils.collections.Lists;
 
@@ -31,15 +31,15 @@ public class LsimulatorRecall implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
-			Collection<LsimulatorPcInstance> targets = null;
+			Collection<PcInstance> targets = null;
 			if (arg.equalsIgnoreCase("all")) {
 				targets = LsimulatorWorld.getInstance().getAllPlayers();
 			}
 			else {
 				targets = Lists.newList();
-				LsimulatorPcInstance tg = LsimulatorWorld.getInstance().getPlayer(arg);
+				PcInstance tg = LsimulatorWorld.getInstance().getPlayer(arg);
 				if (tg == null) {
 					pc.sendPackets(new S_SystemMessage("ID不存在。"));
 					return;
@@ -47,7 +47,7 @@ public class LsimulatorRecall implements LsimulatorCommandExecutor {
 				targets.add(tg);
 			}
 
-			for (LsimulatorPcInstance target : targets) {
+			for (PcInstance target : targets) {
 				if (target.isGm()) {
 					continue;
 				}

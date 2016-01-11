@@ -17,10 +17,10 @@ package Lsimulator.server.server.model;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 public class LsimulatorItemOwnerTimer extends TimerTask {
-	public LsimulatorItemOwnerTimer(LsimulatorItemInstance item, int timeMillis) {
+	public LsimulatorItemOwnerTimer(ItemInstance item, int timeMillis) {
 		_item = item;
 		_timeMillis = timeMillis;
 	}
@@ -36,7 +36,7 @@ public class LsimulatorItemOwnerTimer extends TimerTask {
 		timer.schedule(this, _timeMillis);
 	}
 
-	private final LsimulatorItemInstance _item;
+	private final ItemInstance _item;
 
 	private final int _timeMillis;
 }

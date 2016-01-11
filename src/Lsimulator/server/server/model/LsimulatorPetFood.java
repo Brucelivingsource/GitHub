@@ -18,14 +18,14 @@ import java.util.TimerTask;
 
 import Lsimulator.server.server.datatables.PetTable;
 import Lsimulator.server.server.datatables.PetTypeTable;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.serverpackets.S_NpcChatPacket;
 import Lsimulator.server.server.templates.LsimulatorPet;
 import Lsimulator.server.server.templates.LsimulatorPetType;
 
 public class LsimulatorPetFood extends TimerTask {
 	/** 寵物飽食度計時器 */
-	public LsimulatorPetFood(LsimulatorPetInstance pet, int itemObj) {
+	public LsimulatorPetFood(PetInstance pet, int itemObj) {
 		_pet = pet;
 		_l1pet = PetTable.getInstance().getTemplate(itemObj);
 	}
@@ -58,7 +58,7 @@ public class LsimulatorPetFood extends TimerTask {
 		}
 	}
 
-	private final LsimulatorPetInstance _pet;
+	private final PetInstance _pet;
 	private int _food = 0;
 	private LsimulatorPet _l1pet;
 }

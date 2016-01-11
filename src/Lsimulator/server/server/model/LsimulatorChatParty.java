@@ -17,7 +17,7 @@ package Lsimulator.server.server.model;
 import java.util.List;
 
 import Lsimulator.server.Config;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.utils.collections.Lists;
 
@@ -25,11 +25,11 @@ import Lsimulator.server.server.utils.collections.Lists;
 // LsimulatorChatParty
 
 public class LsimulatorChatParty {
-	private final List<LsimulatorPcInstance> _membersList = Lists.newList();
+	private final List<PcInstance> _membersList = Lists.newList();
 
-	private LsimulatorPcInstance _leader = null;
+	private PcInstance _leader = null;
 
-	public void addMember(LsimulatorPcInstance pc) {
+	public void addMember(PcInstance pc) {
 		if (pc == null) {
 			throw new NullPointerException();
 		}
@@ -46,7 +46,7 @@ public class LsimulatorChatParty {
 		pc.setChatParty(this);
 	}
 
-	private void removeMember(LsimulatorPcInstance pc) {
+	private void removeMember(PcInstance pc) {
 		if (!_membersList.contains(pc)) {
 			return;
 		}
@@ -63,41 +63,41 @@ public class LsimulatorChatParty {
 		return Config.MAX_CHAT_PT - _membersList.size();
 	}
 
-	public boolean isMember(LsimulatorPcInstance pc) {
+	public boolean isMember(PcInstance pc) {
 		return _membersList.contains(pc);
 	}
 
-	private void setLeader(LsimulatorPcInstance pc) {
+	private void setLeader(PcInstance pc) {
 		_leader = pc;
 	}
 
-	public LsimulatorPcInstance getLeader() {
+	public PcInstance getLeader() {
 		return _leader;
 	}
 
-	public boolean isLeader(LsimulatorPcInstance pc) {
+	public boolean isLeader(PcInstance pc) {
 		return pc.getId() == _leader.getId();
 	}
 
 	public String getMembersNameList() {
 		String _result = new String("");
-		for (LsimulatorPcInstance pc : _membersList) {
+		for (PcInstance pc : _membersList) {
 			_result = _result + pc.getName() + " ";
 		}
 		return _result;
 	}
 
 	private void breakup() {
-		LsimulatorPcInstance[] members = getMembers();
+		PcInstance[] members = getMembers();
 
-		for (LsimulatorPcInstance member : members) {
+		for (PcInstance member : members) {
 			removeMember(member);
 			member.sendPackets(new S_ServerMessage(418)); // パーティーを解散しました。
 		}
 	}
 
-	public void leaveMember(LsimulatorPcInstance pc) {
-		LsimulatorPcInstance[] members = getMembers();
+	public void leaveMember(PcInstance pc) {
+		PcInstance[] members = getMembers();
 		if (isLeader(pc)) {
 			// パーティーリーダーの場合
 			breakup();
@@ -107,7 +107,7 @@ public class LsimulatorChatParty {
 			if (getNumOfMembers() == 2) {
 				// パーティーメンバーが自分とリーダーのみ
 				removeMember(pc);
-				LsimulatorPcInstance leader = getLeader();
+				PcInstance leader = getLeader();
 				removeMember(leader);
 
 				sendLeftMessage(pc, pc);
@@ -116,7 +116,7 @@ public class LsimulatorChatParty {
 			else {
 				// 残りのパーティーメンバーが２人以上いる
 				removeMember(pc);
-				for (LsimulatorPcInstance member : members) {
+				for (PcInstance member : members) {
 					sendLeftMessage(member, pc);
 				}
 				sendLeftMessage(pc, pc);
@@ -124,11 +124,11 @@ public class LsimulatorChatParty {
 		}
 	}
 
-	public void kickMember(LsimulatorPcInstance pc) {
+	public void kickMember(PcInstance pc) {
 		if (getNumOfMembers() == 2) {
 			// パーティーメンバーが自分とリーダーのみ
 			removeMember(pc);
-			LsimulatorPcInstance leader = getLeader();
+			PcInstance leader = getLeader();
 			removeMember(leader);
 		}
 		else {
@@ -138,15 +138,15 @@ public class LsimulatorChatParty {
 		pc.sendPackets(new S_ServerMessage(419)); // パーティーから追放されました。
 	}
 
-	public LsimulatorPcInstance[] getMembers() {
-		return _membersList.toArray(new LsimulatorPcInstance[_membersList.size()]);
+	public PcInstance[] getMembers() {
+		return _membersList.toArray(new PcInstance[_membersList.size()]);
 	}
 
 	public int getNumOfMembers() {
 		return _membersList.size();
 	}
 
-	private void sendLeftMessage(LsimulatorPcInstance sendTo, LsimulatorPcInstance left) {
+	private void sendLeftMessage(PcInstance sendTo, PcInstance left) {
 		// %0がパーティーから去りました。
 		sendTo.sendPackets(new S_ServerMessage(420, left.getName()));
 	}

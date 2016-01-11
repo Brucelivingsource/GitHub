@@ -24,13 +24,13 @@ import Lsimulator.server.server.model.LsimulatorPinkName;
 import Lsimulator.server.server.model.LsimulatorPolyMorph;
 import Lsimulator.server.server.model.LsimulatorTeleport;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorTowerInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
+import Lsimulator.server.server.model.Instance.TowerInstance;
 import Lsimulator.server.server.model.poison.LsimulatorDamagePoison;
 import Lsimulator.server.server.serverpackets.S_ChangeName;
 import Lsimulator.server.server.serverpackets.S_CharVisualUpdate;
@@ -68,7 +68,7 @@ import Lsimulator.server.server.utils.Random;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.*;
 
 public class LsimulatorBuffUtil {
-	public static void haste(LsimulatorPcInstance pc, int timeMillis) {
+	public static void haste(PcInstance pc, int timeMillis) {
 
 		int objId = pc.getId();
 
@@ -107,7 +107,7 @@ public class LsimulatorBuffUtil {
 		pc.setMoveSpeed(1);
 	}
 
-	public static void brave(LsimulatorPcInstance pc, int timeMillis) {
+	public static void brave(PcInstance pc, int timeMillis) {
 		// 消除重複狀態
 		if (pc.hasSkillEffect(STATUS_BRAVE)) { // 勇敢藥水 1.33倍
 			pc.killSkillEffectTimer(STATUS_BRAVE);
@@ -141,7 +141,7 @@ public class LsimulatorBuffUtil {
 		pc.setBraveSpeed(1);
 	}
 
-	public static void thirdSpeed(LsimulatorPcInstance pc) {
+	public static void thirdSpeed(PcInstance pc) {
 		if (pc.hasSkillEffect(STATUS_THIRD_SPEED)) {
 			pc.killSkillEffectTimer(STATUS_THIRD_SPEED);
 		}
@@ -155,7 +155,7 @@ public class LsimulatorBuffUtil {
 		pc.sendPackets(new S_ServerMessage(1065)); // 將發生神秘的奇蹟力量。
 	}
 
-	public static void bloodstain(LsimulatorPcInstance pc, byte type, int time,
+	public static void bloodstain(PcInstance pc, byte type, int time,
 			boolean showGfx) {
 		if (showGfx) {
 			pc.sendPackets(new S_SkillSound(pc.getId(), 7783));
@@ -183,7 +183,7 @@ public class LsimulatorBuffUtil {
 		pc.setSkillEffect(skillId, (time * 60 * 1000));
 	}
 
-	public static void effectBlessOfDragonSlayer(LsimulatorPcInstance pc, int skillId,
+	public static void effectBlessOfDragonSlayer(PcInstance pc, int skillId,
 			int time, int showGfx) {
 		if (showGfx != 0) {
 			pc.sendPackets(new S_SkillSound(pc.getId(), showGfx));
@@ -227,9 +227,9 @@ public class LsimulatorBuffUtil {
 	}
 
 	public static int skillEffect(LsimulatorCharacter _user, LsimulatorCharacter cha, LsimulatorCharacter _target, int skillId, int _getBuffIconDuration, int dmg) {
-		LsimulatorPcInstance _player = null;
-		if (_user instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance _pc = (LsimulatorPcInstance) _user;
+		PcInstance _player = null;
+		if (_user instanceof PcInstance) {
+			PcInstance _pc = (PcInstance) _user;
 			_player = _pc;
 		}
 
@@ -250,11 +250,11 @@ public class LsimulatorBuffUtil {
 		// 返生術、終極返生術
 		case RESURRECTION:
 		case GREATER_RESURRECTION:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				if (_player.getId() != pc.getId()) {
 					if (LsimulatorWorld.getInstance().getVisiblePlayer(pc, 0).size() > 0) {
-						for (LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance()
+						for (PcInstance visiblePc : LsimulatorWorld.getInstance()
 								.getVisiblePlayer(pc, 0)) {
 							if (!visiblePc.isDead()) {
 								// 復活失敗，因為這個位置已被佔據。
@@ -275,17 +275,17 @@ public class LsimulatorBuffUtil {
 						}
 					}
 				}
-			} else if (cha instanceof LsimulatorNpcInstance) {
-				if (!(cha instanceof LsimulatorTowerInstance)) {
-					LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			} else if (cha instanceof NpcInstance) {
+				if (!(cha instanceof TowerInstance)) {
+					NpcInstance npc = (NpcInstance) cha;
 					if (npc.getNpcTemplate().isCantResurrect()
-							&& !(npc instanceof LsimulatorPetInstance)) {
+							&& !(npc instanceof PetInstance)) {
 						return 0;
 					}
-					if ((npc instanceof LsimulatorPetInstance)
+					if ((npc instanceof PetInstance)
 							&& (LsimulatorWorld.getInstance().getVisiblePlayer(npc, 0)
 									.size() > 0)) {
-						for (LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance()
+						for (PcInstance visiblePc : LsimulatorWorld.getInstance()
 								.getVisiblePlayer(npc, 0)) {
 							if (!visiblePc.isDead()) {
 								// 復活失敗，因為這個位置已被佔據。
@@ -295,10 +295,10 @@ public class LsimulatorBuffUtil {
 						}
 					}
 					if ((npc.getCurrentHp() == 0) && npc.isDead()) {
-						npc.resurrect(npc.getMaxHp() / 4);
+						npc.resurrect(npc.getMaxHp() >> 2 );
 						npc.setResurrect(true);
-						if ((npc instanceof LsimulatorPetInstance)) {
-							LsimulatorPetInstance pet = (LsimulatorPetInstance) npc;
+						if ((npc instanceof PetInstance)) {
+							PetInstance pet = (PetInstance) npc;
 							// 開始飽食度計時
 							pet.startFoodTimer(pet);
 							// 開始回血回魔
@@ -311,11 +311,11 @@ public class LsimulatorBuffUtil {
 			break;
 		// 生命呼喚
 		case CALL_OF_NATURE:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				if (_player.getId() != pc.getId()) {
 					if (LsimulatorWorld.getInstance().getVisiblePlayer(pc, 0).size() > 0) {
-						for (LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance()
+						for (PcInstance visiblePc : LsimulatorWorld.getInstance()
 								.getVisiblePlayer(pc, 0)) {
 							if (!visiblePc.isDead()) {
 								// 復活失敗，因為這個位置已被佔據。
@@ -330,17 +330,17 @@ public class LsimulatorBuffUtil {
 																	// (Y/N)
 					}
 				}
-			} else if (cha instanceof LsimulatorNpcInstance) {
-				if (!(cha instanceof LsimulatorTowerInstance)) {
-					LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			} else if (cha instanceof NpcInstance) {
+				if (!(cha instanceof TowerInstance)) {
+					NpcInstance npc = (NpcInstance) cha;
 					if (npc.getNpcTemplate().isCantResurrect()
-							&& !(npc instanceof LsimulatorPetInstance)) {
+							&& !(npc instanceof PetInstance)) {
 						return 0;
 					}
-					if ((npc instanceof LsimulatorPetInstance)
+					if ((npc instanceof PetInstance)
 							&& (LsimulatorWorld.getInstance().getVisiblePlayer(npc, 0)
 									.size() > 0)) {
-						for (LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance()
+						for (PcInstance visiblePc : LsimulatorWorld.getInstance()
 								.getVisiblePlayer(npc, 0)) {
 							if (!visiblePc.isDead()) {
 								// 復活失敗，因為這個位置已被佔據。
@@ -353,8 +353,8 @@ public class LsimulatorBuffUtil {
 						npc.resurrect(cha.getMaxHp());
 						npc.resurrect(cha.getMaxMp() / 100);
 						npc.setResurrect(true);
-						if ((npc instanceof LsimulatorPetInstance)) {
-							LsimulatorPetInstance pet = (LsimulatorPetInstance) npc;
+						if ((npc instanceof PetInstance)) {
+							PetInstance pet = (PetInstance) npc;
 							// 開始飽食度計時
 							pet.startFoodTimer(pet);
 							// 開始回血回魔
@@ -367,17 +367,17 @@ public class LsimulatorBuffUtil {
 			break;
 		// 無所遁形
 		case DETECTION:
-			if (cha instanceof LsimulatorNpcInstance) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			if (cha instanceof NpcInstance) {
+				NpcInstance npc = (NpcInstance) cha;
 				int hiddenStatus = npc.getHiddenStatus();
-				if (hiddenStatus == LsimulatorNpcInstance.HIDDEN_STATUS_SINK) {
+				if (hiddenStatus == NpcInstance.HIDDEN_STATUS_SINK) {
 					npc.appearOnGround(_player);
 				}
 			}
 			break;
 		// 弱化屬性
 		case ELEMENTAL_FALL_DOWN:
-			if (_user instanceof LsimulatorPcInstance) {
+			if (_user instanceof PcInstance) {
 				int playerAttr = _player.getElfAttr();
 				int i = -50;
 				if (playerAttr != 0) {
@@ -476,17 +476,17 @@ public class LsimulatorBuffUtil {
 		// 混亂
 		case CONFUSION:
 			// 發動判斷
-			if (_user instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) _user;
+			if (_user instanceof PcInstance) {
+				PcInstance pc = (PcInstance) _user;
 				if (!cha.hasSkillEffect(CONFUSION)) {
 					int change = Random.nextInt(100) + 1;
 					if (change < (30 + Random.nextInt(11))) { // 30 ~ 40%
 						pc.sendPackets(new S_SkillSound(cha.getId(), 6525));
 						pc.broadcastPacket(new S_SkillSound(cha.getId(), 6525));
-						cha.setSkillEffect(CONFUSION, 2 * 1000); // 發動後再次發動間隔 2秒
+						cha.setSkillEffect(CONFUSION, 2000); // 發動後再次發動間隔 2秒
 						cha.setSkillEffect(CONFUSION_ING, 8 * 1000);
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance targetPc = (LsimulatorPcInstance) cha;
+						if (cha instanceof PcInstance) {
+							PcInstance targetPc = (PcInstance) cha;
 							targetPc.sendPackets(new S_ServerMessage(1339)); // 突然感覺到混亂。
 						}
 					}
@@ -497,8 +497,8 @@ public class LsimulatorBuffUtil {
 		// 黑闇之影
 		case CURSE_BLIND:
 		case DARKNESS:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				if (pc.hasSkillEffect(STATUS_FLOATING_EYE)) { // 漂浮之眼肉效果
 					pc.sendPackets(new S_CurseBlind(2));
 				} else {
@@ -517,9 +517,9 @@ public class LsimulatorBuffUtil {
 					&& !cha.hasSkillEffect(ICE_LANCE)
 					&& !cha.hasSkillEffect(FREEZING_BLIZZARD)
 					&& !cha.hasSkillEffect(FREEZING_BREATH)) {
-				if (cha instanceof LsimulatorPcInstance) {
+				if (cha instanceof PcInstance) {
 					LsimulatorCurseParalysis.curse(cha, 8000, 16000);
-				} else if (cha instanceof LsimulatorMonsterInstance) {
+				} else if (cha instanceof MonsterInstance) {
 					LsimulatorCurseParalysis.curse(cha, 8000, 16000);
 				}
 			}
@@ -536,8 +536,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 風之枷鎖
 		case WIND_SHACKLE:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconWindShackle(pc.getId(),
 						_getBuffIconDuration));
 				pc.broadcastPacket(new S_SkillIconWindShackle(pc.getId(),
@@ -546,8 +546,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 魔法相消術
 		case CANCELLATION:
-			if (cha instanceof LsimulatorNpcInstance) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			if (cha instanceof NpcInstance) {
+				NpcInstance npc = (NpcInstance) cha;
 				int npcId = npc.getNpcTemplate().get_npcId();
 				if (npcId == 71092) { // 調査員
 					if (npc.getGfxId() == npc.getTempCharGfx()) {
@@ -603,8 +603,8 @@ public class LsimulatorBuffUtil {
 			if ((_player != null) && _player.isInvisble()) {
 				_player.delInvis();
 			}
-			if (!(cha instanceof LsimulatorPcInstance)) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			if (!(cha instanceof PcInstance)) {
+				NpcInstance npc = (NpcInstance) cha;
 				npc.setMoveSpeed(0);
 				npc.setBraveSpeed(0);
 				npc.broadcastPacket(new S_SkillHaste(cha.getId(), 0, 0));
@@ -632,7 +632,7 @@ public class LsimulatorBuffUtil {
 				cha.removeSkillEffect(skillNum);
 			}
 
-			if (cha instanceof LsimulatorPcInstance) {
+			if (cha instanceof PcInstance) {
 			}
 
 			// 料理の解除
@@ -643,8 +643,8 @@ public class LsimulatorBuffUtil {
 				cha.removeSkillEffect(skillNum);
 			}
 
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 
 				// アイテム装備による変身の解除
 				LsimulatorPolyMorph.undoPoly(pc);
@@ -659,8 +659,8 @@ public class LsimulatorBuffUtil {
 				}
 			}
 			cha.removeSkillEffect(STATUS_FREEZE); // Freeze解除
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_CharVisualUpdate(pc));
 				pc.broadcastPacket(new S_CharVisualUpdate(pc));
 				if (pc.isPrivateShop()) {
@@ -669,15 +669,15 @@ public class LsimulatorBuffUtil {
 					pc.broadcastPacket(new S_DoActionShop(pc.getId(),
 							ActionCodes.ACTION_Shop, pc.getShopChat()));
 				}
-				if (_user instanceof LsimulatorPcInstance) {
+				if (_user instanceof PcInstance) {
 					LsimulatorPinkName.onAction(pc, _user);
 				}
 			}
 			break;
 		// 沉睡之霧
 		case FOG_OF_SLEEPING:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_SLEEP, true));
 			}
 			cha.setSleeped(true);
@@ -702,29 +702,29 @@ public class LsimulatorBuffUtil {
 		// 恐懼無助
 		case RESIST_FEAR:
 			cha.addNdodge((byte) 5); // 閃避率 - 50%
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				// 更新閃避率顯示
 				pc.sendPackets(new S_PacketBox(101, pc.getNdodge()));
 			}
 			break;
 		// 釋放元素
 		case RETURN_TO_NATURE:
-			if (Config.RETURN_TO_NATURE && (cha instanceof LsimulatorSummonInstance)) {
-				LsimulatorSummonInstance summon = (LsimulatorSummonInstance) cha;
+			if (Config.RETURN_TO_NATURE && (cha instanceof SummonInstance)) {
+				SummonInstance summon = (SummonInstance) cha;
 				summon.broadcastPacket(new S_SkillSound(summon.getId(), 2245));
 				summon.returnToNature();
 			} else {
-				if (_user instanceof LsimulatorPcInstance) {
+				if (_user instanceof PcInstance) {
 					_player.sendPackets(new S_ServerMessage(79));
 				}
 			}
 			break;
 		// 壞物術
 		case WEAPON_BREAK:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
-				LsimulatorItemInstance weapon = pc.getWeapon();
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
+				ItemInstance weapon = pc.getWeapon();
 				if (weapon != null) {
 					int weaponDamage = Random.nextInt(_user.getInt() / 3) + 1;
 					// \f1你的%0%s壞了。
@@ -732,7 +732,7 @@ public class LsimulatorBuffUtil {
 					pc.getInventory().receiveDamage(weapon, weaponDamage);
 				}
 			} else {
-				((LsimulatorNpcInstance) cha).setWeaponBreaked(true);
+				((NpcInstance) cha).setWeaponBreaked(true);
 			}
 			break;
 
@@ -740,8 +740,8 @@ public class LsimulatorBuffUtil {
 		// 鏡像、暗影閃避
 		case MIRROR_IMAGE:
 		case UNCANNY_DODGE:
-			if (_user instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) _user;
+			if (_user instanceof PcInstance) {
+				PcInstance pc = (PcInstance) _user;
 				pc.addDodge((byte) 5); // 閃避率 + 50%
 				// 更新閃避率顯示
 				pc.sendPackets(new S_PacketBox(88, pc.getDodge()));
@@ -749,8 +749,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 激勵士氣
 		case GLOWING_AURA:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addHitup(5);
 				pc.addBowHitup(5);
 				pc.addMr(20);
@@ -760,112 +760,112 @@ public class LsimulatorBuffUtil {
 			break;
 		// 鋼鐵士氣
 		case SHINING_AURA:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(-8);
 				pc.sendPackets(new S_SkillIconAura(114, _getBuffIconDuration));
 			}
 			break;
 		// 衝擊士氣
 		case BRAVE_AURA:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addDmgup(5);
 				pc.sendPackets(new S_SkillIconAura(116, _getBuffIconDuration));
 			}
 			break;
 		// 防護罩
 		case SHIELD:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(-2);
 				pc.sendPackets(new S_SkillIconShield(2, _getBuffIconDuration));
 			}
 			break;
 		// 影之防護
 		case SHADOW_ARMOR:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(-3);
 				pc.sendPackets(new S_SkillIconShield(3, _getBuffIconDuration));
 			}
 			break;
 		// 大地防護
 		case EARTH_SKIN:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(-6);
 				pc.sendPackets(new S_SkillIconShield(6, _getBuffIconDuration));
 			}
 			break;
 		// 大地的祝福
 		case EARTH_BLESS:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(-7);
 				pc.sendPackets(new S_SkillIconShield(7, _getBuffIconDuration));
 			}
 			break;
 		// 鋼鐵防護
 		case IRON_SKIN:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(-10);
 				pc.sendPackets(new S_SkillIconShield(10, _getBuffIconDuration));
 			}
 			break;
 		// 體魄強健術
 		case PHYSICAL_ENCHANT_STR:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addStr((byte) 5);
 				pc.sendPackets(new S_Strup(pc, 5, _getBuffIconDuration));
 			}
 			break;
 		// 通暢氣脈術
 		case PHYSICAL_ENCHANT_DEX:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addDex((byte) 5);
 				pc.sendPackets(new S_Dexup(pc, 5, _getBuffIconDuration));
 			}
 			break;
 		// 力量提升
 		case DRESS_MIGHTY:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addStr((byte) 2);
 				pc.sendPackets(new S_Strup(pc, 2, _getBuffIconDuration));
 			}
 			break;
 		// 敏捷提升
 		case DRESS_DEXTERITY:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addDex((byte) 2);
 				pc.sendPackets(new S_Dexup(pc, 2, _getBuffIconDuration));
 			}
 			break;
 		// 魔法防禦
 		case RESIST_MAGIC:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(10);
 				pc.sendPackets(new S_SPMR(pc));
 			}
 			break;
 		// 淨化精神
 		case CLEAR_MIND:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addWis((byte) 3);
 				pc.resetBaseMr();
 			}
 			break;
 		// 屬性防禦
 		case RESIST_ELEMENTAL:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addWind(10);
 				pc.addWater(10);
 				pc.addFire(10);
@@ -875,8 +875,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 單屬性防禦
 		case ELEMENTAL_PROTECTION:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				int attr = pc.getElfAttr();
 				if (attr == 1) {
 					pc.addEarth(50);
@@ -891,47 +891,47 @@ public class LsimulatorBuffUtil {
 			break;
 		// 心靈轉換
 		case BODY_TO_MIND:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.setCurrentMp(pc.getCurrentMp() + 2);
 			}
 			break;
 		// 魂體轉換
 		case BLOODY_SOUL:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.setCurrentMp(pc.getCurrentMp() + 12);
 			}
 			break;
 		// 隱身術、暗隱術
 		case INVISIBILITY:
 		case BLIND_HIDING:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Invis(pc.getId(), 1));
 				pc.broadcastPacketForFindInvis(new S_RemoveObject(pc), false);
 			}
 			break;
 		// 火焰武器
 		case FIRE_WEAPON:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addDmgup(4);
 				pc.sendPackets(new S_SkillIconAura(147, _getBuffIconDuration));
 			}
 			break;
 		// 烈炎氣息
 		case FIRE_BLESS:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addDmgup(4);
 				pc.sendPackets(new S_SkillIconAura(154, _getBuffIconDuration));
 			}
 			break;
 		// 烈炎武器
 		case BURNING_WEAPON:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addDmgup(6);
 				pc.addHitup(3);
 				pc.sendPackets(new S_SkillIconAura(162, _getBuffIconDuration));
@@ -939,16 +939,16 @@ public class LsimulatorBuffUtil {
 			break;
 		// 風之神射
 		case WIND_SHOT:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addBowHitup(6);
 				pc.sendPackets(new S_SkillIconAura(148, _getBuffIconDuration));
 			}
 			break;
 		// 暴風之眼
 		case STORM_EYE:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addBowHitup(2);
 				pc.addBowDmgup(3);
 				pc.sendPackets(new S_SkillIconAura(155, _getBuffIconDuration));
@@ -956,8 +956,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 暴風神射
 		case STORM_SHOT:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addBowDmgup(5);
 				pc.addBowHitup(-1);
 				pc.sendPackets(new S_SkillIconAura(165, _getBuffIconDuration));
@@ -965,8 +965,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 狂暴術
 		case BERSERKERS:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(10);
 				pc.addDmgup(5);
 				pc.addHitup(2);
@@ -974,8 +974,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 變形術
 		case SHAPE_CHANGE:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_ShowPolyList(pc.getId()));
 				if (!pc.isShapeChange()) {
 					pc.setShapeChange(true);
@@ -984,8 +984,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 靈魂昇華
 		case ADVANCE_SPIRIT:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.setAdvenHp(pc.getBaseMaxHp() / 5);
 				pc.setAdvenMp(pc.getBaseMaxMp() / 5);
 				pc.addMaxHp(pc.getAdvenHp());
@@ -1001,8 +1001,8 @@ public class LsimulatorBuffUtil {
 		case HOLY_WALK:
 		case MOVING_ACCELERATION:
 		case WIND_WALK:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.setBraveSpeed(4);
 				pc.sendPackets(new S_SkillBrave(pc.getId(), 4,_getBuffIconDuration));
 				pc.broadcastPacket(new S_SkillBrave(pc.getId(), 4, 0));
@@ -1010,8 +1010,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 血之渴望
 		case BLOODLUST:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.setBraveSpeed(6);
 				pc.sendPackets(new S_SkillBrave(pc.getId(), 6, _getBuffIconDuration));
 				pc.broadcastPacket(new S_SkillBrave(pc.getId(), 6, 0));
@@ -1021,8 +1021,8 @@ public class LsimulatorBuffUtil {
 		case AWAKEN_ANTHARAS:
 		case AWAKEN_FAFURION:
 		case AWAKEN_VALAKAS:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				LsimulatorAwake.start(pc, skillId);
 			}
 			break;
@@ -1036,8 +1036,8 @@ public class LsimulatorBuffUtil {
 		// 幻覺：巫妖
 		case ILLUSION_LICH:
 			cha.addSp(2);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SPMR(pc));
 			}
 			break;
@@ -1060,8 +1060,8 @@ public class LsimulatorBuffUtil {
 			break;
 		// 絕對屏障
 		case ABSOLUTE_BARRIER:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.stopHpRegeneration();
 				pc.stopMpRegeneration();
 				pc.stopHpRegenerationByDoll();
@@ -1070,15 +1070,15 @@ public class LsimulatorBuffUtil {
 			break;
 		// 冥想術
 		case MEDITATION:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMpr(5);
 			}
 			break;
 		// 專注
 		case CONCENTRATION:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMpr(2);
 			}
 			break;
@@ -1086,8 +1086,8 @@ public class LsimulatorBuffUtil {
 		// 目標 NPC
 		// 能量感測
 		case WEAK_ELEMENTAL:
-			if (cha instanceof LsimulatorMonsterInstance) {
-				LsimulatorNpc npcTemp = ((LsimulatorMonsterInstance) cha).getNpcTemplate();
+			if (cha instanceof MonsterInstance) {
+				LsimulatorNpc npcTemp = ((MonsterInstance) cha).getNpcTemplate();
 				int weakAttr = npcTemp.get_weakAttr();
 				if ((weakAttr & 1) == 1) { // 地
 					cha.broadcastPacket(new S_SkillSound(cha.getId(), 2169));
@@ -1098,12 +1098,12 @@ public class LsimulatorBuffUtil {
 				} else if ((weakAttr & 8) == 8) { // 風
 					cha.broadcastPacket(new S_SkillSound(cha.getId(), 2168));
 				} else {
-					if (_user instanceof LsimulatorPcInstance) {
+					if (_user instanceof PcInstance) {
 						_player.sendPackets(new S_ServerMessage(79));
 					}
 				}
 			} else {
-				if (_user instanceof LsimulatorPcInstance) {
+				if (_user instanceof PcInstance) {
 					_player.sendPackets(new S_ServerMessage(79));
 				}
 			}
@@ -1112,8 +1112,8 @@ public class LsimulatorBuffUtil {
 		// 傳送性魔法
 		// 世界樹的呼喚
 		case TELEPORT_TO_MATHER:
-			if (_user instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (_user instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				if (pc.getMap().isEscapable() || pc.isGm()) {
 					LsimulatorTeleport.teleport(pc, 33051, 32337, (short) 4, 5, true);
 				} else {
@@ -1126,8 +1126,8 @@ public class LsimulatorBuffUtil {
 		// 召喚、迷魅、造屍
 		// 召喚術
 		case SUMMON_MONSTER:
-			if (_user instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (_user instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				int level = pc.getLevel();
 				int[] summons;
 				if (pc.getMap().isRecallPets()) {
@@ -1154,7 +1154,7 @@ public class LsimulatorBuffUtil {
 						Object[] petlist = pc.getPetList().values().toArray();
 						for (Object pet : petlist) {
 							// 現在のペットコスト
-							petcost += ((LsimulatorNpcInstance) pet).getPetcost();
+							petcost += ((NpcInstance) pet).getPetcost();
 						}
 						int pcCha = pc.getCha();
 						if (pcCha > 34) { // max count = 5
@@ -1165,7 +1165,7 @@ public class LsimulatorBuffUtil {
 						int summoncount = charisma / summoncost;
 						LsimulatorNpc npcTemp = NpcTable.getInstance().getTemplate(summonid);
 						for (int i = 0; i < summoncount; i++) {
-							LsimulatorSummonInstance summon = new LsimulatorSummonInstance(npcTemp, pc);
+							SummonInstance summon = new SummonInstance(npcTemp, pc);
 							summon.setPetcost(summoncost);
 						}
 					}
@@ -1178,13 +1178,13 @@ public class LsimulatorBuffUtil {
 		// 召喚屬性精靈、召喚強力屬性精靈
 		case LESSER_ELEMENTAL:
 		case GREATER_ELEMENTAL:
-			if (_user instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (_user instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				int attr = pc.getElfAttr();
 				if (attr != 0) { // 無属性でなければ実行
 					if (pc.getMap().isRecallPets()) {
 						int petcost = 0;
-						for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
+						for (NpcInstance petNpc : pc.getPetList().values()) {
 							// 現在のペットコスト
 							petcost += petNpc.getPetcost();
 						}
@@ -1206,7 +1206,7 @@ public class LsimulatorBuffUtil {
 									summonid = summons[i];
 									i = summons.length;
 								}
-								npcattr *= 2;
+								npcattr <<= 1;
 							}
 							// 特殊設定の場合ランダムで出現
 							if (summonid == 0) {
@@ -1217,7 +1217,7 @@ public class LsimulatorBuffUtil {
 
 							LsimulatorNpc npcTemp = NpcTable.getInstance().getTemplate(
 									summonid);
-							LsimulatorSummonInstance summon = new LsimulatorSummonInstance(
+							SummonInstance summon = new SummonInstance(
 									npcTemp, pc);
 							summon.setPetcost(pc.getCha() + 7); // 精霊の他にはNPCを所属させられない
 						}
@@ -1231,15 +1231,15 @@ public class LsimulatorBuffUtil {
 			break;
 		// 迷魅術
 		case TAMING_MONSTER:
-			if (cha instanceof LsimulatorMonsterInstance) {
-				LsimulatorMonsterInstance npc = (LsimulatorMonsterInstance) cha;
+			if (cha instanceof MonsterInstance) {
+				MonsterInstance npc = (MonsterInstance) cha;
 				// 可迷魅的怪物
 				if (npc.getNpcTemplate().isTamable()) {
 					int petcost = 0;
 					Object[] petlist = _user.getPetList().values().toArray();
 					for (Object pet : petlist) {
 						// 現在のペットコスト
-						petcost += ((LsimulatorNpcInstance) pet).getPetcost();
+						petcost += ((NpcInstance) pet).getPetcost();
 					}
 					int charisma = _user.getCha();
 					if (_player.isElf()) { // エルフ
@@ -1255,7 +1255,7 @@ public class LsimulatorBuffUtil {
 					}
 					charisma -= petcost;
 					if (charisma >= 6) { // ペットコストの確認
-						LsimulatorSummonInstance summon = new LsimulatorSummonInstance(npc,
+						SummonInstance summon = new SummonInstance(npc,
 								_user, false);
 						_target = summon; // ターゲット入替え
 					} else {
@@ -1266,13 +1266,13 @@ public class LsimulatorBuffUtil {
 			break;
 		// 造屍術
 		case CREATE_ZOMBIE:
-			if (cha instanceof LsimulatorMonsterInstance) {
-				LsimulatorMonsterInstance npc = (LsimulatorMonsterInstance) cha;
+			if (cha instanceof MonsterInstance) {
+				MonsterInstance npc = (MonsterInstance) cha;
 				int petcost = 0;
 				Object[] petlist = _user.getPetList().values().toArray();
 				for (Object pet : petlist) {
 					// 現在のペットコスト
-					petcost += ((LsimulatorNpcInstance) pet).getPetcost();
+					petcost += ((NpcInstance) pet).getPetcost();
 				}
 				int charisma = _user.getCha();
 				if (_player.isElf()) { // エルフ
@@ -1288,7 +1288,7 @@ public class LsimulatorBuffUtil {
 				}
 				charisma -= petcost;
 				if (charisma >= 6) { // ペットコストの確認
-					LsimulatorSummonInstance summon = new LsimulatorSummonInstance(npc, _user,
+					SummonInstance summon = new SummonInstance(npc, _user,
 							true);
 					_target = summon; // ターゲット入替え
 				} else {
@@ -1302,8 +1302,8 @@ public class LsimulatorBuffUtil {
 		case 10027:
 		case 10028:
 		case 10029:
-			if (_user instanceof LsimulatorNpcInstance) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) _user;
+			if (_user instanceof NpcInstance) {
+				NpcInstance npc = (NpcInstance) _user;
 				_user.broadcastPacket(new S_NpcChatPacket(npc, "$3717", 0)); // さあ、おまえに安息を与えよう。
 			} else {
 				_player.broadcastPacket(new S_ChatPacket(_player, "$3717", 0, 0)); // さあ、おまえに安息を与えよう。
@@ -1313,8 +1313,8 @@ public class LsimulatorBuffUtil {
 			LsimulatorTeleport.teleportToTargetFront(cha, _user, 1);
 			break;
 		case STATUS_FREEZE:
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_BIND, true));
 			}
 			break;
@@ -1337,7 +1337,7 @@ public class LsimulatorBuffUtil {
 				|| (skillNum == COOKING_WONDER_DRUG);
 	}
 	
-	private static void summonMonster(LsimulatorPcInstance pc, String s) {
+	private static void summonMonster(PcInstance pc, String s) {
 		String[] summonstr_list;
 		int[] summonid_list;
 		int[] summonlvl_list;
@@ -1375,7 +1375,7 @@ public class LsimulatorBuffUtil {
 		}
 
 		int petcost = 0;
-		for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
+		for (NpcInstance petNpc : pc.getPetList().values()) {
 			// 現在のペットコスト
 			petcost += petNpc.getPetcost();
 		}
@@ -1402,7 +1402,7 @@ public class LsimulatorBuffUtil {
 
 		LsimulatorNpc npcTemp = NpcTable.getInstance().getTemplate(summonid);
 		for (int cnt = 0; cnt < summoncount; cnt++) {
-			LsimulatorSummonInstance summon = new LsimulatorSummonInstance(npcTemp, pc);
+			SummonInstance summon = new SummonInstance(npcTemp, pc);
 			summon.setPetcost(summoncost);
 		}
 	}

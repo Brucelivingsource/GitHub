@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.w3c.dom.Element;
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.npc.LsimulatorNpcHtml;
 
 public class LsimulatorNpcListedAction extends LsimulatorNpcXmlAction {
@@ -30,7 +30,7 @@ public class LsimulatorNpcListedAction extends LsimulatorNpcXmlAction {
 	}
 
 	@Override
-	public LsimulatorNpcHtml execute(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj,
+	public LsimulatorNpcHtml execute(String actionName, PcInstance pc, LsimulatorObject obj,
 			byte[] args) {
 		LsimulatorNpcHtml result = null;
 		for (LsimulatorNpcAction action : _actions) {
@@ -46,7 +46,7 @@ public class LsimulatorNpcListedAction extends LsimulatorNpcXmlAction {
 	}
 
 	@Override
-	public LsimulatorNpcHtml executeWithAmount(String actionName, LsimulatorPcInstance pc,
+	public LsimulatorNpcHtml executeWithAmount(String actionName, PcInstance pc,
 			LsimulatorObject obj, int amount) {
 		LsimulatorNpcHtml result = null;
 		for (LsimulatorNpcAction action : _actions) {

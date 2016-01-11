@@ -19,7 +19,7 @@ import Lsimulator.server.server.datatables.ClanMembersTable;
 import Lsimulator.server.server.datatables.ClanRecommendTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_CharReset;
 import Lsimulator.server.server.serverpackets.S_CharTitle;
 import Lsimulator.server.server.serverpackets.S_ClanAttention;
@@ -37,7 +37,7 @@ public class C_PledgeRecommendation extends ClientBasePacket {
 	public C_PledgeRecommendation(byte[] decrypt, ClientThread client) throws Exception {
 		super(decrypt);
 
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -75,8 +75,8 @@ public class C_PledgeRecommendation extends ClientBasePacket {
 			
             if(type == 1){ // 接受玩家加入
             	LsimulatorClan clan = pc.getClan();
-            	LsimulatorPcInstance joinPc = LsimulatorWorld.getInstance().getPlayer(ClanRecommendTable.getInstance().getApplyPlayerName(index));
-            	for (LsimulatorPcInstance clanMembers : clan.getOnlineClanMember()) {
+            	PcInstance joinPc = LsimulatorWorld.getInstance().getPlayer(ClanRecommendTable.getInstance().getApplyPlayerName(index));
+            	for (PcInstance clanMembers : clan.getOnlineClanMember()) {
 					clanMembers.sendPackets(new S_ServerMessage(94,joinPc.getName())); // \f1你接受%0當你的血盟成員。
 				}
             	joinPc.setClanid(clan.getClanId());
@@ -101,7 +101,7 @@ public class C_PledgeRecommendation extends ClientBasePacket {
 				joinPc.sendPackets(new S_CharReset(joinPc.getId(), clan.getClanId()));
 				joinPc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.getClan().getEmblemStatus()));
 				joinPc.sendPackets(new S_ClanAttention());
-				for(LsimulatorPcInstance player : clan.getOnlineClanMember()){
+				for(PcInstance player : clan.getOnlineClanMember()){
 					player.sendPackets(new S_CharReset(joinPc.getId(), joinPc.getClan().getEmblemId()));
 					player.broadcastPacket(new S_CharReset(player.getId(), joinPc.getClan().getEmblemId()));
 				}

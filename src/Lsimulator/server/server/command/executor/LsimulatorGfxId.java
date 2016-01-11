@@ -20,8 +20,8 @@ import java.util.StringTokenizer;
 import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.datatables.NpcTable;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.templates.LsimulatorNpc;
 
@@ -34,7 +34,7 @@ public class LsimulatorGfxId implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer st = new StringTokenizer(arg);
 			int gfxid = Integer.parseInt(st.nextToken(), 10);
@@ -46,14 +46,14 @@ public class LsimulatorGfxId implements LsimulatorCommandExecutor {
 					Constructor<?> constructor = Class.forName("Lsimulator.server.server.model.Instance." + s + "Instance").getConstructors()[0];
 					Object aobj[] =
 					{ l1npc };
-					LsimulatorNpcInstance npc = (LsimulatorNpcInstance) constructor.newInstance(aobj);
+					NpcInstance npc = (NpcInstance) constructor.newInstance(aobj);
 					npc.setId(IdFactory.getInstance().nextId());
 					npc.setGfxId(gfxid + i);
 					npc.setTempCharGfx(0);
 					npc.setNameId("");
 					npc.setMap(pc.getMapId());
-					npc.setX(pc.getX() + i * 2);
-					npc.setY(pc.getY() + i * 2);
+					npc.setX(pc.getX() + i << 1);
+					npc.setY(pc.getY() + i << 1 );
 					npc.setHomeX(npc.getX());
 					npc.setHomeY(npc.getY());
 					npc.setHeading(4);

@@ -15,7 +15,7 @@
 package Lsimulator.server.server.model.monitor;
 
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * LsimulatorPcInstanceの定期処理、監視処理等を行う為の共通的な処理を実装した抽象クラス
@@ -38,7 +38,7 @@ public abstract class LsimulatorPcMonitor implements Runnable {
 
 	/**
 	 * 指定されたパラメータでLsimulatorPcInstanceに対するモニターを作成する。
-	 * @param oId {@link LsimulatorPcInstance#getId()}で取得できるオブジェクトID
+	 * @param oId {@link PcInstance#getId()}で取得できるオブジェクトID
 	 */
 	public LsimulatorPcMonitor(int oId) {
 		_id = oId;
@@ -46,7 +46,7 @@ public abstract class LsimulatorPcMonitor implements Runnable {
 
 	@Override
 	public final void run() {
-		LsimulatorPcInstance pc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(_id);
+		PcInstance pc = (PcInstance) LsimulatorWorld.getInstance().findObject(_id);
 		if (pc == null || pc.getNetConnection() == null) {
 			return;
 		}
@@ -57,5 +57,5 @@ public abstract class LsimulatorPcMonitor implements Runnable {
 	 * タスク実行時の処理
 	 * @param pc モニター対象のPC
 	 */
-	public abstract void execTask(LsimulatorPcInstance pc);
+	public abstract void execTask(PcInstance pc);
 }

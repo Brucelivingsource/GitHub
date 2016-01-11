@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket, S_SendInvOnLogin
@@ -27,7 +27,7 @@ public class S_ItemName extends ServerBasePacket {
 	/**
 	 * アイテムの名前を変更する。装備や強化状態が変わったときに送る。
 	 */
-	public S_ItemName(LsimulatorItemInstance item) {
+	public S_ItemName(ItemInstance item) {
 		if (item == null) {
 			return;
 		}

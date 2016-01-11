@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.clientpackets;
 
-import static Lsimulator.server.server.model.Instance.LsimulatorPcInstance.REGENSTATE_MOVE;
+import static Lsimulator.server.server.model.Instance.PcInstance.REGENSTATE_MOVE;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.ABSOLUTE_BARRIER;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.MEDITATION;
 import Lsimulator.server.Config;
@@ -23,7 +23,7 @@ import Lsimulator.server.server.model.AcceleratorChecker;
 import Lsimulator.server.server.model.Dungeon;
 import Lsimulator.server.server.model.DungeonRandom;
 import Lsimulator.server.server.model.LsimulatorTrade;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.trap.LsimulatorWorldTraps;
 import Lsimulator.server.server.serverpackets.S_MoveCharPacket;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
@@ -46,7 +46,7 @@ public class C_MoveChar extends ClientBasePacket {
 
 	// 地圖編號的研究
 	@SuppressWarnings("unused")
-	private void sendMapTileLog(LsimulatorPcInstance pc) {
+	private void sendMapTileLog(PcInstance pc) {
 		pc.sendPackets(new S_SystemMessage(pc.getMap().toString(pc.getLocation())));
 	}
 
@@ -54,7 +54,7 @@ public class C_MoveChar extends ClientBasePacket {
 	public C_MoveChar(byte decrypt[], ClientThread client) throws Exception {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if ((pc == null) || pc.isTeleport()) { // 傳送中
 			return;
 		}

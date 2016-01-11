@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.model.LsimulatorCharacter;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -43,7 +43,7 @@ public class S_UseAttackSkill extends ServerBasePacket {
 	}
 
 	private void buildPacket(LsimulatorCharacter cha, int targetobj, int x, int y, int[] data, boolean withCastMotion) {
-		if (cha instanceof LsimulatorPcInstance) {
+		if (cha instanceof PcInstance) {
 			// シャドウ系変身中に攻撃魔法を使用するとクライアントが落ちるため暫定対応
 			if (cha.hasSkillEffect(SHAPE_CHANGE) && (data[0] == ActionCodes.ACTION_SkillAttack)) {
 				int tempchargfx = cha.getTempCharGfx();

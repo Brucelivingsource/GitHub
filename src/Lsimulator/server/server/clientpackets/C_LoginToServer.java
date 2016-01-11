@@ -68,8 +68,8 @@ import Lsimulator.server.server.model.LsimulatorCooking;
 import Lsimulator.server.server.model.LsimulatorPolyMorph;
 import Lsimulator.server.server.model.LsimulatorWar;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.model.skill.LsimulatorBuffUtil;
 import Lsimulator.server.server.model.skill.LsimulatorSkillUse;
 import Lsimulator.server.server.serverpackets.S_ActiveSpells;
@@ -129,7 +129,7 @@ public class C_LoginToServer extends ClientBasePacket {
 			return;
 		}
 
-		LsimulatorPcInstance pc = LsimulatorPcInstance.load(charName);
+		PcInstance pc = PcInstance.load(charName);
 		Account account = Account.load(pc.getAccountName());
 		if (account.isOnlineStatus()) {
 			_log.info("同一個帳號雙重角色登入，強制切斷 " + client.getHostname() + ") 的連結");
@@ -290,8 +290,8 @@ public class C_LoginToServer extends ClientBasePacket {
 			if (clan != null) {
 				if ((pc.getClanid() == clan.getClanId()) && // 血盟解散、又重新用同樣名字創立時的對策
 						pc.getClanname().toLowerCase().equals(clan.getClanName().toLowerCase())) {
-					LsimulatorPcInstance[] clanMembers = clan.getOnlineClanMember();
-					for (LsimulatorPcInstance clanMember : clanMembers) {
+					PcInstance[] clanMembers = clan.getOnlineClanMember();
+					for (PcInstance clanMember : clanMembers) {
 						if (clanMember.getId() != pc.getId()) {
 							clanMember.sendPackets(new S_ServerMessage(843, pc.getName())); // 只今、血盟員の%0%sがゲームに接続しました。
 						}
@@ -319,7 +319,7 @@ public class C_LoginToServer extends ClientBasePacket {
 		}
 
 		if (pc.getPartnerId() != 0) { // 結婚中
-			LsimulatorPcInstance partner = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartnerId());
+			PcInstance partner = (PcInstance) LsimulatorWorld.getInstance().findObject(pc.getPartnerId());
 			if ((partner != null) && (partner.getPartnerId() != 0)) {
 				if ((pc.getPartnerId() == partner.getId())&& (partner.getPartnerId() == pc.getId())) {
 					pc.sendPackets(new S_ServerMessage(548)); // あなたのパートナーは今ゲーム中です。
@@ -350,14 +350,14 @@ public class C_LoginToServer extends ClientBasePacket {
 		pc.checkNoviceType();
 	}
 
-	private void items(LsimulatorPcInstance pc) {
+	private void items(PcInstance pc) {
 		// 從資料庫中讀取角色的道具
 		CharacterTable.getInstance().restoreInventory(pc);
 
 		pc.sendPackets(new S_InvList(pc.getInventory().getItems()));
 	}
 
-	private void skills(LsimulatorPcInstance pc) {
+	private void skills(PcInstance pc) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
@@ -505,19 +505,19 @@ public class C_LoginToServer extends ClientBasePacket {
 		}
 	}
 
-	private void serchSummon(LsimulatorPcInstance pc) {
-		for (LsimulatorSummonInstance summon : LsimulatorWorld.getInstance().getAllSummons()) {
+	private void serchSummon(PcInstance pc) {
+		for (SummonInstance summon : LsimulatorWorld.getInstance().getAllSummons()) {
 			if (summon.getMaster().getId() == pc.getId()) {
 				summon.setMaster(pc);
 				pc.addPet(summon);
-				for (LsimulatorPcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(summon)) {
+				for (PcInstance visiblePc : LsimulatorWorld.getInstance().getVisiblePlayer(summon)) {
 					visiblePc.sendPackets(new S_SummonPack(summon, visiblePc));
 				}
 			}
 		}
 	}
 
-	private void buff(ClientThread clientthread, LsimulatorPcInstance pc) {
+	private void buff(ClientThread clientthread, PcInstance pc) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
@@ -569,22 +569,22 @@ public class C_LoginToServer extends ClientBasePacket {
 					pc.setSkillEffect(skillid, remaining_time * 1000);
 					break;
 				case STATUS_THIRD_SPEED: // 三段加速
-					time = remaining_time / 4;
+					time = remaining_time >> 2 ;
 					pc.sendPackets(new S_Liquor(pc.getId(), 8)); // 人物 *
 																	// 1.15
 					pc.broadcastPacket(new S_Liquor(pc.getId(), 8)); // 人物 *
 																		// 1.15
 					pc.sendPackets(new S_SkillIconThirdSpeed(time));
-					pc.setSkillEffect(skillid, time * 4 * 1000);
+					pc.setSkillEffect(skillid, ( time << 2  ) * 1000);
 					break;
 				case MIRROR_IMAGE: // 鏡像
 				case UNCANNY_DODGE: // 暗影閃避
-					time = remaining_time / 16;
+					time = remaining_time >> 4 ;
 					pc.addDodge((byte) 5); // 閃避率 + 50%
 					// 更新閃避率顯示
 					pc.sendPackets(new S_PacketBox(88, pc.getDodge()));
 					pc.sendPackets(new S_PacketBox(21, time));
-					pc.setSkillEffect(skillid, time * 16 * 1000);
+					pc.setSkillEffect(skillid, ( time  * 1000 ) << 4 );
 					break;
 				case EFFECT_BLOODSTAIN_OF_ANTHARAS: // 安塔瑞斯的血痕
 					remaining_time = remaining_time / 60;
@@ -633,7 +633,7 @@ public class C_LoginToServer extends ClientBasePacket {
 		}
 	}
 	
-	private void checkPledgeRecommendation(LsimulatorPcInstance pc){
+	private void checkPledgeRecommendation(PcInstance pc){
 		if(pc.getClanid() > 0){ 
 			pc.sendPackets(new S_ClanAttention());
 			pc.sendPackets(new S_PacketBox(S_PacketBox.PLEDGE_EMBLEM_STATUS, pc.getClan().getEmblemStatus()));

@@ -17,7 +17,7 @@ package Lsimulator.server.server.model.npc.action;
 import java.util.List;
 
 import Lsimulator.server.server.model.LsimulatorObject;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.npc.LsimulatorNpcHtml;
 import Lsimulator.server.server.utils.IterableElementList;
 import Lsimulator.server.server.utils.collections.Lists;
@@ -45,7 +45,7 @@ public class LsimulatorNpcShowHtmlAction extends LsimulatorNpcXmlAction {
 	}
 
 	@Override
-	public LsimulatorNpcHtml execute(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj, byte[] args) {
+	public LsimulatorNpcHtml execute(String actionName, PcInstance pc, LsimulatorObject obj, byte[] args) {
 		return new LsimulatorNpcHtml(_htmlId, _args);
 	}
 

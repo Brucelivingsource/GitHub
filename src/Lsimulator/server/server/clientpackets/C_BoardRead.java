@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorBoardInstance;
+import Lsimulator.server.server.model.Instance.BoardInstance;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
 // ClientBasePacket
@@ -34,7 +34,7 @@ public class C_BoardRead extends ClientBasePacket {
 		int objId = readD();
 		int topicNumber = readD();
 		LsimulatorObject obj = LsimulatorWorld.getInstance().findObject(objId);
-		LsimulatorBoardInstance board = (LsimulatorBoardInstance) obj;
+		BoardInstance board = (BoardInstance) obj;
 		board.onActionRead(client.getActiveChar(), topicNumber);
 	}
 

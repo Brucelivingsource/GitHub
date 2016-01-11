@@ -33,8 +33,8 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.GeneralThreadPool;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
 import Lsimulator.server.server.serverpackets.S_Paralysis;
 
@@ -112,14 +112,14 @@ public class LsimulatorCube extends TimerTask {
 				return;
 			}
 
-			if (_cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) _cha;
+			if (_cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) _cha;
 				pc.sendPackets(new S_DoActionGFX(pc.getId(), ActionCodes.ACTION_Damage));
 				pc.broadcastPacket(new S_DoActionGFX(pc.getId(), ActionCodes.ACTION_Damage));
 				pc.receiveDamage(_effect, 10, false);
 			}
-			else if (_cha instanceof LsimulatorMonsterInstance) {
-				LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) _cha;
+			else if (_cha instanceof MonsterInstance) {
+				MonsterInstance mob = (MonsterInstance) _cha;
 				mob.broadcastPacket(new S_DoActionGFX(mob.getId(), ActionCodes.ACTION_Damage));
 				mob.receiveDamage(_effect, 10);
 			}
@@ -147,13 +147,13 @@ public class LsimulatorCube extends TimerTask {
 				return;
 			}
 
-			if (_cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) _cha;
+			if (_cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) _cha;
 				pc.setSkillEffect(STATUS_FREEZE, 1000);
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_BIND, true));
 			}
-			else if (_cha instanceof LsimulatorMonsterInstance) {
-				LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) _cha;
+			else if (_cha instanceof MonsterInstance) {
+				MonsterInstance mob = (MonsterInstance) _cha;
 				mob.setSkillEffect(STATUS_FREEZE, 1000);
 				mob.setParalyzed(true);
 			}
@@ -163,8 +163,8 @@ public class LsimulatorCube extends TimerTask {
 			// return;
 			// }
 			// _cha.addMr(-10);
-			// if (_cha instanceof LsimulatorPcInstance) {
-			// LsimulatorPcInstance pc = (LsimulatorPcInstance) _cha;
+			// if (_cha instanceof PcInstance) {
+			// PcInstance pc = (PcInstance) _cha;
 			// pc.sendPackets(new S_SPMR(pc));
 			// }
 			_cha.setSkillEffect(STATUS_MR_REDUCTION_BY_CUBE_SHOCK, 4000);
@@ -178,12 +178,12 @@ public class LsimulatorCube extends TimerTask {
 				_cha.setCurrentMp(newMp);
 			}
 			if (_timeCounter % 5 == 0) {
-				if (_cha instanceof LsimulatorPcInstance) {
-					LsimulatorPcInstance pc = (LsimulatorPcInstance) _cha;
+				if (_cha instanceof PcInstance) {
+					PcInstance pc = (PcInstance) _cha;
 					pc.receiveDamage(_effect, 25, false);
 				}
-				else if (_cha instanceof LsimulatorMonsterInstance) {
-					LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) _cha;
+				else if (_cha instanceof MonsterInstance) {
+					MonsterInstance mob = (MonsterInstance) _cha;
 					mob.receiveDamage(_effect, 25);
 				}
 			}

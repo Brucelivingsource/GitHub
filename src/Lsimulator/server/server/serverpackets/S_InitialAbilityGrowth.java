@@ -15,13 +15,13 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 /**
  * @category 初始能力加成, 用於查看創腳色時初始能力的增幅
  */
 public class S_InitialAbilityGrowth extends ServerBasePacket {
-	public S_InitialAbilityGrowth(LsimulatorPcInstance pc) {
+	public S_InitialAbilityGrowth(PcInstance pc) {
 
 		int Str = pc.getOriginalStr();// 力量
 		int Dex = pc.getOriginalDex();// 敏捷
@@ -122,10 +122,10 @@ public class S_InitialAbilityGrowth extends ServerBasePacket {
 	 * @param Int
 	 *            智力
 	 */
-	private void buildPacket(LsimulatorPcInstance pc, int Str, int Dex, int Con,int Wis, int Cha, int Int) {
-		int write1 = (Int * 16) + Str;
-		int write2 = (Dex * 16) + Wis;
-		int write3 = (Cha * 16) + Con;
+	private void buildPacket(PcInstance pc, int Str, int Dex, int Con,int Wis, int Cha, int Int) {
+		int write1 = (Int  << 4 ) + Str;
+		int write2 = (Dex << 4 ) + Wis;
+		int write3 = (Cha << 4 ) + Con;
 		writeC(Opcodes.S_OPCODE_CHARRESET);
 		writeC(0x04);
 		writeC(write1);// 智力&力量

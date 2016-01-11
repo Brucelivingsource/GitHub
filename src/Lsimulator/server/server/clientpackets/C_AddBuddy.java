@@ -18,7 +18,7 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.datatables.BuddyTable;
 import Lsimulator.server.server.datatables.CharacterTable;
 import Lsimulator.server.server.model.LsimulatorBuddy;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorCharName;
 
@@ -35,7 +35,7 @@ public class C_AddBuddy extends ClientBasePacket {
 	public C_AddBuddy(byte[] decrypt, ClientThread client) {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

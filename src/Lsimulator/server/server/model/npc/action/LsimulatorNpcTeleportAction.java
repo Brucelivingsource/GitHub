@@ -19,7 +19,7 @@ import org.w3c.dom.Element;
 import Lsimulator.server.server.model.LsimulatorLocation;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorTeleport;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.model.npc.LsimulatorNpcHtml;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -45,7 +45,7 @@ public class LsimulatorNpcTeleportAction extends LsimulatorNpcXmlAction {
 	}
 
 	@Override
-	public LsimulatorNpcHtml execute(String actionName, LsimulatorPcInstance pc, LsimulatorObject obj,
+	public LsimulatorNpcHtml execute(String actionName, PcInstance pc, LsimulatorObject obj,
 			byte[] args) {
 		if (!pc.getInventory().checkItem(LsimulatorItemId.ADENA, _price)) {
 			pc.sendPackets(new S_ServerMessage(337, "$4")); // アデナが不足しています。

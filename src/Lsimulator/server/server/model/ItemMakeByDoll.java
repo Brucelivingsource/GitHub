@@ -19,8 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.server.datatables.ItemTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorMagicDoll;
 
@@ -28,9 +28,9 @@ public class ItemMakeByDoll extends TimerTask {
 	private static Logger _log = Logger.getLogger(ItemMakeByDoll.class
 			.getName());
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
-	public ItemMakeByDoll(LsimulatorPcInstance pc) {
+	public ItemMakeByDoll(PcInstance pc) {
 		_pc = pc;
 	}
 
@@ -47,10 +47,10 @@ public class ItemMakeByDoll extends TimerTask {
 	}
 
 	public void itemMake() {
-		LsimulatorItemInstance temp = ItemTable.getInstance().createItem(LsimulatorMagicDoll.getMakeItemId(_pc));
+		ItemInstance temp = ItemTable.getInstance().createItem(LsimulatorMagicDoll.getMakeItemId(_pc));
 		if (temp!= null) {
 			if (_pc.getInventory().checkAddItem(temp, 1) == LsimulatorInventory.OK) {
-				LsimulatorItemInstance item = _pc.getInventory().storeItem(temp.getItemId(), 1);
+				ItemInstance item = _pc.getInventory().storeItem(temp.getItemId(), 1);
 				_pc.sendPackets(new S_ServerMessage(403, item.getItem().getName())); // 獲得%0%o 。
 			}
 		}

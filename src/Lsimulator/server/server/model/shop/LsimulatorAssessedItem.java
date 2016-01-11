@@ -16,7 +16,7 @@ package Lsimulator.server.server.model.shop;
 
 import Lsimulator.server.server.datatables.RaceTicketTable;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
 import Lsimulator.server.server.templates.LsimulatorRaceTicket;
 
 public class LsimulatorAssessedItem {
@@ -25,7 +25,7 @@ public class LsimulatorAssessedItem {
 
 	LsimulatorAssessedItem(int targetId, int assessedPrice) {
 		_targetId = targetId;
-		LsimulatorItemInstance item = (LsimulatorItemInstance) LsimulatorWorld.getInstance()
+		ItemInstance item = (ItemInstance) LsimulatorWorld.getInstance()
 				.findObject(getTargetId());
 		if (item.getItemId() == 40309) {// Race Tickets
 			LsimulatorRaceTicket ticket = RaceTicketTable.getInstance().getTemplate(

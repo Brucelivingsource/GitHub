@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorChatParty;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Party;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -34,7 +34,7 @@ public class C_ChatParty extends ClientBasePacket {
 	public C_ChatParty(byte abyte0[], ClientThread clientthread) {
 		super(abyte0);
 
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if ((pc == null) || pc.isGhost()) {
 			return;
 		}
@@ -53,7 +53,7 @@ public class C_ChatParty extends ClientBasePacket {
 				pc.sendPackets(new S_ServerMessage(427));
 				return;
 			}
-			LsimulatorPcInstance targetPc = LsimulatorWorld.getInstance().getPlayer(name);
+			PcInstance targetPc = LsimulatorWorld.getInstance().getPlayer(name);
 			if (targetPc == null) {
 				// 沒有叫%0的人。
 				pc.sendPackets(new S_ServerMessage(109));
@@ -63,7 +63,7 @@ public class C_ChatParty extends ClientBasePacket {
 				return;
 			}
 
-			for (LsimulatorPcInstance member : pc.getChatParty().getMembers()) {
+			for (PcInstance member : pc.getChatParty().getMembers()) {
 				if (member.getName().toLowerCase().equals(name.toLowerCase())) {
 					pc.getChatParty().kickMember(member);
 					return;

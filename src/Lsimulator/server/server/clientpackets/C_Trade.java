@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Message_YN;
 import Lsimulator.server.server.utils.FaceToFace;
 
@@ -32,11 +32,11 @@ public class C_Trade extends ClientBasePacket {
 	public C_Trade(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance player = clientthread.getActiveChar();
+		PcInstance player = clientthread.getActiveChar();
 		if ((player == null) || player.isGhost()) {
 			return;
 		}
-		LsimulatorPcInstance target = FaceToFace.faceToFace(player, false);
+		PcInstance target = FaceToFace.faceToFace(player, false);
 		if (target != null) {
 			if (!target.isParalyzed()) {
 				player.setTradeID(target.getId()); // 相手のオブジェクトIDを保存しておく

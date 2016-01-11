@@ -30,9 +30,9 @@ import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.GeneralThreadPool;
 import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.datatables.UBSpawnTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorItem;
@@ -106,7 +106,7 @@ public class LsimulatorUltimateBattle {
 
 	private static final Logger _log = Logger.getLogger(LsimulatorUltimateBattle.class.getName());
 
-	private final List<LsimulatorPcInstance> _members = Lists.newList();
+	private final List<PcInstance> _members = Lists.newList();
 
 	/**
 	 * ラウンド開始時のメッセージを送信する。
@@ -160,8 +160,8 @@ public class LsimulatorUltimateBattle {
 	 * コロシアムから出たメンバーをメンバーリストから削除する。
 	 */
 	private void removeRetiredMembers() {
-		LsimulatorPcInstance[] temp = getMembersArray();
-		for (LsimulatorPcInstance element : temp) {
+		PcInstance[] temp = getMembersArray();
+		for (PcInstance element : temp) {
 			if (element.getMapId() != _mapId) {
 				removeMember(element);
 			}
@@ -177,7 +177,7 @@ public class LsimulatorUltimateBattle {
 	 *            送信するメッセージ
 	 */
 	private void sendMessage(int type, String msg) {
-		for (LsimulatorPcInstance pc : getMembersArray()) {
+		for (PcInstance pc : getMembersArray()) {
 			pc.sendPackets(new S_ServerMessage(type, msg));
 		}
 	}
@@ -199,9 +199,9 @@ public class LsimulatorUltimateBattle {
 		}
 
 		for (int i = 0; i < count; i++) {
-			LsimulatorLocation loc = _location.randomLocation((getLocX2() - getLocX1()) / 2, false);
+			LsimulatorLocation loc = _location.randomLocation(  (getLocX2() - getLocX1()) >>1 , false);
 			if (temp.isStackable()) {
-				LsimulatorItemInstance item = ItemTable.getInstance().createItem(itemId);
+				ItemInstance item = ItemTable.getInstance().createItem(itemId);
 				item.setEnchantLevel(0);
 				item.setCount(stackCount);
 				LsimulatorGroundInventory ground = LsimulatorWorld.getInstance().getInventory(loc.getX(), loc.getY(), _mapId);
@@ -210,7 +210,7 @@ public class LsimulatorUltimateBattle {
 				}
 			}
 			else {
-				LsimulatorItemInstance item = null;
+				ItemInstance item = null;
 				for (int createCount = 0; createCount < stackCount; createCount++) {
 					item = ItemTable.getInstance().createItem(itemId);
 					item.setEnchantLevel(0);
@@ -228,9 +228,9 @@ public class LsimulatorUltimateBattle {
 	 */
 	private void clearColosseum() {
 		for (Object obj : LsimulatorWorld.getInstance().getVisibleObjects(_mapId).values()) {
-			if (obj instanceof LsimulatorMonsterInstance) // モンスター削除
+			if (obj instanceof MonsterInstance) // モンスター削除
 			{
-				LsimulatorMonsterInstance mob = (LsimulatorMonsterInstance) obj;
+				MonsterInstance mob = (MonsterInstance) obj;
 				if (!mob.isDead()) {
 					mob.setDead(true);
 					mob.setStatus(ActionCodes.ACTION_Die);
@@ -343,7 +343,7 @@ public class LsimulatorUltimateBattle {
 					waitForNextRound(round);
 				}
 
-				for (LsimulatorPcInstance pc : getMembersArray()) // コロシアム内に居るPCを外へ出す
+				for (PcInstance pc : getMembersArray()) // コロシアム内に居るPCを外へ出す
 				{
 					int rndx = Random.nextInt(4);
 					int rndy = Random.nextInt(4);
@@ -383,7 +383,7 @@ public class LsimulatorUltimateBattle {
 	 * @param pc
 	 *            新たに参加するプレイヤー
 	 */
-	public void addMember(LsimulatorPcInstance pc) {
+	public void addMember(PcInstance pc) {
 		if (!_members.contains(pc)) {
 			_members.add(pc);
 		}
@@ -395,7 +395,7 @@ public class LsimulatorUltimateBattle {
 	 * @param pc
 	 *            削除するプレイヤー
 	 */
-	public void removeMember(LsimulatorPcInstance pc) {
+	public void removeMember(PcInstance pc) {
 		_members.remove(pc);
 	}
 
@@ -413,7 +413,7 @@ public class LsimulatorUltimateBattle {
 	 *            調べるプレイヤー
 	 * @return 参加メンバーであればtrue、そうでなければfalse。
 	 */
-	public boolean isMember(LsimulatorPcInstance pc) {
+	public boolean isMember(PcInstance pc) {
 		return _members.contains(pc);
 	}
 
@@ -422,8 +422,8 @@ public class LsimulatorUltimateBattle {
 	 * 
 	 * @return 参加メンバーの配列
 	 */
-	public LsimulatorPcInstance[] getMembersArray() {
-		return _members.toArray(new LsimulatorPcInstance[_members.size()]);
+	public PcInstance[] getMembersArray() {
+		return _members.toArray(new PcInstance[_members.size()]);
 	}
 
 	/**
@@ -588,8 +588,8 @@ public class LsimulatorUltimateBattle {
 
 	// setされたlocx1～locy2から中心点を求める。
 	public void resetLoc() {
-		_locX = (_locX2 + _locX1) / 2;
-		_locY = (_locY2 + _locY1) / 2;
+		_locX = (_locX2 + _locX1) >> 1 ;
+		_locY = (_locY2 + _locY1) >> 1 ;
 		_location = new LsimulatorLocation(_locX, _locY, _mapId);
 	}
 
@@ -659,7 +659,7 @@ public class LsimulatorUltimateBattle {
 	 *            UBに参加できるかチェックするPC
 	 * @return 参加出来る場合はtrue,出来ない場合はfalse
 	 */
-	public boolean canPcEnter(LsimulatorPcInstance pc) {
+	public boolean canPcEnter(PcInstance pc) {
 		_log.log(Level.FINE, "pcname={0} ubid={1} minlvl={2} maxlvl={3}", new Object[]
 		{ pc.getName(), _ubId, _minLevel, _maxLevel });
 		// 参加可能なレベルか

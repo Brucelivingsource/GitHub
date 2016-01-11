@@ -14,14 +14,14 @@
  */
 package Lsimulator.server.server.storage;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public interface CharacterStorage {
-	public void createCharacter(LsimulatorPcInstance pc) throws Exception;
+	public void createCharacter(PcInstance pc) throws Exception;
 
 	public void deleteCharacter(String accountName, String charName)throws Exception;
 
-	public void storeCharacter(LsimulatorPcInstance pc) throws Exception;
+	public void storeCharacter(PcInstance pc) throws Exception;
 
-	public LsimulatorPcInstance loadCharacter(String charName) throws Exception;
+	public PcInstance loadCharacter(String charName) throws Exception;
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.datatables.MailTable;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorMail;
 import Lsimulator.server.server.utils.collections.Lists;
 
@@ -49,7 +49,7 @@ public class S_Mail extends ServerBasePacket {
      *  00d0:  35 00 00 00 45 1c c9 93                            5...E...
 	 */
 	// 打開收信夾 ?封信件顯示標題
-	public S_Mail(LsimulatorPcInstance pc, int type) {
+	public S_Mail(PcInstance pc, int type) {
 		List<LsimulatorMail> mails = Lists.newList();
 		MailTable.getInstance();
 		for (LsimulatorMail mail : MailTable.getAllMail()) {
@@ -84,7 +84,7 @@ public class S_Mail extends ServerBasePacket {
 	 * @param pc 寄出信件: 寄信人 , 寄件備份: 收信人<br>
 	 * @param isDraft 是否是寄件備份 ? true:備份  , false:寄出
 	 */
-	public S_Mail(LsimulatorPcInstance pc, int mailId, boolean isDraft){
+	public S_Mail(PcInstance pc, int mailId, boolean isDraft){
 		MailTable.getInstance();
 		LsimulatorMail mail = MailTable.getMail(mailId);
 		writeC(Opcodes.S_OPCODE_MAIL);

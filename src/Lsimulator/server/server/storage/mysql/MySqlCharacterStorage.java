@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.storage.CharacterStorage;
 import Lsimulator.server.server.utils.SQLUtil;
 
@@ -31,8 +31,8 @@ public class MySqlCharacterStorage implements CharacterStorage {
 	private static Logger _log = Logger.getLogger(MySqlCharacterStorage.class.getName());
 
 	@Override
-	public LsimulatorPcInstance loadCharacter(String charName) {
-		LsimulatorPcInstance pc = null;
+	public PcInstance loadCharacter(String charName) {
+		PcInstance pc = null;
 		Connection con = null;
 		PreparedStatement pstm = null;
 		PreparedStatement pstm2 = null;
@@ -49,7 +49,7 @@ public class MySqlCharacterStorage implements CharacterStorage {
 				 */
 				return null;
 			}
-			pc = new LsimulatorPcInstance();
+			pc = new PcInstance();
 			pc.setAccountName(rs.getString("account_name"));
 			pc.setId(rs.getInt("objid"));
 			pc.setName(rs.getString("char_name"));
@@ -158,7 +158,7 @@ public class MySqlCharacterStorage implements CharacterStorage {
 	}
 
 	@Override
-	public void createCharacter(LsimulatorPcInstance pc) {
+	public void createCharacter(PcInstance pc) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -291,7 +291,7 @@ public class MySqlCharacterStorage implements CharacterStorage {
 	}
 
 	@Override
-	public void storeCharacter(LsimulatorPcInstance pc) {
+	public void storeCharacter(PcInstance pc) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {

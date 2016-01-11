@@ -17,8 +17,8 @@ package Lsimulator.server.server.serverpackets;
 import java.util.List;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.utils.collections.Lists;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
@@ -28,17 +28,17 @@ public class S_FixWeaponList extends ServerBasePacket {
 
 	private static final String S_FIX_WEAPON_LIST = "[S] S_FixWeaponList";
 
-	public S_FixWeaponList(LsimulatorPcInstance pc) {
+	public S_FixWeaponList(PcInstance pc) {
 		buildPacket(pc);
 	}
 
-	private void buildPacket(LsimulatorPcInstance pc) {
+	private void buildPacket(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_SELECTLIST);
 		writeD(0x000000c8); // Price
 
-		List<LsimulatorItemInstance> weaponList = Lists.newList();
-		List<LsimulatorItemInstance> itemList = pc.getInventory().getItems();
-		for (LsimulatorItemInstance item : itemList) {
+		List<ItemInstance> weaponList = Lists.newList();
+		List<ItemInstance> itemList = pc.getInventory().getItems();
+		for (ItemInstance item : itemList) {
 
 			// Find Weapon
 			switch (item.getItem().getType2()) {
@@ -52,7 +52,7 @@ public class S_FixWeaponList extends ServerBasePacket {
 
 		writeH(weaponList.size()); // Weapon Amount
 
-		for (LsimulatorItemInstance weapon : weaponList) {
+		for (ItemInstance weapon : weaponList) {
 
 			writeD(weapon.getId()); // Item ID
 			writeC(weapon.get_durability()); // Fix Level

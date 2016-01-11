@@ -17,7 +17,7 @@ package Lsimulator.server.server.model.classes;
 class LsimulatorKnightClassFeature extends LsimulatorClassFeature {
 	@Override
 	public int getAcDefenseMax(int ac) {
-		return ac / 2;
+		return ac >> 1 ;
 	}
 
 	@Override

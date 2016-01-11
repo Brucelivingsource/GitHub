@@ -14,7 +14,7 @@
  */
 package Lsimulator.server.server.model.monitor;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class LsimulatorPcInvisDelay extends LsimulatorPcMonitor {
 
@@ -23,7 +23,7 @@ public class LsimulatorPcInvisDelay extends LsimulatorPcMonitor {
 	}
 
 	@Override
-	public void execTask(LsimulatorPcInstance pc) {
+	public void execTask(PcInstance pc) {
 		pc.addInvisDelayCounter(-1);
 	}
 }

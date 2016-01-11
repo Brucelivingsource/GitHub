@@ -17,7 +17,7 @@ package Lsimulator.server.server.serverpackets;
 import java.util.logging.Logger;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_WhoCharinfo extends ServerBasePacket {
 	private static final String S_WHO_CHARINFO = "[S] S_WhoCharinfo";
@@ -25,7 +25,7 @@ public class S_WhoCharinfo extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_WhoCharinfo(LsimulatorPcInstance pc) {
+	public S_WhoCharinfo(PcInstance pc) {
 		_log.fine("Who charpack for : " + pc.getName());
 
 		String lawfulness = "";

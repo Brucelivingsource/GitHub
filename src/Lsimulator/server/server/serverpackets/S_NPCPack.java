@@ -17,8 +17,8 @@ package Lsimulator.server.server.serverpackets;
 import Lsimulator.server.server.Opcodes;
 import Lsimulator.server.server.datatables.NPCTalkDataTable;
 import Lsimulator.server.server.model.LsimulatorNpcTalkData;
-import Lsimulator.server.server.model.Instance.LsimulatorFieldObjectInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.FieldObjectInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -35,7 +35,7 @@ public class S_NPCPack extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_NPCPack(LsimulatorNpcInstance npc) {
+	public S_NPCPack(NpcInstance npc) {
 		writeC(Opcodes.S_OPCODE_CHARPACK);
 		writeH(npc.getX());
 		writeH(npc.getY());
@@ -53,7 +53,7 @@ public class S_NPCPack extends ServerBasePacket {
 		writeD(npc.getExp());
 		writeH(npc.getTempLawful());
 		writeS(npc.getNameId());
-		if (npc instanceof LsimulatorFieldObjectInstance) { // SICの壁字、看板など
+		if (npc instanceof FieldObjectInstance) { // SICの壁字、看板など
 			LsimulatorNpcTalkData talkdata = NPCTalkDataTable.getInstance().getTemplate(npc.getNpcTemplate().get_npcId());
 			if (talkdata != null) {
 				writeS(talkdata.getNormalAction()); // タイトルがHTML名として解釈される
@@ -83,7 +83,7 @@ public class S_NPCPack extends ServerBasePacket {
 			}
 		}
 		// 二段加速狀態
-		status |= npc.getBraveSpeed() * 16;
+		status |= ( npc.getBraveSpeed()  << 4 ) ;
 
 		writeC(status);
 

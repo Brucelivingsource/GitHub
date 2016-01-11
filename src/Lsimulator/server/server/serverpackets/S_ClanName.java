@@ -15,14 +15,14 @@
 package Lsimulator.server.server.serverpackets;
 
 import static Lsimulator.server.server.Opcodes.S_OPCODE_CLANNAME;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_ClanName extends ServerBasePacket {
 	private static final String S_ClanName = "[S] S_ClanName";
 
 	private byte[] _byte = null;
 	
-	public S_ClanName(LsimulatorPcInstance pc, boolean OnOff) {
+	public S_ClanName(PcInstance pc, boolean OnOff) {
 		writeC(S_OPCODE_CLANNAME);
 		writeD(pc.getId());
 		writeS(OnOff ? pc.getClanname(): "");

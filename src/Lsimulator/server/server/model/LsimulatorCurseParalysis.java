@@ -17,8 +17,8 @@ package Lsimulator.server.server.model;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.STATUS_CURSE_PARALYZED;
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.STATUS_CURSE_PARALYZING;
 import Lsimulator.server.server.GeneralThreadPool;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Paralysis;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -47,8 +47,8 @@ public class LsimulatorCurseParalysis extends LsimulatorParalysis {
 				return;
 			}
 
-			if (_target instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance player = (LsimulatorPcInstance) _target;
+			if (_target instanceof PcInstance) {
+				PcInstance player = (PcInstance) _target;
 				if (!player.isDead()) {
 					player.sendPackets(new S_Paralysis(1, true)); // 麻痺状態にする
 				}
@@ -73,8 +73,8 @@ public class LsimulatorCurseParalysis extends LsimulatorParalysis {
 			catch (InterruptedException e) {}
 
 			_target.killSkillEffectTimer(STATUS_CURSE_PARALYZED);
-			if (_target instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance player = (LsimulatorPcInstance) _target;
+			if (_target instanceof PcInstance) {
+				PcInstance player = (PcInstance) _target;
 				if (!player.isDead()) {
 					player.sendPackets(new S_Paralysis(1, false)); // 麻痺状態を解除する
 				}
@@ -93,8 +93,8 @@ public class LsimulatorCurseParalysis extends LsimulatorParalysis {
 	}
 
 	private void curse() {
-		if (_target instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance player = (LsimulatorPcInstance) _target;
+		if (_target instanceof PcInstance) {
+			PcInstance player = (PcInstance) _target;
 			player.sendPackets(new S_ServerMessage(212));
 		}
 
@@ -105,7 +105,7 @@ public class LsimulatorCurseParalysis extends LsimulatorParalysis {
 	}
 
 	public static boolean curse(LsimulatorCharacter cha, int delay, int time) {
-		if (!((cha instanceof LsimulatorPcInstance) || (cha instanceof LsimulatorMonsterInstance))) {
+		if (!((cha instanceof PcInstance) || (cha instanceof MonsterInstance))) {
 			return false;
 		}
 		if (cha.hasSkillEffect(STATUS_CURSE_PARALYZING) || cha.hasSkillEffect(STATUS_CURSE_PARALYZED)) {

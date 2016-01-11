@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import Lsimulator.server.server.model.LsimulatorParty;
 import Lsimulator.server.server.model.LsimulatorTeleport;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 
 public class LsimulatorPartyRecall implements LsimulatorCommandExecutor {
@@ -35,8 +35,8 @@ public class LsimulatorPartyRecall implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
-		LsimulatorPcInstance target = LsimulatorWorld.getInstance().getPlayer(arg);
+	public void execute(PcInstance pc, String cmdName, String arg) {
+		PcInstance target = LsimulatorWorld.getInstance().getPlayer(arg);
 
 		if (target != null) {
 			LsimulatorParty party = target.getParty();
@@ -44,8 +44,8 @@ public class LsimulatorPartyRecall implements LsimulatorCommandExecutor {
 				int x = pc.getX();
 				int y = pc.getY() + 2;
 				short map = pc.getMapId();
-				LsimulatorPcInstance[] players = party.getMembers();
-				for (LsimulatorPcInstance pc2 : players) {
+				PcInstance[] players = party.getMembers();
+				for (PcInstance pc2 : players) {
 					try {
 						LsimulatorTeleport.teleport(pc2, x, y, map, 5, true);
 						pc2

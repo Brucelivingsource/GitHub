@@ -18,7 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -29,7 +29,7 @@ public class S_SkillBuy extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_SkillBuy(int o, LsimulatorPcInstance pc) {
+	public S_SkillBuy(int o, PcInstance pc) {
 		int count = Scount(pc);
 		int inCount = 0;
 		for (int k = 0; k < count; k++) {
@@ -52,7 +52,7 @@ public class S_SkillBuy extends ServerBasePacket {
 		}
 	}
 
-	public int Scount(LsimulatorPcInstance pc) {
+	public int Scount(PcInstance pc) {
 		int RC = 0;
 		switch (pc.getType()) {
 		case 0: // 君主

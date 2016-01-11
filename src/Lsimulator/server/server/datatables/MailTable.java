@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.IdFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorMail;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Lists;
@@ -155,7 +155,7 @@ public class MailTable {
 
 	}
 
-	public int writeMail(int type, String receiver, LsimulatorPcInstance writer, byte[] text, int inboxId) {
+	public int writeMail(int type, String receiver, PcInstance writer, byte[] text, int inboxId) {
 		Timestamp date = new Timestamp(System.currentTimeMillis());
 		int readStatus = 0;
 		int id = 0;

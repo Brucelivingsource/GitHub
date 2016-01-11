@@ -17,8 +17,8 @@ package Lsimulator.server.server.command.executor;
 import java.util.StringTokenizer;
 
 import Lsimulator.server.server.datatables.NpcTable;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.serverpackets.S_SystemMessage;
 import Lsimulator.server.server.templates.LsimulatorNpc;
 
@@ -31,7 +31,7 @@ public class LsimulatorSummon implements LsimulatorCommandExecutor {
 	}
 
 	@Override
-	public void execute(LsimulatorPcInstance pc, String cmdName, String arg) {
+	public void execute(PcInstance pc, String cmdName, String arg) {
 		try {
 			StringTokenizer tok = new StringTokenizer(arg);
 			String nameid = tok.nextToken();
@@ -52,7 +52,7 @@ public class LsimulatorSummon implements LsimulatorCommandExecutor {
 			}
 			LsimulatorNpc npc = NpcTable.getInstance().getTemplate(npcid);
 			for (int i = 0; i < count; i++) {
-				LsimulatorSummonInstance summonInst = new LsimulatorSummonInstance(npc, pc);
+				SummonInstance summonInst = new SummonInstance(npc, pc);
 				summonInst.setPetcost(0);
 			}
 			nameid = NpcTable.getInstance().getTemplate(npcid).get_name();

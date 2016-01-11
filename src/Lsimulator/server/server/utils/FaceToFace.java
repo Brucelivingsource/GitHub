@@ -17,7 +17,7 @@ package Lsimulator.server.server.utils;
 import java.util.List;
 
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_NoSee;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
@@ -29,17 +29,17 @@ public class FaceToFace {
 	private FaceToFace() {
 	}
 
-	public static LsimulatorPcInstance faceToFace(LsimulatorPcInstance pc, Boolean isJoinClan) {
+	public static PcInstance faceToFace(PcInstance pc, Boolean isJoinClan) {
 		int pcX = pc.getX();
 		int pcY = pc.getY();
 		int pcHeading = pc.getHeading();
-		List<LsimulatorPcInstance> players = LsimulatorWorld.getInstance().getVisiblePlayer(pc, 1);
+		List<PcInstance> players = LsimulatorWorld.getInstance().getVisiblePlayer(pc, 1);
 
 		if (players.size() == 0) { // 1セル以内にPCが居ない場合
 			pc.sendPackets(new S_ServerMessage(93)); // \f1そこには誰もいません。
 			return null;
 		}
-		for (LsimulatorPcInstance target : players) {
+		for (PcInstance target : players) {
 			int targetX = target.getX();
 			int targetY = target.getY();
 			int targetHeading = target.getHeading();

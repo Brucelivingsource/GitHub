@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.datatables.TownTable;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTime;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTimeAdapter;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTimeClock;
@@ -87,8 +87,8 @@ public class HomeTownTimeController {
 	public void monthlyProc() {
 		_log.info("城鎮系統：開始處理每月事項");
 		LsimulatorWorld.getInstance().setProcessingContributionTotal(true);
-		Collection<LsimulatorPcInstance> players = LsimulatorWorld.getInstance().getAllPlayers();
-		for (LsimulatorPcInstance pc : players) {
+		Collection<PcInstance> players = LsimulatorWorld.getInstance().getAllPlayers();
+		for (PcInstance pc : players) {
 			try {
 				// 儲存所有線上玩家的資訊
 				pc.save();
@@ -101,7 +101,7 @@ public class HomeTownTimeController {
 			String leaderName = totalContribution(townId);
 			if (leaderName != null) {
 				S_PacketBox packet = new S_PacketBox(S_PacketBox.MSG_TOWN_LEADER, leaderName);
-				for (LsimulatorPcInstance pc : players) {
+				for (PcInstance pc : players) {
 					if (pc.getHomeTownId() == townId) {
 						pc.setContribution(0);
 						pc.sendPackets(packet);
@@ -111,7 +111,7 @@ public class HomeTownTimeController {
 		}
 		TownTable.getInstance().load();
 
-		for (LsimulatorPcInstance pc : players) {
+		for (PcInstance pc : players) {
 			if (pc.getHomeTownId() == -1) {
 				pc.setHomeTownId(0);
 			}

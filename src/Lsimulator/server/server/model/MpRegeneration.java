@@ -28,19 +28,19 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.types.Point;
 
 public class MpRegeneration extends TimerTask {
 	private static Logger _log = Logger.getLogger(MpRegeneration.class.getName());
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
 	private int _regenPoint = 0;
 
 	private int _curPoint = 4;
 
-	public MpRegeneration(LsimulatorPcInstance pc) {
+	public MpRegeneration(PcInstance pc) {
 		_pc = pc;
 	}
 
@@ -129,7 +129,7 @@ public class MpRegeneration extends TimerTask {
 		_pc.setCurrentMp(newMp);
 	}
 
-	private boolean isOverWeight(LsimulatorPcInstance pc) {
+	private boolean isOverWeight(PcInstance pc) {
 		// エキゾチックバイタライズ状態、アディショナルファイアー状態であれば、
 		// 重量オーバーでは無いとみなす。
 		if (pc.hasSkillEffect(EXOTIC_VITALIZE) || pc.hasSkillEffect(ADDITIONAL_FIRE)) {

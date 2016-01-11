@@ -17,8 +17,8 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorAuctionBoardInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorBoardInstance;
+import Lsimulator.server.server.model.Instance.AuctionBoardInstance;
+import Lsimulator.server.server.model.Instance.BoardInstance;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
 // ClientBasePacket, C_Board
@@ -31,7 +31,7 @@ public class C_Board extends ClientBasePacket {
 	private static final String C_BOARD = "[C] C_Board";
 
 	private boolean isBoardInstance(LsimulatorObject obj) {
-		return ((obj instanceof LsimulatorBoardInstance) || (obj instanceof LsimulatorAuctionBoardInstance));
+		return ((obj instanceof BoardInstance) || (obj instanceof AuctionBoardInstance));
 	}
 
 	public C_Board(byte abyte0[], ClientThread client) {

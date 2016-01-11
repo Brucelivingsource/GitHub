@@ -109,8 +109,8 @@ public class V2MapReader extends MapReader {
 		int width = in.readInt();
 		int height = in.readInt();
 
-		byte[] tiles = new byte[width * height * 2];
-		for (int i = 0; i < width * height * 2; i++) {
+		byte[] tiles = new byte[ ( ( width * height ) << 1 ) ];
+		for (int i = 0; i < ( ( width * height ) << 1 ) ; i++) {
 			tiles[i] = (byte) in.readByte();
 		}
 		in.close();

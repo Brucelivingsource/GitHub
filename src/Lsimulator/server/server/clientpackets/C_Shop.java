@@ -20,11 +20,11 @@ import java.util.List;
 import Lsimulator.server.server.ActionCodes;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorPolyMorph;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 import Lsimulator.server.server.model.identity.LsimulatorSystemMessageId;
 import Lsimulator.server.server.serverpackets.S_ChangeShape;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
@@ -53,7 +53,7 @@ public class C_Shop extends ClientBasePacket {
 	public C_Shop(byte abyte0[], ClientThread clientthread) {
 		super(abyte0);
 
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if ((pc == null) || pc.isGhost()) {
 			return;
 		}
@@ -66,7 +66,7 @@ public class C_Shop extends ClientBasePacket {
 
 		List<LsimulatorPrivateShopSellList> sellList = pc.getSellList();
 		List<LsimulatorPrivateShopBuyList> buyList = pc.getBuyList();
-		LsimulatorItemInstance checkItem;
+		ItemInstance checkItem;
 		boolean tradable = true;
 
 		int type = readC();
@@ -85,9 +85,9 @@ public class C_Shop extends ClientBasePacket {
 					tradable = false;
 					pc.sendPackets(new S_ServerMessage(LsimulatorSystemMessageId.$166, checkItem.getItem().getName(), "這是不可能處理。"));
 				}
-				for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-					if (petNpc instanceof LsimulatorPetInstance) {
-						LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+				for (NpcInstance petNpc : pc.getPetList().values()) {
+					if (petNpc instanceof PetInstance) {
+						PetInstance pet = (PetInstance) petNpc;
 						if (checkItem.getId() == pet.getItemObjId()) {
 							tradable = false;
 							pc.sendPackets(new S_ServerMessage(LsimulatorSystemMessageId.$166, checkItem.getItem().getName(), "這是不可能處理。"));
@@ -126,9 +126,9 @@ public class C_Shop extends ClientBasePacket {
 				}
 
 				// 使用中的寵物項鍊 - 無法販賣
-				for (LsimulatorNpcInstance petNpc : pc.getPetList().values()) {
-					if (petNpc instanceof LsimulatorPetInstance) {
-						LsimulatorPetInstance pet = (LsimulatorPetInstance) petNpc;
+				for (NpcInstance petNpc : pc.getPetList().values()) {
+					if (petNpc instanceof PetInstance) {
+						PetInstance pet = (PetInstance) petNpc;
 						if (checkItem.getId() == pet.getItemObjId()) {
 							tradable = false;
 							pc.sendPackets(new S_ServerMessage(1187)); // 寵物項鍊正在使用中。
@@ -137,7 +137,7 @@ public class C_Shop extends ClientBasePacket {
 					}
 				}
 				// 使用中的魔法娃娃 - 無法販賣
-				for (LsimulatorDollInstance doll : pc.getDollList().values()) {
+				for (DollInstance doll : pc.getDollList().values()) {
 					if (doll.getItemObjId() == checkItem.getId()) {
 						tradable = false;
 						pc.sendPackets(new S_ServerMessage(1181));

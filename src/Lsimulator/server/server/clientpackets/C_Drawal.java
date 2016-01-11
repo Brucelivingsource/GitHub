@@ -20,8 +20,8 @@ import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.templates.LsimulatorCastle;
@@ -39,7 +39,7 @@ public class C_Drawal extends ClientBasePacket {
 	public C_Drawal(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = clientthread.getActiveChar();
+		PcInstance pc = clientthread.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -54,7 +54,7 @@ public class C_Drawal extends ClientBasePacket {
 				LsimulatorCastle l1castle = CastleTable.getInstance().getCastleTable(castle_id);
 				int money = l1castle.getPublicMoney();
 				money -= j;
-				LsimulatorItemInstance item = ItemTable.getInstance().createItem(LsimulatorItemId.ADENA);
+				ItemInstance item = ItemTable.getInstance().createItem(LsimulatorItemId.ADENA);
 				if (item != null) {
 					l1castle.setPublicMoney(money);
 					CastleTable.getInstance().updateCastle(l1castle);

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Lists;
 
@@ -41,11 +41,11 @@ public class S_AuctionBoard extends ServerBasePacket {
 
 	private byte[] _byte = null;
 
-	public S_AuctionBoard(LsimulatorNpcInstance board) {
+	public S_AuctionBoard(NpcInstance board) {
 		buildPacket(board);
 	}
 
-	private void buildPacket(LsimulatorNpcInstance board) {
+	private void buildPacket(NpcInstance board) {
 		List<Integer> houseList = Lists.newList();
 		int houseId = 0;
 		int count = 0;

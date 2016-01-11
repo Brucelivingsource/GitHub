@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.templates.LsimulatorBoardTopic;
 
@@ -46,7 +46,7 @@ public class C_BoardWrite extends ClientBasePacket {
 			return;
 		}
 
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		LsimulatorBoardTopic.create(pc.getName(), title, content);
 		pc.getInventory().consumeItem(LsimulatorItemId.ADENA, 300);
 	}

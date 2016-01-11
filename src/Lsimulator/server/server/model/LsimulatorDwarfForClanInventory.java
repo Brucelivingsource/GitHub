@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.datatables.InnKeyTable;
 import Lsimulator.server.server.datatables.ItemTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorItem;
 import Lsimulator.server.server.utils.SQLUtil;
 
@@ -52,7 +52,7 @@ public class LsimulatorDwarfForClanInventory extends LsimulatorInventory {
 			pstm.setString(1, _clan.getClanName());
 			rs = pstm.executeQuery();
 			while (rs.next()) {
-				LsimulatorItemInstance item = new LsimulatorItemInstance();
+				ItemInstance item = new ItemInstance();
 				int objectId = rs.getInt("id");
 				item.setId(objectId);
 				int itemId = rs.getInt("item_id");
@@ -100,7 +100,7 @@ public class LsimulatorDwarfForClanInventory extends LsimulatorInventory {
 
 	// ＤＢのclan_warehouseへ登録
 	@Override
-	public synchronized void insertItem(LsimulatorItemInstance item) {
+	public synchronized void insertItem(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -141,7 +141,7 @@ public class LsimulatorDwarfForClanInventory extends LsimulatorInventory {
 
 	// ＤＢのclan_warehouseを更新
 	@Override
-	public synchronized void updateItem(LsimulatorItemInstance item) {
+	public synchronized void updateItem(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -161,7 +161,7 @@ public class LsimulatorDwarfForClanInventory extends LsimulatorInventory {
 
 	// ＤＢのclan_warehouseから削除
 	@Override
-	public synchronized void deleteItem(LsimulatorItemInstance item) {
+	public synchronized void deleteItem(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -197,12 +197,12 @@ public class LsimulatorDwarfForClanInventory extends LsimulatorInventory {
 	
 	/**
 	 * 寫入血盟使用紀錄
-	 * @param pc    LsimulatorPcInstance</br>
-	 * @param item  LsimulatorItemInstance</br>
+	 * @param pc    PcInstance</br>
+	 * @param item  ItemInstance</br>
 	 * @param count 物品數量</br>
 	 * @param type  領出: 1, 存入: 0 </br>
 	 */
-	public void writeHistory(LsimulatorPcInstance pc, LsimulatorItemInstance item, int count, int type){
+	public void writeHistory(PcInstance pc, ItemInstance item, int count, int type){
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {

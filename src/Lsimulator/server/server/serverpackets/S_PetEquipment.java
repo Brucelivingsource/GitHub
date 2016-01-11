@@ -2,7 +2,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
 
 public class S_PetEquipment extends ServerBasePacket {
 	private static final String S_PET_EQUIPMENT = "[S] S_PetEquipment";
@@ -15,7 +15,7 @@ public class S_PetEquipment extends ServerBasePacket {
 	 * 0000	52 25 00 04 bd 54 00 00 0a 37 80 08 7e ec d0 46    R%...T...7..~..F
 	*/
 
-	public S_PetEquipment(int i, LsimulatorPetInstance pet, int j) {
+	public S_PetEquipment(int i, PetInstance pet, int j) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
 		writeC(0x25);
 		writeC(i);

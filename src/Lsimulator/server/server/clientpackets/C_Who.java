@@ -17,7 +17,7 @@ package Lsimulator.server.server.clientpackets;
 import Lsimulator.server.Config;
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_WhoAmount;
 import Lsimulator.server.server.serverpackets.S_WhoCharinfo;
 
@@ -34,13 +34,13 @@ public class C_Who extends ClientBasePacket {
 	public C_Who(byte[] decrypt, ClientThread client) {
 		super(decrypt);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}
 		
 		String s = readS();
-		LsimulatorPcInstance find = LsimulatorWorld.getInstance().getPlayer(s);
+		PcInstance find = LsimulatorWorld.getInstance().getPlayer(s);
 		
 
 		if (find != null) {

@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.item.action.Effect;
 import Lsimulator.server.server.model.skill.LsimulatorBuffUtil;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
@@ -106,7 +106,7 @@ public class CharBuffTable {
 		}
 	}
 
-	public static void DeleteBuff(LsimulatorPcInstance pc) {
+	public static void DeleteBuff(PcInstance pc) {
 		java.sql.Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -124,7 +124,7 @@ public class CharBuffTable {
 		}
 	}
 
-	public static void SaveBuff(LsimulatorPcInstance pc) {
+	public static void SaveBuff(PcInstance pc) {
 		for (int skillId : buffSkill) {
 			int timeSec = pc.getSkillEffectTimeSec(skillId);
 			if (0 < timeSec) {
@@ -137,7 +137,7 @@ public class CharBuffTable {
 		}
 	}
 
-	public static void buffRemainingTime(LsimulatorPcInstance pc) {
+	public static void buffRemainingTime(PcInstance pc) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
@@ -153,21 +153,21 @@ public class CharBuffTable {
 				switch (skillid) {
 					case STATUS_RIBRAVE: // 生命之樹果實
 					case DRESS_EVASION: // 迴避提升
-						remaining_time = remaining_time / 4;
-						pc.setSkillEffect(skillid, remaining_time * 4 * 1000);
+						remaining_time = remaining_time >> 2;
+						pc.setSkillEffect(skillid,( remaining_time << 2 ) * 1000);
 						break;
 					case COOKING_WONDER_DRUG: // 象牙塔妙藥
 						pc.addHpr(10);
 						pc.addMpr(2);
-						remaining_time = remaining_time / 4;
-						pc.setSkillEffect(skillid, remaining_time * 4 * 1000);
+						remaining_time = remaining_time  >> 2;
+						pc.setSkillEffect(skillid,( remaining_time << 2 ) * 1000);
 						break;
 					case EFFECT_BLESS_OF_MAZU: // 媽祖的祝福
 					case EFFECT_ENCHANTING_BATTLE : // 強化戰鬥卷軸
 					case EFFECT_STRENGTHENING_HP: // 體力增強卷軸
 					case EFFECT_STRENGTHENING_MP: // 魔力增強卷軸
-						remaining_time = remaining_time / 16;
-						Effect.useEffect(pc, skillid, remaining_time * 16);
+						remaining_time = remaining_time >> 4 ;
+						Effect.useEffect(pc, skillid, remaining_time << 4 );
 						break;
 					case EFFECT_POTION_OF_BATTLE: // 戰鬥藥水
 					case EFFECT_POTION_OF_EXP_150: // 神力藥水
@@ -175,8 +175,8 @@ public class CharBuffTable {
 					case EFFECT_POTION_OF_EXP_200:
 					case EFFECT_POTION_OF_EXP_225:
 					case EFFECT_POTION_OF_EXP_250:
-						remaining_time = remaining_time / 16;
-						pc.setSkillEffect(skillid, remaining_time * 16 * 1000);
+						remaining_time = remaining_time >> 4 ;
+						pc.setSkillEffect(skillid,( remaining_time <<4 )  * 1000);
 						break;
 					case EFFECT_MAGIC_EYE_OF_AHTHARTS: // 魔眼
 					case EFFECT_MAGIC_EYE_OF_FAFURION:
@@ -185,25 +185,25 @@ public class CharBuffTable {
 					case EFFECT_MAGIC_EYE_OF_BIRTH:
 					case EFFECT_MAGIC_EYE_OF_FIGURE:
 					case EFFECT_MAGIC_EYE_OF_LIFE:
-						remaining_time = remaining_time / 32;
-						Effect.useEffect(pc, skillid, remaining_time * 32);
+						remaining_time = remaining_time >> 5 ;
+						Effect.useEffect(pc, skillid, remaining_time << 5 );
 						break;
 					case RESIST_FEAR: // 恐懼無助
-						remaining_time = remaining_time / 4;
+						remaining_time = remaining_time >> 2 ;
 						pc.addNdodge((byte) 5); // 閃避率 - 50%
 						// 更新閃避率顯示
 						pc.sendPackets(new S_PacketBox(101, pc.getNdodge()));
-						pc.setSkillEffect(skillid, remaining_time * 4 * 1000);
+						pc.setSkillEffect(skillid, ( remaining_time << 2 )  * 1000);
 						break;
 					case EFFECT_BLESS_OF_CRAY: // 卡瑞、莎爾的祝福
 					case EFFECT_BLESS_OF_SAELL:
-						remaining_time = remaining_time / 32;
-						LsimulatorBuffUtil.effectBlessOfDragonSlayer(pc, skillid, remaining_time * 32, 0);
+						remaining_time = remaining_time >> 5 ;
+						LsimulatorBuffUtil.effectBlessOfDragonSlayer(pc, skillid, remaining_time << 5 , 0);
 						break;
 					default:
 						if (skillid >= EFFECT_MAGIC_STONE_A_1 && skillid <= EFFECT_MAGIC_STONE_D_9) { // 附魔石
-							remaining_time = remaining_time / 32;
-							Effect.magicStoneEffect(pc, skillid, remaining_time * 32);
+							remaining_time = remaining_time >> 5 ;
+							Effect.magicStoneEffect(pc, skillid, remaining_time  << 5 );
 							break;
 						}
 						break;

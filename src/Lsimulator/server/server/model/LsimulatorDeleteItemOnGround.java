@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 import Lsimulator.server.Config;
 import Lsimulator.server.LsimulatorMessage;
 import Lsimulator.server.server.GeneralThreadPool;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
 // Referenced classes of package Lsimulator.server.server.model:
@@ -80,11 +80,11 @@ public class LsimulatorDeleteItemOnGround {
 	private void deleteItem() {
 		int numOfDeleted = 0;
 		for (LsimulatorObject obj : LsimulatorWorld.getInstance().getObject()) {
-			if (!(obj instanceof LsimulatorItemInstance)) {
+			if (!(obj instanceof ItemInstance)) {
 				continue;
 			}
 
-			LsimulatorItemInstance item = (LsimulatorItemInstance) obj;
+			ItemInstance item = (ItemInstance) obj;
 			if (item.getX() == 0 && item.getY() == 0) { // 地面上のアイテムではなく、誰かの所有物
 				continue;
 			}
@@ -96,7 +96,7 @@ public class LsimulatorDeleteItemOnGround {
 				continue;
 			}
 
-			List<LsimulatorPcInstance> players = LsimulatorWorld.getInstance()
+			List<PcInstance> players = LsimulatorWorld.getInstance()
 					.getVisiblePlayer(item, Config.ALT_ITEM_DELETION_RANGE);
 			if (players.isEmpty()) { // 指定範囲内にプレイヤーが居なければ削除
 				LsimulatorInventory groundInventory = LsimulatorWorld

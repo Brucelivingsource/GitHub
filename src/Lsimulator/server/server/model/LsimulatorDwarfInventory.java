@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 import Lsimulator.server.LsimulatorDatabaseFactory;
 import Lsimulator.server.server.datatables.InnKeyTable;
 import Lsimulator.server.server.datatables.ItemTable;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorItem;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Lists;
@@ -37,7 +37,7 @@ public class LsimulatorDwarfInventory extends LsimulatorInventory {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public LsimulatorDwarfInventory(LsimulatorPcInstance owner) {
+	public LsimulatorDwarfInventory(PcInstance owner) {
 		_owner = owner;
 	}
 
@@ -55,7 +55,7 @@ public class LsimulatorDwarfInventory extends LsimulatorInventory {
 			rs = pstm.executeQuery();
 
 			while (rs.next()) {
-				LsimulatorItemInstance item = new LsimulatorItemInstance();
+				ItemInstance item = new ItemInstance();
 				int objectId = rs.getInt("id");
 				item.setId(objectId);
 				LsimulatorItem itemTemplate = ItemTable.getInstance().getTemplate(
@@ -101,7 +101,7 @@ public class LsimulatorDwarfInventory extends LsimulatorInventory {
 
 	// ＤＢのcharacter_warehouseへ登録
 	@Override
-	public void insertItem(LsimulatorItemInstance item) {
+	public void insertItem(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -143,7 +143,7 @@ public class LsimulatorDwarfInventory extends LsimulatorInventory {
 
 	// ＤＢのcharacter_warehouseを更新
 	@Override
-	public void updateItem(LsimulatorItemInstance item) {
+	public void updateItem(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -162,7 +162,7 @@ public class LsimulatorDwarfInventory extends LsimulatorInventory {
 
 	// ＤＢのcharacter_warehouseから削除
 	@Override
-	public void deleteItem(LsimulatorItemInstance item) {
+	public void deleteItem(ItemInstance item) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -273,7 +273,7 @@ public class LsimulatorDwarfInventory extends LsimulatorInventory {
 
 				for (String account : accountList) {
 					if (itemtemp.isStackable()) {
-						LsimulatorItemInstance item = ItemTable.getInstance().createItem(itemid);
+						ItemInstance item = ItemTable.getInstance().createItem(itemid);
 						item.setEnchantLevel(enchant);
 						item.setCount(count);
 
@@ -329,7 +329,7 @@ public class LsimulatorDwarfInventory extends LsimulatorInventory {
 						ps.setInt(24, item.getM_Def());
 						ps.execute();
 					} else {
-						LsimulatorItemInstance item = null;
+						ItemInstance item = null;
 						int createCount;
 
 						for (createCount = 0; createCount < count; createCount++) {
@@ -411,5 +411,5 @@ public class LsimulatorDwarfInventory extends LsimulatorInventory {
 
 	private static Logger _log = Logger.getLogger(LsimulatorDwarfInventory.class.getName());
 
-	private final LsimulatorPcInstance _owner;
+	private final PcInstance _owner;
 }

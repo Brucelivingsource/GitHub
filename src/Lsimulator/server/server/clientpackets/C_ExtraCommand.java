@@ -16,7 +16,7 @@ package Lsimulator.server.server.clientpackets;
 
 import static Lsimulator.server.server.model.skill.LsimulatorSkillId.SHAPE_CHANGE;
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_DoActionGFX;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -31,7 +31,7 @@ public class C_ExtraCommand extends ClientBasePacket {
 	public C_ExtraCommand(byte abyte0[], ClientThread client) throws Exception {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}

@@ -17,7 +17,7 @@ package Lsimulator.server.server.model.classes;
 class LsimulatorDarkElfClassFeature extends LsimulatorClassFeature {
 	@Override
 	public int getAcDefenseMax(int ac) {
-		return ac / 4;
+		return ac >> 2 ;
 	}
 
 	@Override

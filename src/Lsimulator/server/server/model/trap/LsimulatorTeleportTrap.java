@@ -17,7 +17,7 @@ package Lsimulator.server.server.model.trap;
 import Lsimulator.server.server.model.LsimulatorLocation;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorTeleport;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.storage.TrapStorage;
 
 public class LsimulatorTeleportTrap extends LsimulatorTrap {
@@ -33,7 +33,7 @@ public class LsimulatorTeleportTrap extends LsimulatorTrap {
 	}
 
 	@Override
-	public void onTrod(LsimulatorPcInstance trodFrom, LsimulatorObject trapObj) {
+	public void onTrod(PcInstance trodFrom, LsimulatorObject trapObj) {
 		sendEffect(trapObj);
 
 		LsimulatorTeleport.teleport(trodFrom, _loc.getX(), _loc.getY(), (short) _loc

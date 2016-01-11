@@ -25,11 +25,11 @@ import Lsimulator.server.server.datatables.SkillsTable;
 import Lsimulator.server.server.model.LsimulatorCharacter;
 import Lsimulator.server.server.model.LsimulatorEffectSpawn;
 import Lsimulator.server.server.model.LsimulatorPolyMorph;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.serverpackets.S_CurseBlind;
 import Lsimulator.server.server.serverpackets.S_Dexup;
 import Lsimulator.server.server.serverpackets.S_HPUpdate;
@@ -69,9 +69,9 @@ public interface LsimulatorSkillTimer {
 class LsimulatorSkillStop {
 	public static void stopSkill(LsimulatorCharacter cha, int skillId) {
 		if (skillId == LIGHT) { // ライト
-			if (cha instanceof LsimulatorPcInstance) {
+			if (cha instanceof PcInstance) {
 				if (!cha.isInvisble()) {
-					LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+					PcInstance pc = (PcInstance) cha;
 					pc.turnOnOffLight();
 				}
 			}
@@ -80,57 +80,57 @@ class LsimulatorSkillStop {
 			cha.addHitup(-5);
 			cha.addBowHitup(-5);
 			cha.addMr(-20);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SPMR(pc));
 				pc.sendPackets(new S_SkillIconAura(113, 0));
 			}
 		}
 		else if (skillId == SHINING_AURA) { // シャイニング オーラ
 			cha.addAc(8);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(114, 0));
 			}
 		}
 		else if (skillId == BRAVE_AURA) { // ブレイブ オーラ
 			cha.addDmgup(-5);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(116, 0));
 			}
 		}
 		else if (skillId == SHIELD) { // シールド
 			cha.addAc(2);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconShield(2, 0));
 			}
 		}
 		else if (skillId == BLIND_HIDING) { // ブラインドハイディング
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.delBlindHiding();
 			}
 		}
 		else if (skillId == SHADOW_ARMOR) { // シャドウ アーマー
 			cha.addAc(3);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconShield(3, 0));
 			}
 		}
 		else if (skillId == DRESS_DEXTERITY) { // ドレス デクスタリティー
 			cha.addDex((byte) -2);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Dexup(pc, 2, 0));
 			}
 		}
 		else if (skillId == DRESS_MIGHTY) { // ドレス マイティー
 			cha.addStr((byte) -2);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Strup(pc, 2, 0));
 			}
 		}
@@ -145,22 +145,22 @@ class LsimulatorSkillStop {
 		}
 		else if (skillId == EARTH_BLESS) { // アース ブレス
 			cha.addAc(7);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconShield(7, 0));
 			}
 		}
 		else if (skillId == RESIST_MAGIC) { // レジスト マジック
 			cha.addMr(-10);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SPMR(pc));
 			}
 		}
 		else if (skillId == CLEAR_MIND) { // クリアー マインド
 			cha.addWis((byte) -3);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.resetBaseMr();
 			}
 		}
@@ -169,14 +169,14 @@ class LsimulatorSkillStop {
 			cha.addWater(-10);
 			cha.addFire(-10);
 			cha.addEarth(-10);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_OwnCharAttrDef(pc));
 			}
 		}
 		else if (skillId == ELEMENTAL_PROTECTION) { // エレメンタルプロテクション
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				int attr = pc.getElfAttr();
 				if (attr == 1) {
 					cha.addEarth(-50);
@@ -210,58 +210,58 @@ class LsimulatorSkillStop {
 					break;
 			}
 			cha.setAddAttrKind(0);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_OwnCharAttrDef(pc));
 			}
 		}
 		else if (skillId == IRON_SKIN) { // アイアン スキン
 			cha.addAc(10);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconShield(10, 0));
 			}
 		}
 		else if (skillId == EARTH_SKIN) { // アース スキン
 			cha.addAc(6);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconShield(6, 0));
 			}
 		}
 		else if (skillId == PHYSICAL_ENCHANT_STR) { // フィジカル エンチャント：STR
 			cha.addStr((byte) -5);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Strup(pc, 5, 0));
 			}
 		}
 		else if (skillId == PHYSICAL_ENCHANT_DEX) { // フィジカル エンチャント：DEX
 			cha.addDex((byte) -5);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Dexup(pc, 5, 0));
 			}
 		}
 		else if (skillId == FIRE_WEAPON) { // ファイアー ウェポン
 			cha.addDmgup(-4);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(147, 0));
 			}
 		}
 		else if (skillId == FIRE_BLESS) { // ファイアー ブレス
 			cha.addDmgup(-4);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(154, 0));
 			}
 		}
 		else if (skillId == BURNING_WEAPON) { // バーニング ウェポン
 			cha.addDmgup(-6);
 			cha.addHitup(-3);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(162, 0));
 			}
 		}
@@ -272,24 +272,24 @@ class LsimulatorSkillStop {
 		}
 		else if (skillId == WIND_SHOT) { // ウィンド ショット
 			cha.addBowHitup(-6);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(148, 0));
 			}
 		}
 		else if (skillId == STORM_EYE) { // ストーム アイ
 			cha.addBowHitup(-2);
 			cha.addBowDmgup(-3);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(155, 0));
 			}
 		}
 		else if (skillId == STORM_SHOT) { // ストーム ショット
 			cha.addBowDmgup(-5);
 			cha.addBowHitup(1);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(165, 0));
 			}
 		}
@@ -302,8 +302,8 @@ class LsimulatorSkillStop {
 			LsimulatorPolyMorph.undoPoly(cha);
 		}
 		else if (skillId == ADVANCE_SPIRIT) { // アドバンスド スピリッツ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-pc.getAdvenHp());
 				pc.addMaxMp(-pc.getAdvenMp());
 				pc.setAdvenHp(0);
@@ -317,16 +317,16 @@ class LsimulatorSkillStop {
 		}
 		else if ((skillId == HASTE) || (skillId == GREATER_HASTE)) { // ヘイスト、グレーターヘイスト
 			cha.setMoveSpeed(0);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillHaste(pc.getId(), 0, 0));
 				pc.broadcastPacket(new S_SkillHaste(pc.getId(), 0, 0));
 			}
 		}
 		else if ((skillId == HOLY_WALK) || (skillId == MOVING_ACCELERATION) || (skillId == WIND_WALK) || (skillId == BLOODLUST)) { // ホーリーウォーク、ムービングアクセレーション、ウィンドウォーク、ブラッドラスト
 			cha.setBraveSpeed(0);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillBrave(pc.getId(), 0, 0));
 				pc.broadcastPacket(new S_SkillBrave(pc.getId(), 0, 0));
 			}
@@ -339,8 +339,8 @@ class LsimulatorSkillStop {
 		}
 		else if (skillId == ILLUSION_LICH) { // イリュージョン：リッチ
 			cha.addSp(-2);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SPMR(pc));
 			}
 		}
@@ -368,14 +368,14 @@ class LsimulatorSkillStop {
 
 		// ****** 状態変化が解けた場合
 		else if ((skillId == CURSE_BLIND) || (skillId == DARKNESS)) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_CurseBlind(0));
 			}
 		}
 		else if (skillId == CURSE_PARALYZE) { // カーズ パラライズ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Poison(pc.getId(), 0));
 				pc.broadcastPacket(new S_Poison(pc.getId(), 0));
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_PARALYSIS, false));
@@ -395,71 +395,71 @@ class LsimulatorSkillStop {
 				) || (skillId == FREEZING_BREATH) // フリージングブレス
 				|| (skillId == ICE_LANCE_COCKATRICE) // 亞力安冰矛圍籬
 				|| (skillId == ICE_LANCE_BASILISK)) { // 邪惡蜥蜴冰矛圍籬
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Poison(pc.getId(), 0));
 				pc.broadcastPacket(new S_Poison(pc.getId(), 0));
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_FREEZE, false));
 			}
-			else if ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance)) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			else if ((cha instanceof MonsterInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance)) {
+				NpcInstance npc = (NpcInstance) cha;
 				npc.broadcastPacket(new S_Poison(npc.getId(), 0));
 				npc.setParalyzed(false);
 			}
 		}
 		else if (skillId == EARTH_BIND) { // アースバインド
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Poison(pc.getId(), 0));
 				pc.broadcastPacket(new S_Poison(pc.getId(), 0));
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_FREEZE, false));
 			}
-			else if ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance)) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			else if ((cha instanceof MonsterInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance)) {
+				NpcInstance npc = (NpcInstance) cha;
 				npc.broadcastPacket(new S_Poison(npc.getId(), 0));
 				npc.setParalyzed(false);
 			}
 		}
 		else if (skillId == SHOCK_STUN) { // 衝擊之暈
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
-			} else if ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance)) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			} else if ((cha instanceof MonsterInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance)) {
+				NpcInstance npc = (NpcInstance) cha;
 				npc.setParalyzed(false);
 			}
 		}
 		else if (skillId == BONE_BREAK_START) { // 骷髏毀壞 (發動)
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
 				pc.setSkillEffect(BONE_BREAK_END, 1 * 1000);
-			} else if ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance)) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			} else if ((cha instanceof MonsterInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance)) {
+				NpcInstance npc = (NpcInstance) cha;
 				npc.setParalyzed(true);
 				npc.setSkillEffect(BONE_BREAK_END, 1 * 1000);
 			}
 		}
 		else if (skillId == BONE_BREAK_END) { // 骷髏毀壞 (結束)
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
-			} else if ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance)) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			} else if ((cha instanceof MonsterInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance)) {
+				NpcInstance npc = (NpcInstance) cha;
 				npc.setParalyzed(false);
 			}
 		}
 		else if (skillId == FOG_OF_SLEEPING) { // フォグ オブ スリーピング
 			cha.setSleeped(false);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_SLEEP, false));
 				pc.sendPackets(new S_OwnCharStatus(pc));
 			}
 		}
 		else if (skillId == ABSOLUTE_BARRIER) { // 絕對屏障
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.startHpRegeneration();
 				pc.startMpRegeneration();
 				pc.startHpRegenerationByDoll();
@@ -467,39 +467,39 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == MEDITATION) { // 冥想術
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMpr(-5);
 			}
 		}
 		else if (skillId == CONCENTRATION) { // 專注
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMpr(-2);
 			}
 		}
 		else if (skillId == WIND_SHACKLE) { // 風之枷鎖
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconWindShackle(pc.getId(), 0));
 				pc.broadcastPacket(new S_SkillIconWindShackle(pc.getId(), 0));
 			}
 		}
 		else if ((skillId == SLOW) || (skillId == ENTANGLE) || (skillId == MASS_SLOW)) { // スロー、エンタングル、マススロー
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillHaste(pc.getId(), 0, 0));
 				pc.broadcastPacket(new S_SkillHaste(pc.getId(), 0, 0));
 			}
 			cha.setMoveSpeed(0);
 		}
 		else if (skillId == STATUS_FREEZE) { // 束縛
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_BIND, false));
 			}
-			else if ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance)) {
-				LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+			else if ((cha instanceof MonsterInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance)) {
+				NpcInstance npc = (NpcInstance) cha;
 				npc.setParalyzed(false);
 			}
 		}
@@ -518,22 +518,22 @@ class LsimulatorSkillStop {
 		}
 		else if (skillId == STATUS_CUBE_IGNITION_TO_ALLY) { // キューブ[イグニション]：味方
 			cha.addFire(-30);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_OwnCharAttrDef(pc));
 			}
 		}
 		else if (skillId == STATUS_CUBE_QUAKE_TO_ALLY) { // キューブ[クエイク]：味方
 			cha.addEarth(-30);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_OwnCharAttrDef(pc));
 			}
 		}
 		else if (skillId == STATUS_CUBE_SHOCK_TO_ALLY) { // キューブ[ショック]：味方
 			cha.addWind(-30);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_OwnCharAttrDef(pc));
 			}
 		}
@@ -545,8 +545,8 @@ class LsimulatorSkillStop {
 		}
 		else if (skillId == STATUS_MR_REDUCTION_BY_CUBE_SHOCK) { // キューブ[ショック]によるMR減少
 			// cha.addMr(10);
-			// if (cha instanceof LsimulatorPcInstance) {
-			// LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			// if (cha instanceof PcInstance) {
+			// PcInstance pc = (PcInstance) cha;
 			// pc.sendPackets(new S_SPMR(pc));
 			// }
 		}
@@ -558,15 +558,15 @@ class LsimulatorSkillStop {
 				|| (skillId == STATUS_ELFBRAVE)
 				|| (skillId == STATUS_BRAVE2)) { // 二段加速
 			cha.setBraveSpeed(0);
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillBrave(pc.getId(), 0, 0));
 				pc.broadcastPacket(new S_SkillBrave(pc.getId(), 0, 0));
 			}
 		}
 		else if (skillId == STATUS_THIRD_SPEED) { // 三段加速
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_Liquor(pc.getId(), 0)); // 人物 * 1.15
 				pc.broadcastPacket(new S_Liquor(pc.getId(), 0)); // 人物 * 1.15
 			}
@@ -577,8 +577,8 @@ class LsimulatorSkillStop {
 			cha.setBraveSpeed(0);
 		}*/
 		else if (skillId == STATUS_HASTE) { // グリーン ポーション
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillHaste(pc.getId(), 0, 0));
 				pc.broadcastPacket(new S_SkillHaste(pc.getId(), 0, 0));
 			}
@@ -587,21 +587,21 @@ class LsimulatorSkillStop {
 		else if (skillId == STATUS_BLUE_POTION) { // ブルー ポーション
 		}
 		else if (skillId == STATUS_UNDERWATER_BREATH) { // エヴァの祝福＆マーメイドの鱗
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconBlessOfEva(pc.getId(), 0));
 			}
 		}
 		else if (skillId == STATUS_WISDOM_POTION) { // ウィズダム ポーション
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				cha.addSp(-2);
 				pc.sendPackets(new S_SkillIconWisdomPotion(0));
 			}
 		}
 		else if (skillId == STATUS_CHAT_PROHIBITED) { // チャット禁止
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_ServerMessage(288)); // チャットができるようになりました。
 			}
 		}
@@ -613,8 +613,8 @@ class LsimulatorSkillStop {
 
 		// ****** 料理関係
 		else if ((skillId == COOKING_1_0_N) || (skillId == COOKING_1_0_S)) { // フローティングアイステーキ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addWind(-10);
 				pc.addWater(-10);
 				pc.addFire(-10);
@@ -625,8 +625,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_1_1_N) || (skillId == COOKING_1_1_S)) { // ベアーステーキ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-30);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
 				if (pc.isInParty()) { // パーティー中
@@ -637,23 +637,23 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_1_2_N) || (skillId == COOKING_1_2_S)) { // ナッツ餅
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 2, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_1_3_N) || (skillId == COOKING_1_3_S)) { // 蟻脚のチーズ焼き
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(1);
 				pc.sendPackets(new S_PacketBox(53, 3, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_1_4_N) || (skillId == COOKING_1_4_S)) { // フルーツサラダ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-20);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
 				pc.sendPackets(new S_PacketBox(53, 4, 0));
@@ -661,15 +661,15 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_1_5_N) || (skillId == COOKING_1_5_S)) { // フルーツ甘酢あんかけ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 5, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_1_6_N) || (skillId == COOKING_1_6_S)) { // 猪肉の串焼き
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-5);
 				pc.sendPackets(new S_SPMR(pc));
 				pc.sendPackets(new S_PacketBox(53, 6, 0));
@@ -677,22 +677,22 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_1_7_N) || (skillId == COOKING_1_7_S)) { // キノコスープ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 7, 0));
 				pc.setDessertId(0);
 			}
 		}
 		else if ((skillId == COOKING_2_0_N) || (skillId == COOKING_2_0_S)) { // キャビアカナッペ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 8, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_2_1_N) || (skillId == COOKING_2_1_S)) { // アリゲーターステーキ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-30);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
 				if (pc.isInParty()) { // パーティー中
@@ -705,30 +705,30 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_2_2_N) || (skillId == COOKING_2_2_S)) { // タートルドラゴンの菓子
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(2);
 				pc.sendPackets(new S_PacketBox(53, 10, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_2_3_N) || (skillId == COOKING_2_3_S)) { // キウィパロット焼き
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 11, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_2_4_N) || (skillId == COOKING_2_4_S)) { // スコーピオン焼き
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 12, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_2_5_N) || (skillId == COOKING_2_5_S)) { // イレッカドムシチュー
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-10);
 				pc.sendPackets(new S_SPMR(pc));
 				pc.sendPackets(new S_PacketBox(53, 13, 0));
@@ -736,8 +736,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_2_6_N) || (skillId == COOKING_2_6_S)) { // クモ脚の串焼き
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addSp(-1);
 				pc.sendPackets(new S_SPMR(pc));
 				pc.sendPackets(new S_PacketBox(53, 14, 0));
@@ -745,22 +745,22 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_2_7_N) || (skillId == COOKING_2_7_S)) { // クラブスープ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 15, 0));
 				pc.setDessertId(0);
 			}
 		}
 		else if ((skillId == COOKING_3_0_N) || (skillId == COOKING_3_0_S)) { // クラスタシアンのハサミ焼き
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 16, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_3_1_N) || (skillId == COOKING_3_1_S)) { // グリフォン焼き
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-50);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
 				if (pc.isInParty()) { // パーティー中
@@ -773,23 +773,23 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_3_2_N) || (skillId == COOKING_3_2_S)) { // コカトリスステーキ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 18, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_3_3_N) || (skillId == COOKING_3_3_S)) { // タートルドラゴン焼き
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(3);
 				pc.sendPackets(new S_PacketBox(53, 19, 0));
 				pc.setCookingId(0);
 			}
 		}
 		else if ((skillId == COOKING_3_4_N) || (skillId == COOKING_3_4_S)) { // レッサードラゴンの手羽先
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-15);
 				pc.sendPackets(new S_SPMR(pc));
 				pc.addWind(-10);
@@ -802,8 +802,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_3_5_N) || (skillId == COOKING_3_5_S)) { // ドレイク焼き
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addSp(-2);
 				pc.sendPackets(new S_SPMR(pc));
 				pc.sendPackets(new S_PacketBox(53, 21, 0));
@@ -811,8 +811,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_3_6_N) || (skillId == COOKING_3_6_S)) { // 深海魚のシチュー
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-30);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
 				if (pc.isInParty()) { // パーティー中
@@ -823,31 +823,31 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if ((skillId == COOKING_3_7_N) || (skillId == COOKING_3_7_S)) { // バシリスクの卵スープ
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PacketBox(53, 23, 0));
 				pc.setDessertId(0);
 			}
 		}
 		else if (skillId == COOKING_WONDER_DRUG) { // 象牙塔妙藥
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addHpr(-10);
 				pc.addMpr(-2);
 			}
 		}
 		// ****** 
 		else if (skillId == EFFECT_BLESS_OF_MAZU) { // 媽祖的祝福
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addHitup(-3);
 				pc.addDmgup(-3);
 				pc.addMpr(-2);
 			}
 		}
 		else if (skillId == EFFECT_STRENGTHENING_HP) { // 體力增強卷軸
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-50);
 				pc.addHpr(-4);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -857,16 +857,16 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_STRENGTHENING_MP) { // 魔力增強卷軸
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-40);
 				pc.addMpr(-4);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
 			}
 		}
 		else if (skillId == EFFECT_ENCHANTING_BATTLE) { // 強化戰鬥卷軸
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addHitup(-3);
 				pc.addDmgup(-3);
 				pc.addBowHitup(-3);
@@ -876,8 +876,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == MIRROR_IMAGE || skillId == UNCANNY_DODGE) { // 鏡像、暗影閃避
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addDodge((byte) -5); // 閃避率 - 50%
 				// 更新閃避率顯示
 				pc.sendPackets(new S_PacketBox(88, pc.getDodge()));
@@ -885,30 +885,30 @@ class LsimulatorSkillStop {
 		}
 		else if (skillId == RESIST_FEAR) { // 恐懼無助
 			cha.addNdodge((byte) -5); // 閃避率 + 50%
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				// 更新閃避率顯示
 				pc.sendPackets(new S_PacketBox(101, pc.getNdodge()));
 			}
 		}
 		else if (skillId == EFFECT_BLOODSTAIN_OF_ANTHARAS) { // 安塔瑞斯的血痕
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addAc(2);
 				pc.addWater(-50);
 				pc.sendPackets(new S_SkillIconBloodstain(82, 0));
 			}
 		}
 		else if (skillId == EFFECT_BLOODSTAIN_OF_FAFURION) { // 法利昂的血痕
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addWind(-50);
 				pc.sendPackets(new S_SkillIconBloodstain(85, 0));
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_A_1) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-10);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
 				if (pc.isInParty()) { // 組隊中
@@ -918,8 +918,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_A_2) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-20);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
 				if (pc.isInParty()) { // 組隊中
@@ -929,8 +929,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_A_3) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-30);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
 				if (pc.isInParty()) { // 組隊中
@@ -940,8 +940,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_A_4) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-40);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
 				if (pc.isInParty()) { // 組隊中
@@ -951,8 +951,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_A_5) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-50);
 				pc.addHpr(-1);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -963,8 +963,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_A_6) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-60);
 				pc.addHpr(-2);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -975,8 +975,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_A_7) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-70);
 				pc.addHpr(-3);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -987,8 +987,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_A_8) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-80);
 				pc.addHpr(-4);
 				pc.addHitup(-1);
@@ -1000,8 +1000,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_A_9) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-100);
 				pc.addHpr(-5);
 				pc.addHitup(-2);
@@ -1015,8 +1015,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_B_1) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-5);
 				pc.addMaxMp(-3);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -1028,8 +1028,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_B_2) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-10);
 				pc.addMaxMp(-6);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -1041,8 +1041,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_B_3) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-15);
 				pc.addMaxMp(-10);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -1054,8 +1054,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_B_4) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-20);
 				pc.addMaxMp(-15);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -1067,8 +1067,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_B_5) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-25);
 				pc.addMaxMp(-20);
 				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
@@ -1080,8 +1080,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_B_6) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-30);
 				pc.addMaxMp(-20);
 				pc.addHpr(-1);
@@ -1094,8 +1094,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_B_7) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-35);
 				pc.addMaxMp(-20);
 				pc.addHpr(-1);
@@ -1109,8 +1109,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_B_8) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-40);
 				pc.addMaxMp(-25);
 				pc.addHpr(-2);
@@ -1124,8 +1124,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_B_9) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-50);
 				pc.addMaxMp(-30);
 				pc.addHpr(-2);
@@ -1142,40 +1142,40 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_C_1) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-5);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
 				pc.setMagicStoneLevel((byte) 0);
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_C_2) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-10);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
 				pc.setMagicStoneLevel((byte) 0);
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_C_3) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-15);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
 				pc.setMagicStoneLevel((byte) 0);
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_C_4) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-20);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
 				pc.setMagicStoneLevel((byte) 0);
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_C_5) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-25);
 				pc.addMpr(-1);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
@@ -1183,8 +1183,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_C_6) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-30);
 				pc.addMpr(-2);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
@@ -1192,8 +1192,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_C_7) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-35);
 				pc.addMpr(-3);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
@@ -1201,8 +1201,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_C_8) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-40);
 				pc.addMpr(-4);
 				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
@@ -1210,8 +1210,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_C_9) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxMp(-50);
 				pc.addMpr(-5);
 				pc.addInt((byte)-1);
@@ -1222,40 +1222,40 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_D_1) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-2);
 				pc.sendPackets(new S_SPMR(pc));
 				pc.setMagicStoneLevel((byte) 0);
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_D_2) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-4);
 				pc.sendPackets(new S_SPMR(pc));
 				pc.setMagicStoneLevel((byte) 0);
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_D_3) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-6);
 				pc.sendPackets(new S_SPMR(pc));
 				pc.setMagicStoneLevel((byte) 0);
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_D_4) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-8);
 				pc.sendPackets(new S_SPMR(pc));
 				pc.setMagicStoneLevel((byte) 0);
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_D_5) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-10);
 				pc.addAc(1);
 				pc.sendPackets(new S_SPMR(pc));
@@ -1263,8 +1263,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_D_6) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-10);
 				pc.addAc(2);
 				pc.sendPackets(new S_SPMR(pc));
@@ -1272,8 +1272,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_D_7) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-10);
 				pc.addAc(3);
 				pc.sendPackets(new S_SPMR(pc));
@@ -1281,8 +1281,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_D_8) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-15);
 				pc.addAc(4);
 				pc.addDamageReductionByArmor(-1);
@@ -1291,8 +1291,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_STONE_D_9) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMr(-20);
 				pc.addAc(5);
 				pc.addCon((byte) -1);
@@ -1302,8 +1302,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_EYE_OF_AHTHARTS) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addRegistStone(-3); // 石化耐性
 
 				pc.addDodge((byte) -1); // 閃避率 - 10%
@@ -1312,29 +1312,29 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_EYE_OF_FAFURION) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.add_regist_freeze(-3); // 寒冰耐性
 				// 魔法傷害減免
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_EYE_OF_LINDVIOR) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addRegistSleep(-3); // 睡眠耐性
 				// 魔法暴擊率
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_EYE_OF_VALAKAS) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addRegistStun(-3); // 昏迷耐性
 				pc.addDmgup(-2); // 額外攻擊點數
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_EYE_OF_BIRTH) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addRegistBlind(-3); // 闇黑耐性
 				// 魔法傷害減免
 
@@ -1344,8 +1344,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_EYE_OF_FIGURE) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addRegistSustain(-3); // 支撐耐性
 				// 魔法傷害減免
 				// 魔法暴擊率
@@ -1356,8 +1356,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_MAGIC_EYE_OF_LIFE) {
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addDmgup(2); // 額外攻擊點數
 				// 魔法傷害減免
 				// 魔法暴擊率
@@ -1369,8 +1369,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_BLESS_OF_CRAY) { // 卡瑞的祝福
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-100);
 				pc.addMaxMp(-50);
 				pc.addHpr(-3);
@@ -1387,8 +1387,8 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == EFFECT_BLESS_OF_SAELL) { // 莎爾的祝福
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.addMaxHp(-80);
 				pc.addMaxMp(-10);
 				pc.addWater(-30);
@@ -1401,33 +1401,33 @@ class LsimulatorSkillStop {
 			}
 		}
 		else if (skillId == ERASE_MAGIC) { // 魔法消除
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(152, 0));
 			}
 		}
 		else if (skillId == STATUS_CURSE_YAHEE) { // 炎魔的烙印
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(221, 0, 1));
 			}
 		}
 		else if (skillId == STATUS_CURSE_BARLOG) { // 火焰之影的烙印
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(221, 0, 2));
 			}
 		}
 
-		if (cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if (cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) cha;
 			sendStopMessage(pc, skillId);
 			pc.sendPackets(new S_OwnCharStatus(pc));
 		}
 	}
 
 	// メッセージの表示（終了するとき）
-	private static void sendStopMessage(LsimulatorPcInstance charaPc, int skillid) {
+	private static void sendStopMessage(PcInstance charaPc, int skillid) {
 		LsimulatorSkills l1skills = SkillsTable.getInstance().getTemplate(skillid);
 		if ((l1skills == null) || (charaPc == null)) {
 			return;

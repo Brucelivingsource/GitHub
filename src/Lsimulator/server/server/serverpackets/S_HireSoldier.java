@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.serverpackets:
 // ServerBasePacket
@@ -28,7 +28,7 @@ public class S_HireSoldier extends ServerBasePacket {
 
 	// HTMLを開いているときにこのパケットを送るとnpcdeloy-j.htmlが表示される
 	// OKボタンを押すとC_127が飛ぶ
-	public S_HireSoldier(LsimulatorPcInstance pc) {
+	public S_HireSoldier(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_HIRESOLDIER);
 		writeH(0); // ? クライアントが返すパケットに含まれる
 		writeH(0); // ? クライアントが返すパケットに含まれる

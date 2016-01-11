@@ -35,26 +35,26 @@ import Lsimulator.server.server.model.LsimulatorPolyMorph;
 import Lsimulator.server.server.model.LsimulatorTeleport;
 import Lsimulator.server.server.model.LsimulatorWar;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorAuctionBoardInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorBoardInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorCrownInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorDwarfInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorEffectInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorFieldObjectInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorFurnitureInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorGuardInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorHousekeeperInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorMerchantInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorTeleporterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorTowerInstance;
+import Lsimulator.server.server.model.Instance.AuctionBoardInstance;
+import Lsimulator.server.server.model.Instance.BoardInstance;
+import Lsimulator.server.server.model.Instance.CrownInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
+import Lsimulator.server.server.model.Instance.DwarfInstance;
+import Lsimulator.server.server.model.Instance.EffectInstance;
+import Lsimulator.server.server.model.Instance.FieldObjectInstance;
+import Lsimulator.server.server.model.Instance.FurnitureInstance;
+import Lsimulator.server.server.model.Instance.GuardInstance;
+import Lsimulator.server.server.model.Instance.HousekeeperInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.MerchantInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
+import Lsimulator.server.server.model.Instance.TeleporterInstance;
+import Lsimulator.server.server.model.Instance.TowerInstance;
 import Lsimulator.server.server.model.trap.LsimulatorWorldTraps;
 import Lsimulator.server.server.serverpackets.S_AttackPacket;
 import Lsimulator.server.server.serverpackets.S_ChangeHeading;
@@ -149,9 +149,9 @@ public class LsimulatorSkillUse {
 
 	private LsimulatorCharacter _target = null;
 
-	private LsimulatorPcInstance _player = null;
+	private PcInstance _player = null;
 
-	private LsimulatorNpcInstance _npc = null;
+	private NpcInstance _npc = null;
 
 	private int _calcType;
 
@@ -258,12 +258,12 @@ public class LsimulatorSkillUse {
 		_checkedUseSkill = flg;
 	}
 
-	public boolean checkUseSkill(LsimulatorPcInstance player, int skillid, int target_id, int x, int y, String message, int time, int type,
+	public boolean checkUseSkill(PcInstance player, int skillid, int target_id, int x, int y, String message, int time, int type,
 			LsimulatorCharacter attacker) {
 		return checkUseSkill(player, skillid, target_id, x, y, message, time, type, attacker, 0, 0, 0);
 	}
 
-	public boolean checkUseSkill(LsimulatorPcInstance player, int skillid, int target_id, int x, int y, String message, int time, int type,
+	public boolean checkUseSkill(PcInstance player, int skillid, int target_id, int x, int y, String message, int time, int type,
 			LsimulatorCharacter attacker, int actid, int gfxid, int mpConsume) {
 		// 初期設定ここから
 		setCheckedUseSkill(true);
@@ -288,7 +288,7 @@ public class LsimulatorSkillUse {
 		}
 		else {
 			// npc
-			_npc = (LsimulatorNpcInstance) attacker;
+			_npc = (NpcInstance) attacker;
 			_user = _npc;
 		}
 
@@ -321,23 +321,23 @@ public class LsimulatorSkillUse {
 		}
 
 		LsimulatorObject l1object = LsimulatorWorld.getInstance().findObject(_targetID);
-		if (l1object instanceof LsimulatorItemInstance) {
-			_log.fine("skill target item name: " + ((LsimulatorItemInstance) l1object).getViewName());
+		if (l1object instanceof ItemInstance) {
+			_log.fine("skill target item name: " + ((ItemInstance) l1object).getViewName());
 			// スキルターゲットが精霊の石になることがある。
 			// Linux環境で確認（Windowsでは未確認）
 			// 2008.5.4追記：地面のアイテムに魔法を使うとなる。継続してもエラーになるだけなのでreturn
 			return false;
 		}
-		if (_user instanceof LsimulatorPcInstance) {
-			if (l1object instanceof LsimulatorPcInstance) {
+		if (_user instanceof PcInstance) {
+			if (l1object instanceof PcInstance) {
 				_calcType = PC_PC;
 			}
 			else {
 				_calcType = PC_NPC;
 			}
 		}
-		else if (_user instanceof LsimulatorNpcInstance) {
-			if (l1object instanceof LsimulatorPcInstance) {
+		else if (_user instanceof NpcInstance) {
+			if (l1object instanceof PcInstance) {
 				_calcType = NPC_PC;
 			}
 			else if (_skill.getTarget().equals("none")) {
@@ -359,7 +359,7 @@ public class LsimulatorSkillUse {
 		}
 		_target = (LsimulatorCharacter) l1object;
 
-		if (!(_target instanceof LsimulatorMonsterInstance) && _skill.getTarget().equals("attack") && (_user.getId() != target_id)) {
+		if (!(_target instanceof MonsterInstance) && _skill.getTarget().equals("attack") && (_user.getId() != target_id)) {
 			_isPK = true; // ターゲットがモンスター以外で攻撃系スキルで、自分以外の場合PKモードとする。
 		}
 
@@ -370,7 +370,7 @@ public class LsimulatorSkillUse {
 			checkedResult = false;
 		}
 		makeTargetList(); // ターゲットの一覧を作成
-		if (_targetList.isEmpty() && (_user instanceof LsimulatorNpcInstance)) {
+		if (_targetList.isEmpty() && (_user instanceof NpcInstance)) {
 			checkedResult = false;
 		}
 		// 事前チェックここまで
@@ -384,8 +384,8 @@ public class LsimulatorSkillUse {
 	 */
 	private boolean isNormalSkillUsable() {
 		// スキル使用者がPCの場合のチェック
-		if (_user instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) _user;
+		if (_user instanceof PcInstance) {
+			PcInstance pc = (PcInstance) _user;
 
 			if (pc.isTeleport()) { // 傳送中
 				return false;
@@ -447,8 +447,8 @@ public class LsimulatorSkillUse {
 				boolean isNearSameCube = false;
 				int gfxId = 0;
 				for (LsimulatorObject obj : LsimulatorWorld.getInstance().getVisibleObjects(pc, 3)) {
-					if (obj instanceof LsimulatorEffectInstance) {
-						LsimulatorEffectInstance effect = (LsimulatorEffectInstance) obj;
+					if (obj instanceof EffectInstance) {
+						EffectInstance effect = (EffectInstance) obj;
 						gfxId = effect.getGfxId();
 						if (((_skillId == CUBE_IGNITION) && (gfxId == 6706)) || ((_skillId == CUBE_QUAKE) && (gfxId == 6712))
 								|| ((_skillId == CUBE_SHOCK) && (gfxId == 6718)) || ((_skillId == CUBE_BALANCE) && (gfxId == 6724))) {
@@ -478,7 +478,7 @@ public class LsimulatorSkillUse {
 			}
 		}
 		// スキル使用者がNPCの場合のチェック
-		else if (_user instanceof LsimulatorNpcInstance) {
+		else if (_user instanceof NpcInstance) {
 
 			// サイレンス状態では使用不可
 			if (_user.hasSkillEffect(SILENCE)) {
@@ -502,7 +502,7 @@ public class LsimulatorSkillUse {
 	 */
 	private boolean isSpellScrollUsable() {
 		// スペルスクロールを使用するのはPCのみ
-		LsimulatorPcInstance pc = (LsimulatorPcInstance) _user;
+		PcInstance pc = (PcInstance) _user;
 
 		if (pc.isTeleport()) { // 傳送中
 			return false;
@@ -530,12 +530,12 @@ public class LsimulatorSkillUse {
 		return false;
 	}
 
-	public void handleCommands(LsimulatorPcInstance player, int skillId, int targetId, int x, int y, String message, int timeSecs, int type) {
+	public void handleCommands(PcInstance player, int skillId, int targetId, int x, int y, String message, int timeSecs, int type) {
 		LsimulatorCharacter attacker = null;
 		handleCommands(player, skillId, targetId, x, y, message, timeSecs, type, attacker);
 	}
 
-	public void handleCommands(LsimulatorPcInstance player, int skillId, int targetId, int x, int y, String message, int timeSecs, int type,
+	public void handleCommands(PcInstance player, int skillId, int targetId, int x, int y, String message, int timeSecs, int type,
 			LsimulatorCharacter attacker) {
 
 		try {
@@ -600,58 +600,58 @@ public class LsimulatorSkillUse {
 	private boolean isTarget(LsimulatorCharacter cha) throws Exception {
 		boolean _flg = false;
 
-		if (cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if (cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) cha;
 			if (pc.isGhost() || pc.isGmInvis()) {
 				return false;
 			}
 		}
-		if ((_calcType == NPC_PC) && ((cha instanceof LsimulatorPcInstance) || (cha instanceof LsimulatorPetInstance) || (cha instanceof LsimulatorSummonInstance))) {
+		if ((_calcType == NPC_PC) && ((cha instanceof PcInstance) || (cha instanceof PetInstance) || (cha instanceof SummonInstance))) {
 			_flg = true;
 		}
 
 		// 破壊不可能なドアは対象外
-		if (cha instanceof LsimulatorDoorInstance) {
+		if (cha instanceof DoorInstance) {
 			if ((cha.getMaxHp() == 0) || (cha.getMaxHp() == 1)) {
 				return false;
 			}
 		}
 
 		// マジックドールは対象外
-		if ((cha instanceof LsimulatorDollInstance) && (_skillId != HASTE)) {
+		if ((cha instanceof DollInstance) && (_skillId != HASTE)) {
 			return false;
 		}
 
 		// 元のターゲットがPet、Summon以外のNPCの場合、PC、Pet、Summonは対象外
-		if ((_calcType == PC_NPC) && (_target instanceof LsimulatorNpcInstance) && !(_target instanceof LsimulatorPetInstance)
-				&& !(_target instanceof LsimulatorSummonInstance)
-				&& ((cha instanceof LsimulatorPetInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPcInstance))) {
+		if ((_calcType == PC_NPC) && (_target instanceof NpcInstance) && !(_target instanceof PetInstance)
+				&& !(_target instanceof SummonInstance)
+				&& ((cha instanceof PetInstance) || (cha instanceof SummonInstance) || (cha instanceof PcInstance))) {
 			return false;
 		}
 
 		// 元のターゲットがガード以外のNPCの場合、ガードは対象外
-		if ((_calcType == PC_NPC) && (_target instanceof LsimulatorNpcInstance) && !(_target instanceof LsimulatorGuardInstance) && (cha instanceof LsimulatorGuardInstance)) {
+		if ((_calcType == PC_NPC) && (_target instanceof NpcInstance) && !(_target instanceof GuardInstance) && (cha instanceof GuardInstance)) {
 			return false;
 		}
 
 		// NPC対PCでターゲットがモンスターの場合ターゲットではない。
 		if ((_skill.getTarget().equals("attack") || (_skill.getType() == LsimulatorSkills.TYPE_ATTACK)) && (_calcType == NPC_PC)
-				&& !(cha instanceof LsimulatorPetInstance) && !(cha instanceof LsimulatorSummonInstance) && !(cha instanceof LsimulatorPcInstance)) {
+				&& !(cha instanceof PetInstance) && !(cha instanceof SummonInstance) && !(cha instanceof PcInstance)) {
 			return false;
 		}
 
 		// NPC対NPCで使用者がMOBで、ターゲットがMOBの場合ターゲットではない。
 		if ((_skill.getTarget().equals("attack") || (_skill.getType() == LsimulatorSkills.TYPE_ATTACK)) && (_calcType == NPC_NPC)
-				&& (_user instanceof LsimulatorMonsterInstance) && (cha instanceof LsimulatorMonsterInstance)) {
+				&& (_user instanceof MonsterInstance) && (cha instanceof MonsterInstance)) {
 			return false;
 		}
 
 		// 無方向範囲攻撃魔法で攻撃できないNPCは対象外
 		if (_skill.getTarget().equals("none")
 				&& (_skill.getType() == LsimulatorSkills.TYPE_ATTACK)
-				&& ((cha instanceof LsimulatorAuctionBoardInstance) || (cha instanceof LsimulatorBoardInstance) || (cha instanceof LsimulatorCrownInstance)
-						|| (cha instanceof LsimulatorDwarfInstance) || (cha instanceof LsimulatorEffectInstance) || (cha instanceof LsimulatorFieldObjectInstance)
-						|| (cha instanceof LsimulatorFurnitureInstance) || (cha instanceof LsimulatorHousekeeperInstance) || (cha instanceof LsimulatorMerchantInstance) || (cha instanceof LsimulatorTeleporterInstance))) {
+				&& ((cha instanceof AuctionBoardInstance) || (cha instanceof BoardInstance) || (cha instanceof CrownInstance)
+						|| (cha instanceof DwarfInstance) || (cha instanceof EffectInstance) || (cha instanceof FieldObjectInstance)
+						|| (cha instanceof FurnitureInstance) || (cha instanceof HousekeeperInstance) || (cha instanceof MerchantInstance) || (cha instanceof TeleporterInstance))) {
 			return false;
 		}
 
@@ -672,25 +672,25 @@ public class LsimulatorSkillUse {
 		}
 
 		// スキル使用者がPCで、PKモードではない場合、自分のサモン・ペットは対象外
-		if ((_user instanceof LsimulatorPcInstance) && (_skill.getTarget().equals("attack") || (_skill.getType() == LsimulatorSkills.TYPE_ATTACK))
+		if ((_user instanceof PcInstance) && (_skill.getTarget().equals("attack") || (_skill.getType() == LsimulatorSkills.TYPE_ATTACK))
 				&& (  !_isPK  )) {
-			if (cha instanceof LsimulatorSummonInstance) {
-				LsimulatorSummonInstance summon = (LsimulatorSummonInstance) cha;
+			if (cha instanceof SummonInstance) {
+				SummonInstance summon = (SummonInstance) cha;
 				if (_player.getId() == summon.getMaster().getId()) {
 					return false;
 				}
 			}
-			else if (cha instanceof LsimulatorPetInstance) {
-				LsimulatorPetInstance pet = (LsimulatorPetInstance) cha;
+			else if (cha instanceof PetInstance) {
+				PetInstance pet = (PetInstance) cha;
 				if (_player.getId() == pet.getMaster().getId()) {
 					return false;
 				}
 			}
 		}
 
-		if ((_skill.getTarget().equals("attack") || (_skill.getType() == LsimulatorSkills.TYPE_ATTACK)) && !(cha instanceof LsimulatorMonsterInstance)
-				&& (  !_isPK ) && (_target instanceof LsimulatorPcInstance)) {
-			LsimulatorPcInstance enemy = (LsimulatorPcInstance) cha;
+		if ((_skill.getTarget().equals("attack") || (_skill.getType() == LsimulatorSkills.TYPE_ATTACK)) && !(cha instanceof MonsterInstance)
+				&& (  !_isPK ) && (_target instanceof PcInstance)) {
+			PcInstance enemy = (PcInstance) cha;
 			// カウンターディテクション
 			if ((_skillId == COUNTER_DETECTION) && (enemy.getZoneType() != 1)
 					&& (cha.hasSkillEffect(INVISIBILITY) || cha.hasSkillEffect(BLIND_HIDING))) {
@@ -744,7 +744,7 @@ public class LsimulatorSkillUse {
 			return false; // アース バインド中にアース バインド
 		}
 
-		if (!(cha instanceof LsimulatorMonsterInstance) && ((_skillId == TAMING_MONSTER) || (_skillId == CREATE_ZOMBIE))) {
+		if (!(cha instanceof MonsterInstance) && ((_skillId == TAMING_MONSTER) || (_skillId == CREATE_ZOMBIE))) {
 			return false; // ターゲットがモンスターじゃない（テイミングモンスター）
 		}
 		if (cha.isDead()
@@ -757,13 +757,13 @@ public class LsimulatorSkillUse {
 			return false; // 目標未死亡 法術復活類
 		}
 
-		if (((cha instanceof LsimulatorTowerInstance) || (cha instanceof LsimulatorDoorInstance))
+		if (((cha instanceof TowerInstance) || (cha instanceof DoorInstance))
 				&& ((_skillId == CREATE_ZOMBIE) || (_skillId == RESURRECTION) || (_skillId == GREATER_RESURRECTION) || (_skillId == CALL_OF_NATURE))) {
 			return false; // 塔跟門不可放復活法術
 		}
 
-		if (cha instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if (cha instanceof PcInstance) {
+			PcInstance pc = (PcInstance) cha;
 			if (pc.hasSkillEffect(ABSOLUTE_BARRIER)) { // 絕對屏障狀態中
 				if ((_skillId == CURSE_BLIND) || (_skillId == WEAPON_BREAK) || (_skillId == DARKNESS) || (_skillId == WEAKNESS)
 						|| (_skillId == DISEASE) || (_skillId == FOG_OF_SLEEPING) || (_skillId == MASS_SLOW) || (_skillId == SLOW)
@@ -779,9 +779,9 @@ public class LsimulatorSkillUse {
 			}
 		}
 
-		if (cha instanceof LsimulatorNpcInstance) {
-			int hiddenStatus = ((LsimulatorNpcInstance) cha).getHiddenStatus();
-			if (hiddenStatus == LsimulatorNpcInstance.HIDDEN_STATUS_SINK) {
+		if (cha instanceof NpcInstance) {
+			int hiddenStatus = ((NpcInstance) cha).getHiddenStatus();
+			if (hiddenStatus == NpcInstance.HIDDEN_STATUS_SINK) {
 				if ((_skillId == DETECTION) || (_skillId == COUNTER_DETECTION)) { // ディテク、Cディテク
 					return true;
 				}
@@ -789,32 +789,32 @@ public class LsimulatorSkillUse {
 					return false;
 				}
 			}
-			else if (hiddenStatus == LsimulatorNpcInstance.HIDDEN_STATUS_FLY) {
+			else if (hiddenStatus == NpcInstance.HIDDEN_STATUS_FLY) {
 				return false;
 			}
 		}
 
 		if (((_skill.getTargetTo() & LsimulatorSkills.TARGET_TO_PC) == LsimulatorSkills.TARGET_TO_PC // ターゲットがPC
 				)
-				&& (cha instanceof LsimulatorPcInstance)) {
+				&& (cha instanceof PcInstance)) {
 			_flg = true;
 		}
 		else if (((_skill.getTargetTo() & LsimulatorSkills.TARGET_TO_NPC) == LsimulatorSkills.TARGET_TO_NPC // ターゲットがNPC
 				)
-				&& ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorNpcInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance))) {
+				&& ((cha instanceof MonsterInstance) || (cha instanceof NpcInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance))) {
 			_flg = true;
 		}
-		else if (((_skill.getTargetTo() & LsimulatorSkills.TARGET_TO_PET) == LsimulatorSkills.TARGET_TO_PET) && (_user instanceof LsimulatorPcInstance)) { // ターゲットがSummon,Pet
-			if (cha instanceof LsimulatorSummonInstance) {
-				LsimulatorSummonInstance summon = (LsimulatorSummonInstance) cha;
+		else if (((_skill.getTargetTo() & LsimulatorSkills.TARGET_TO_PET) == LsimulatorSkills.TARGET_TO_PET) && (_user instanceof PcInstance)) { // ターゲットがSummon,Pet
+			if (cha instanceof SummonInstance) {
+				SummonInstance summon = (SummonInstance) cha;
 				if (summon.getMaster() != null) {
 					if (_player.getId() == summon.getMaster().getId()) {
 						_flg = true;
 					}
 				}
 			}
-			else if (cha instanceof LsimulatorPetInstance) {
-				LsimulatorPetInstance pet = (LsimulatorPetInstance) cha;
+			else if (cha instanceof PetInstance) {
+				PetInstance pet = (PetInstance) cha;
 				if (pet.getMaster() != null) {
 					if (_player.getId() == pet.getMaster().getId()) {
 						_flg = true;
@@ -823,13 +823,13 @@ public class LsimulatorSkillUse {
 			}
 		}
 
-		if ((_calcType == PC_PC) && (cha instanceof LsimulatorPcInstance)) {
+		if ((_calcType == PC_PC) && (cha instanceof PcInstance)) {
 			if (((_skill.getTargetTo() & LsimulatorSkills.TARGET_TO_CLAN) == LsimulatorSkills.TARGET_TO_CLAN) && (((_player.getClanid() != 0 // ターゲットがクラン員
-					) && (_player.getClanid() == ((LsimulatorPcInstance) cha).getClanid())) || _player.isGm())) {
+					) && (_player.getClanid() == ((PcInstance) cha).getClanid())) || _player.isGm())) {
 				return true;
 			}
 			if (((_skill.getTargetTo() & LsimulatorSkills.TARGET_TO_PARTY) == LsimulatorSkills.TARGET_TO_PARTY) && (_player.getParty() // ターゲットがパーティー
-					.isMember((LsimulatorPcInstance) cha) || _player.isGm())) {
+					.isMember((PcInstance) cha) || _player.isGm())) {
 				return true;
 			}
 		}
@@ -936,7 +936,7 @@ public class LsimulatorSkillUse {
 	}
 
 	// メッセージの表示（何か起こったとき）
-	private void sendHappenMessage(LsimulatorPcInstance pc) {
+	private void sendHappenMessage(PcInstance pc) {
 		int msgID = _skill.getSysmsgIdHappen();
 		if (msgID > 0) {
 			// 效果訊息排除施法者本身。
@@ -959,7 +959,7 @@ public class LsimulatorSkillUse {
 	// メッセージの表示（失敗したとき）
 	private void sendFailMessage() {
 		int msgID = _skill.getSysmsgIdFail();
-		if ((msgID > 0) && (_user instanceof LsimulatorPcInstance)) {
+		if ((msgID > 0) && (_user instanceof PcInstance)) {
 			_player.sendPackets(new S_ServerMessage(msgID));
 		}
 	}
@@ -967,7 +967,7 @@ public class LsimulatorSkillUse {
 	// 精霊魔法の属性と使用者の属性は一致するか？（とりあえずの対処なので、対応できたら消去して下さい)
 	private boolean isAttrAgrees() {
 		int magicattr = _skill.getAttr();
-		if (_user instanceof LsimulatorNpcInstance) { // NPCが使った場合なんでもOK
+		if (_user instanceof NpcInstance) { // NPCが使った場合なんでもOK
 			return true;
 		}
 
@@ -988,7 +988,7 @@ public class LsimulatorSkillUse {
 		int currentMp = 0;
 		int currentHp = 0;
 
-		if (_user instanceof LsimulatorNpcInstance) {
+		if (_user instanceof NpcInstance) {
 			currentMp = _npc.getCurrentMp();
 			currentHp = _npc.getCurrentHp();
 		}
@@ -1037,34 +1037,34 @@ public class LsimulatorSkillUse {
 
 			// 裝備MP減免 一次只需判斷一個 
 			if ((_skillId == PHYSICAL_ENCHANT_DEX) && _player.getInventory().checkEquipped(20013)) { // 敏捷魔法頭盔使用通暢氣脈術
-				_mpConsume /= 2;
+				_mpConsume >>= 1;
 			}
 			else if ((_skillId == HASTE) && _player.getInventory().checkEquipped(20013)) { // 敏捷魔法頭盔使用加速術
-				_mpConsume /= 2;
+				_mpConsume >>= 1;
 			}
 			else if ((_skillId == HEAL) && _player.getInventory().checkEquipped(20014)) { // 治癒魔法頭盔使用初級治癒術
-				_mpConsume /= 2;
+				_mpConsume >>= 1;
 			}
 			else if ((_skillId == EXTRA_HEAL) && _player.getInventory().checkEquipped(20014)) { // 治癒魔法頭盔使用中級治癒術
-				_mpConsume /= 2;
+				_mpConsume >>= 1;
 			}
 			else if ((_skillId == ENCHANT_WEAPON) && _player.getInventory().checkEquipped(20015)) { // 力量魔法頭盔使用擬似魔法武器
-				_mpConsume /= 2;
+				_mpConsume >>= 1;
 			}
 			else if ((_skillId == DETECTION) && _player.getInventory().checkEquipped(20015)) { // 力量魔法頭盔使用無所遁形術
-				_mpConsume /= 2;
+				_mpConsume >>= 1;
 			}
 			else if ((_skillId == PHYSICAL_ENCHANT_STR) && _player.getInventory().checkEquipped(20015)) { // 力量魔法頭盔使用體魄強健術
-				_mpConsume /= 2;
+				_mpConsume >>= 1;
 			}
 			else if ((_skillId == HASTE) && _player.getInventory().checkEquipped(20008)) { // 小型風之頭盔使用加速術
-				_mpConsume /= 2;
+				_mpConsume >>= 1;
 			}
 			else if ((_skillId == HASTE) && _player.getInventory().checkEquipped(20023)) { // 風之頭盔使用加速術
 				_mpConsume = 25;
 			}
 			else if ((_skillId == GREATER_HASTE) && _player.getInventory().checkEquipped(20023)) { // 風之頭盔使用強力加速術
-				_mpConsume /= 2;
+				_mpConsume >>= 1;
 			}
 
 			// 初始能力減免
@@ -1078,13 +1078,13 @@ public class LsimulatorSkillUse {
 		}
 
 		if (currentHp < _hpConsume + 1) {
-			if (_user instanceof LsimulatorPcInstance) {
+			if (_user instanceof PcInstance) {
 				_player.sendPackets(new S_ServerMessage(279)); // \f1因體力不足而無法使用魔法。
 			}
 			return false;
 		}
 		else if (currentMp < _mpConsume) {
-			if (_user instanceof LsimulatorPcInstance) {
+			if (_user instanceof PcInstance) {
 				_player.sendPackets(new S_ServerMessage(278)); // \f1因魔力不足而無法使用魔法。
 			}
 			return false;
@@ -1112,7 +1112,7 @@ public class LsimulatorSkillUse {
 
 	// 使用材料、HP・MP、Lawfulをマイナスする。
 	private void useConsume() {
-		if (_user instanceof LsimulatorNpcInstance) {
+		if (_user instanceof NpcInstance) {
 			// NPCの場合、HP、MPのみマイナス
 			int current_hp = _npc.getCurrentHp() - _hpConsume;
 			_npc.setCurrentHp(current_hp);
@@ -1211,14 +1211,14 @@ public class LsimulatorSkillUse {
 			runSkill();
 			return;
 		}
-		if ((cha instanceof LsimulatorPcInstance) && repetition) { // 対象がPCで既にスキルが重複している場合
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+		if ((cha instanceof PcInstance) && repetition) { // 対象がPCで既にスキルが重複している場合
+			PcInstance pc = (PcInstance) cha;
 			sendIcon(pc);
 		}
 	}
 
 	// アイコンの送信
-	private void sendIcon(LsimulatorPcInstance pc) {
+	private void sendIcon(PcInstance pc) {
 		if (_skillTime == 0) {
 			_getBuffIconDuration = _skill.getBuffDuration(); // 効果時間
 		}
@@ -1319,13 +1319,13 @@ public class LsimulatorSkillUse {
 		}
 		int[] data = null;
 
-		if (_user instanceof LsimulatorPcInstance) {
+		if (_user instanceof PcInstance) {
 
 			int targetid = 0;
 			if (_skillId != FIRE_WALL && _skillId != LIFE_STREAM) {
 				targetid = _target.getId();
 			}
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) _user;
+			PcInstance pc = (PcInstance) _user;
 
 			switch(_skillId) {
 				case FIRE_WALL: // 火牢
@@ -1344,11 +1344,11 @@ public class LsimulatorSkillUse {
 					if (_targetList.isEmpty()) { // 失敗
 						return;
 					} else {
-						if (_target instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance targetPc = (LsimulatorPcInstance) _target;
+						if (_target instanceof PcInstance) {
+							PcInstance targetPc = (PcInstance) _target;
 							targetPc.sendPackets(new S_SkillSound(targetid, 4434));
 							targetPc.broadcastPacket(new S_SkillSound(targetid, 4434));
-						} else if (_target instanceof LsimulatorNpcInstance) {
+						} else if (_target instanceof NpcInstance) {
 							_target.broadcastPacket(new S_SkillSound(targetid, 4434));
 						}
 						return;
@@ -1471,17 +1471,17 @@ public class LsimulatorSkillUse {
 				// スキルのエフェクト表示はターゲット全員だが、あまり必要性がないので、ステータスのみ送信
 				for (TargetStatus ts : _targetList) {
 					LsimulatorCharacter cha = ts.getTarget();
-					if (cha instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance chaPc = (LsimulatorPcInstance) cha;
+					if (cha instanceof PcInstance) {
+						PcInstance chaPc = (PcInstance) cha;
 						chaPc.sendPackets(new S_OwnCharStatus(chaPc));
 					}
 				}
 			}
 		}
-		else if (_user instanceof LsimulatorNpcInstance) { // NPCがスキルを使った場合
+		else if (_user instanceof NpcInstance) { // NPCがスキルを使った場合
 			int targetid = _target.getId();
 
-			if (_user instanceof LsimulatorMerchantInstance) {
+			if (_user instanceof MerchantInstance) {
 				_user.broadcastPacket(new S_SkillSound(targetid, _gfxid));
 				return;
 			}
@@ -1594,40 +1594,40 @@ public class LsimulatorSkillUse {
 				return;
 			case CUBE_IGNITION:
 				LsimulatorEffectSpawn.getInstance().spawnEffect(80149, _skill.getBuffDuration() * 1000, _targetX, _targetY, _user.getMapId(),
-					(LsimulatorPcInstance) _user, _skillId);
+					(PcInstance) _user, _skillId);
 				return;
 			case CUBE_QUAKE:
 				LsimulatorEffectSpawn.getInstance().spawnEffect(80150, _skill.getBuffDuration() * 1000, _targetX, _targetY, _user.getMapId(),
-						(LsimulatorPcInstance) _user, _skillId);
+						(PcInstance) _user, _skillId);
 				return;
 			case CUBE_SHOCK:
 				LsimulatorEffectSpawn.getInstance().spawnEffect(80151, _skill.getBuffDuration() * 1000, _targetX, _targetY, _user.getMapId(),
-						(LsimulatorPcInstance) _user, _skillId);
+						(PcInstance) _user, _skillId);
 				return;
 			case CUBE_BALANCE:
 				LsimulatorEffectSpawn.getInstance().spawnEffect(80152, _skill.getBuffDuration() * 1000, _targetX, _targetY, _user.getMapId(),
-						(LsimulatorPcInstance) _user, _skillId);
+						(PcInstance) _user, _skillId);
 				return;
 			case FIRE_WALL: // 火牢
 				LsimulatorEffectSpawn.getInstance().doSpawnFireWall(_user, _targetX, _targetY);
 				return;
 			case TRUE_TARGET: // 精準目標
-				if (_user instanceof LsimulatorPcInstance) {
-					LsimulatorPcInstance pri = (LsimulatorPcInstance) _user;
-					LsimulatorEffectInstance effect = LsimulatorEffectSpawn.getInstance().spawnEffect(80153, 5 * 1000, _targetX + 2, _targetY - 1, _user.getMapId());
+				if (_user instanceof PcInstance) {
+					PcInstance pri = (PcInstance) _user;
+					EffectInstance effect = LsimulatorEffectSpawn.getInstance().spawnEffect(80153, 5 * 1000, _targetX + 2, _targetY - 1, _user.getMapId());
 					if (_targetID != 0) {
 						pri.sendPackets(new S_TrueTarget(_targetID, pri.getId(), _message));
 						if (pri.getClanid() != 0) {
-							LsimulatorPcInstance players[] = LsimulatorWorld.getInstance().getClan(pri.getClanname()).getOnlineClanMember();
-							for (LsimulatorPcInstance pc : players) {
+							PcInstance players[] = LsimulatorWorld.getInstance().getClan(pri.getClanname()).getOnlineClanMember();
+							for (PcInstance pc : players) {
 								pc.sendPackets(new S_TrueTarget(_targetID, pc.getId(), _message));
 							}
 						}
 					} else if (effect != null) {
 						pri.sendPackets(new S_TrueTarget(effect.getId(), pri.getId(), _message));
 						if (pri.getClanid() != 0) {
-							LsimulatorPcInstance players[] = LsimulatorWorld.getInstance().getClan(pri.getClanname()).getOnlineClanMember();
-							for (LsimulatorPcInstance pc : players) {
+							PcInstance players[] = LsimulatorWorld.getInstance().getClan(pri.getClanname()).getOnlineClanMember();
+							for (PcInstance pc : players) {
 								pc.sendPackets(new S_TrueTarget(effect.getId(), pc.getId(), _message));
 							}
 						}
@@ -1648,7 +1648,7 @@ public class LsimulatorSkillUse {
 
 		// NPCにショックスタンを使用させるとonActionでNullPointerExceptionが発生するため
 		// とりあえずPCが使用した時のみ
-		if ((_skillId == SHOCK_STUN) && (_user instanceof LsimulatorPcInstance)) {
+		if ((_skillId == SHOCK_STUN) && (_user instanceof PcInstance)) {
 			_target.onAction(_player);
 		}
 
@@ -1683,8 +1683,8 @@ public class LsimulatorSkillUse {
 				LsimulatorMagic _magic = new LsimulatorMagic(_user, cha);
 				_magic.setLeverage(getLeverage());
 
-				if (cha instanceof LsimulatorMonsterInstance) { // 不死係判斷
-					undeadType = ((LsimulatorMonsterInstance) cha).getNpcTemplate().get_undead();
+				if (cha instanceof MonsterInstance) { // 不死係判斷
+					undeadType = ((MonsterInstance) cha).getNpcTemplate().get_undead();
 				}
 
 				// 確率系スキルで失敗が確定している場合
@@ -1693,7 +1693,7 @@ public class LsimulatorSkillUse {
 					continue;
 				}
 
-				if (cha instanceof LsimulatorPcInstance) { // ターゲットがPCの場合のみアイコンは送信する。
+				if (cha instanceof PcInstance) { // ターゲットがPCの場合のみアイコンは送信する。
 					if (_skillTime == 0) {
 						_getBuffIconDuration = _skill.getBuffDuration(); // 効果時間
 					}
@@ -1728,8 +1728,8 @@ public class LsimulatorSkillUse {
 						}
 					}
 					else { // 失敗した場合、リストから削除
-						if ((_skillId == FOG_OF_SLEEPING) && (cha instanceof LsimulatorPcInstance)) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+						if ((_skillId == FOG_OF_SLEEPING) && (cha instanceof PcInstance)) {
+							PcInstance pc = (PcInstance) cha;
 							pc.sendPackets(new S_ServerMessage(297)); // 你感覺些微地暈眩。
 						}
 						iter.remove();
@@ -1741,15 +1741,15 @@ public class LsimulatorSkillUse {
 					// 回復量
 					dmg = -1 * _magic.calcHealing(_skillId);
 					if (cha.hasSkillEffect(WATER_LIFE)) { // 水之元氣-效果 2倍
-						dmg *= 2;
+						dmg <<= 1;
 						cha.killSkillEffectTimer(WATER_LIFE); // 效果只有一次
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
 							pc.sendPackets(new S_SkillIconWaterLife());
 						}
 					}
 					if (cha.hasSkillEffect(POLLUTE_WATER)) { // 汙濁之水-效果減半
-						dmg /= 2;
+						dmg >>= 1;
 					}
 				}
 				// 顯示團體魔法效果在隊友或盟友
@@ -1758,8 +1758,8 @@ public class LsimulatorSkillUse {
 						|| _skillId == GLOWING_AURA // 激勵士氣
 						|| _skillId == SHINING_AURA || _skillId == BRAVE_AURA) // 鋼鐵士氣、衝擊士氣 
 							&& _user.getId() != cha.getId()) {
-					if (cha instanceof LsimulatorPcInstance) {
-						LsimulatorPcInstance _targetPc = (LsimulatorPcInstance) cha;
+					if (cha instanceof PcInstance) {
+						PcInstance _targetPc = (PcInstance) cha;
 						_targetPc.sendPackets(new S_SkillSound(_targetPc.getId(), _skill.getCastGfx()));
 						_targetPc.broadcastPacket(new S_SkillSound(_targetPc.getId(), _skill.getCastGfx()));
 					}
@@ -1779,8 +1779,8 @@ public class LsimulatorSkillUse {
 					// 加速術
 					case HASTE:
 						if (cha.getMoveSpeed() != 2) { // スロー中以外
-							if (cha instanceof LsimulatorPcInstance) {
-								LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+							if (cha instanceof PcInstance) {
+								PcInstance pc = (PcInstance) cha;
 								if (pc.getHasteItemEquipped() > 0) {
 									continue;
 								}
@@ -1811,8 +1811,8 @@ public class LsimulatorSkillUse {
 						break;
 					// 強力加速術
 					case GREATER_HASTE:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
 							if (pc.getHasteItemEquipped() > 0) {
 								continue;
 							}
@@ -1846,15 +1846,15 @@ public class LsimulatorSkillUse {
 					case SLOW:
 					case MASS_SLOW:
 					case ENTANGLE:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
 							if (pc.getHasteItemEquipped() > 0) {
 								continue;
 							}
 						}
 						if (cha.getMoveSpeed() == 0) {
-							if (cha instanceof LsimulatorPcInstance) {
-								LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+							if (cha instanceof PcInstance) {
+								PcInstance pc = (PcInstance) cha;
 								pc.sendPackets(new S_SkillHaste(pc.getId(), 2, _getBuffIconDuration));
 							}
 							cha.broadcastPacket(new S_SkillHaste(cha.getId(), 2, _getBuffIconDuration));
@@ -1896,14 +1896,14 @@ public class LsimulatorSkillUse {
 						if (_isFreeze) {
 							int time = _skill.getBuffDuration() * 1000;
 							LsimulatorEffectSpawn.getInstance().spawnEffect(81168, time, cha.getX(), cha.getY(), cha.getMapId());
-							if (cha instanceof LsimulatorPcInstance) {
-								LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+							if (cha instanceof PcInstance) {
+								PcInstance pc = (PcInstance) cha;
 								pc.sendPackets(new S_Poison(pc.getId(), 2));
 								pc.broadcastPacket(new S_Poison(pc.getId(), 2));
 								pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_FREEZE, true));
 							}
-							else if ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance)) {
-								LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+							else if ((cha instanceof MonsterInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance)) {
+								NpcInstance npc = (NpcInstance) cha;
 								npc.broadcastPacket(new S_Poison(npc.getId(), 2));
 								npc.setParalyzed(true);
 								npc.setParalysisTime(time);
@@ -1912,14 +1912,14 @@ public class LsimulatorSkillUse {
 						break;
 					// 大地屏障
 					case EARTH_BIND:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
 							pc.sendPackets(new S_Poison(pc.getId(), 2));
 							pc.broadcastPacket(new S_Poison(pc.getId(), 2));
 							pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_FREEZE, true));
 						}
-						else if ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance)) {
-							LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+						else if ((cha instanceof MonsterInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance)) {
+							NpcInstance npc = (NpcInstance) cha;
 							npc.broadcastPacket(new S_Poison(npc.getId(), 2));
 							npc.setParalyzed(true);
 							npc.setParalysisTime(_skill.getBuffDuration() * 1000);
@@ -1975,17 +1975,17 @@ public class LsimulatorSkillUse {
 						{ 500, 1000, 1500, 2000, 2500, 3000 };
 						int rnd = Random.nextInt(stunTimeArray.length);
 						_shockStunDuration = stunTimeArray[rnd];
-						if ((cha instanceof LsimulatorPcInstance) && cha.hasSkillEffect(SHOCK_STUN)) {
+						if ((cha instanceof PcInstance) && cha.hasSkillEffect(SHOCK_STUN)) {
 							_shockStunDuration += cha.getSkillEffectTimeSec(SHOCK_STUN) * 1000;
 						}
 
 						LsimulatorEffectSpawn.getInstance().spawnEffect(81162, _shockStunDuration, cha.getX(), cha.getY(), cha.getMapId());
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
 							pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, true));
 						}
-						else if ((cha instanceof LsimulatorMonsterInstance) || (cha instanceof LsimulatorSummonInstance) || (cha instanceof LsimulatorPetInstance)) {
-							LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+						else if ((cha instanceof MonsterInstance) || (cha instanceof SummonInstance) || (cha instanceof PetInstance)) {
+							NpcInstance npc = (NpcInstance) cha;
 							npc.setParalyzed(true);
 							npc.setParalysisTime(_shockStunDuration);
 						}
@@ -1995,13 +1995,13 @@ public class LsimulatorSkillUse {
 						isSuccess = _magic.calcProbabilityMagic(_skillId);
 						if (isSuccess) {
 							if (!cha.hasSkillEffect(THUNDER_GRAB_START) && !cha.hasSkillEffect(STATUS_FREEZE) ) {
-								if (cha instanceof LsimulatorPcInstance) {
-									LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+								if (cha instanceof PcInstance) {
+									PcInstance pc = (PcInstance) cha;
 									pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_BIND, true));
 									pc.sendPackets(new S_SkillSound(pc.getId(), 4184));
 									pc.broadcastPacket(new S_SkillSound(pc.getId(), 4184));
-								} else if (cha instanceof LsimulatorNpcInstance) {
-									LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+								} else if (cha instanceof NpcInstance) {
+									NpcInstance npc = (NpcInstance) cha;
 									npc.setParalyzed(true);
 									npc.broadcastPacket(new S_SkillSound(npc.getId(), 4184));
 								}
@@ -2018,7 +2018,7 @@ public class LsimulatorSkillUse {
 					// 魔力奪取
 					case MANA_DRAIN:
 						int chance = Random.nextInt(10) + 5;
-						drainMana = chance + (_user.getInt() / 2);
+						drainMana = chance + (_user.getInt() >> 1 );
 						if (cha.getCurrentMp() < drainMana) {
 							drainMana = cha.getCurrentMp();
 						}
@@ -2026,8 +2026,8 @@ public class LsimulatorSkillUse {
 					// 指定傳送、集體傳送術
 					case TELEPORT:
 					case MASS_TELEPORT:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
 							LsimulatorBookMark bookm = pc.getBookMark(_bookmarkId);
 							if (bookm != null) { // ブックマークを取得出来たらテレポート
 								if (pc.getMap().isEscapable() || pc.isGm()) {
@@ -2036,8 +2036,8 @@ public class LsimulatorSkillUse {
 									short mapId = bookm.getMapId();
 
 									if (_skillId == MASS_TELEPORT) { // マステレポート
-										List<LsimulatorPcInstance> clanMember = LsimulatorWorld.getInstance().getVisiblePlayer(pc);
-										for (LsimulatorPcInstance member : clanMember) {
+										List<PcInstance> clanMember = LsimulatorWorld.getInstance().getVisiblePlayer(pc);
+										for (PcInstance member : clanMember) {
 											if ((pc.getLocation().getTileLineDistance(member.getLocation()) <= 3)
 													&& (member.getClanid() == pc.getClanid()) && (pc.getClanid() != 0) && (member.getId() != pc.getId())) {
 												LsimulatorTeleport.teleport(member, newX, newY, mapId, 5, true);
@@ -2059,8 +2059,8 @@ public class LsimulatorSkillUse {
 									short mapId = (short) newLocation.getMapId();
 
 									if (_skillId == MASS_TELEPORT) {
-										List<LsimulatorPcInstance> clanMember = LsimulatorWorld.getInstance().getVisiblePlayer(pc);
-										for (LsimulatorPcInstance member : clanMember) {
+										List<PcInstance> clanMember = LsimulatorWorld.getInstance().getVisiblePlayer(pc);
+										for (PcInstance member : clanMember) {
 											if ((pc.getLocation().getTileLineDistance(member.getLocation()) <= 3)
 													&& (member.getClanid() == pc.getClanid()) && (pc.getClanid() != 0) && (member.getId() != pc.getId())) {
 												LsimulatorTeleport.teleport(member, newX, newY, mapId, 5, true);
@@ -2078,9 +2078,9 @@ public class LsimulatorSkillUse {
 						break;
 					// 呼喚盟友
 					case CALL_CLAN:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
-							LsimulatorPcInstance clanPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(_targetID);
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
+							PcInstance clanPc = (PcInstance) LsimulatorWorld.getInstance().findObject(_targetID);
 							if (clanPc != null) {
 								clanPc.setTempID(pc.getId());
 								clanPc.sendPackets(new S_Message_YN(729, "")); // 盟主正在呼喚你，你要接受他的呼喚嗎？(Y/N)
@@ -2089,9 +2089,9 @@ public class LsimulatorSkillUse {
 						break;
 					// 援護盟友
 					case RUN_CLAN:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
-							LsimulatorPcInstance clanPc = (LsimulatorPcInstance) LsimulatorWorld.getInstance().findObject(_targetID);
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
+							PcInstance clanPc = (PcInstance) LsimulatorWorld.getInstance().findObject(_targetID);
 							if (clanPc != null) {
 								if (pc.getMap().isEscapable() || pc.isGm()) {
 									boolean castle_area = LsimulatorCastleLocation.checkInAllWarArea(
@@ -2113,13 +2113,13 @@ public class LsimulatorSkillUse {
 						break;
 					// 強力無所遁形
 					case COUNTER_DETECTION:
-						if (cha instanceof LsimulatorPcInstance) {
+						if (cha instanceof PcInstance) {
 							dmg = _magic.calcMagicDamage(_skillId);
 						}
-						else if (cha instanceof LsimulatorNpcInstance) {
-							LsimulatorNpcInstance npc = (LsimulatorNpcInstance) cha;
+						else if (cha instanceof NpcInstance) {
+							NpcInstance npc = (NpcInstance) cha;
 							int hiddenStatus = npc.getHiddenStatus();
-							if (hiddenStatus == LsimulatorNpcInstance.HIDDEN_STATUS_SINK) {
+							if (hiddenStatus == NpcInstance.HIDDEN_STATUS_SINK) {
 								npc.appearOnGround(_player);
 							} else {
 								dmg = 0;
@@ -2130,9 +2130,9 @@ public class LsimulatorSkillUse {
 						break;
 					// 創造魔法武器
 					case CREATE_MAGICAL_WEAPON:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
-							LsimulatorItemInstance item = pc.getInventory().getItem(_itemobjid);
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
+							ItemInstance item = pc.getInventory().getItem(_itemobjid);
 							if ((item != null) && (item.getItem().getType2() == 1)) {
 								int item_type = item.getItem().getType2();
 								int safe_enchant = item.getItem().get_safeenchant();
@@ -2172,10 +2172,10 @@ public class LsimulatorSkillUse {
 						break;
 					// 提煉魔石
 					case BRING_STONE:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
 
-							LsimulatorItemInstance item = pc.getInventory().getItem(_itemobjid);
+							ItemInstance item = pc.getInventory().getItem(_itemobjid);
 							if (item != null) {
 								int dark = (int) (10 + (pc.getLevel() * 0.8) + (pc.getWis() - 6) * 1.2);
 								int brave = (int) (dark / 2.1);
@@ -2220,14 +2220,14 @@ public class LsimulatorSkillUse {
 						break;
 					// 日光術
 					case LIGHT:
-						if (cha instanceof LsimulatorPcInstance) {
+						if (cha instanceof PcInstance) {
 						}
 						break;
 					// 暗影之牙
 					case SHADOW_FANG:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
-							LsimulatorItemInstance item = pc.getInventory().getItem(_itemobjid);
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
+							ItemInstance item = pc.getInventory().getItem(_itemobjid);
 							if ((item != null) && (item.getItem().getType2() == 1)) {
 								item.setSkillWeaponEnchant(pc, _skillId, _skill.getBuffDuration() * 1000);
 							}
@@ -2238,9 +2238,9 @@ public class LsimulatorSkillUse {
 						break;
 					// 擬似魔法武器
 					case ENCHANT_WEAPON:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
-							LsimulatorItemInstance item = pc.getInventory().getItem(_itemobjid);
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
+							ItemInstance item = pc.getInventory().getItem(_itemobjid);
 							if ((item != null) && (item.getItem().getType2() == 1)) {
 								pc.sendPackets(new S_ServerMessage(161, item.getLogName(), "$245", "$247"));
 								item.setSkillWeaponEnchant(pc, _skillId, _skill.getBuffDuration() * 1000);
@@ -2253,16 +2253,16 @@ public class LsimulatorSkillUse {
 					// 神聖武器、祝福魔法武器
 					case HOLY_WEAPON:
 					case BLESS_WEAPON:
-						if (cha instanceof LsimulatorPcInstance) {
-							if (!(cha instanceof LsimulatorPcInstance)) {
+						if (cha instanceof PcInstance) {
+							if (!(cha instanceof PcInstance)) {
 								return;
 							}
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+							PcInstance pc = (PcInstance) cha;
 							if (pc.getWeapon() == null) {
 								pc.sendPackets(new S_ServerMessage(79));
 								return;
 							}
-							for (LsimulatorItemInstance item : pc.getInventory().getItems()) {
+							for (ItemInstance item : pc.getInventory().getItems()) {
 								if (pc.getWeapon().equals(item)) {
 									pc.sendPackets(new S_ServerMessage(161, item.getLogName(), "$245", "$247"));
 									item.setSkillWeaponEnchant(pc, _skillId, _skill.getBuffDuration() * 1000);
@@ -2273,9 +2273,9 @@ public class LsimulatorSkillUse {
 						break;
 					// 鎧甲護持
 					case BLESSED_ARMOR:
-						if (cha instanceof LsimulatorPcInstance) {
-							LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
-							LsimulatorItemInstance item = pc.getInventory().getItem(_itemobjid);
+						if (cha instanceof PcInstance) {
+							PcInstance pc = (PcInstance) cha;
+							ItemInstance item = pc.getInventory().getItem(_itemobjid);
 							if ((item != null) && (item.getItem().getType2() == 2) && (item.getItem().getType() == 2)) {
 								pc.sendPackets(new S_ServerMessage(161, item.getLogName(), "$245", "$247"));
 								item.setSkillArmorEnchant(pc, _skillId, _skill.getBuffDuration() * 1000);
@@ -2301,7 +2301,7 @@ public class LsimulatorSkillUse {
 					dmg = 0;
 				}
 				// 無法對城門、守護塔補血
-				if (((cha instanceof LsimulatorTowerInstance) || (cha instanceof LsimulatorDoorInstance)) && (dmg < 0)) {
+				if (((cha instanceof TowerInstance) || (cha instanceof DoorInstance)) && (dmg < 0)) {
 					dmg = 0;
 				}
 				 // 吸取魔力。
@@ -2317,8 +2317,8 @@ public class LsimulatorSkillUse {
 					_user.setCurrentHp(heal + _user.getCurrentHp());
 				}
 
-				if (cha instanceof LsimulatorPcInstance) { // 更新自身狀態
-					LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+				if (cha instanceof PcInstance) { // 更新自身狀態
+					PcInstance pc = (PcInstance) cha;
 					pc.turnOnOffLight();
 					pc.sendPackets(new S_OwnCharAttrDef(pc));
 					pc.sendPackets(new S_OwnCharStatus(pc));
@@ -2327,8 +2327,8 @@ public class LsimulatorSkillUse {
 
 				addMagicList(cha, false); // ターゲットに魔法の効果時間を設定
 
-				if (cha instanceof LsimulatorPcInstance) { // ターゲットがPCならば、ライト状態を更新
-					LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+				if (cha instanceof PcInstance) { // ターゲットがPCならば、ライト状態を更新
+					PcInstance pc = (PcInstance) cha;
 					pc.turnOnOffLight();
 				}
 			}
@@ -2344,13 +2344,13 @@ public class LsimulatorSkillUse {
 		}
 	}
 
-	private void detection(LsimulatorPcInstance pc) {
+	private void detection(PcInstance pc) {
 		if (!pc.isGmInvis() && pc.isInvisble()) { // 自己隱身中
 			pc.delInvis();
 			pc.beginInvisTimer();
 		}
 
-		for (LsimulatorPcInstance tgt : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) { // 畫面內其他隱身者
+		for (PcInstance tgt : LsimulatorWorld.getInstance().getVisiblePlayer(pc)) { // 畫面內其他隱身者
 			if (!tgt.isGmInvis() && tgt.isInvisble()) {
 				tgt.delInvis();
 			}
@@ -2361,7 +2361,7 @@ public class LsimulatorSkillUse {
 	// ターゲットについて計算する必要があるか返す
 	private boolean isTargetCalc(LsimulatorCharacter cha) {
 		// 三重矢、屠宰者、暴擊、骷髏毀壞
-		if ((_user instanceof LsimulatorPcInstance)
+		if ((_user instanceof PcInstance)
 				&& (_skillId == TRIPLE_ARROW || _skillId == FOE_SLAYER
 						|| _skillId == SMASH || _skillId == BONE_BREAK)) {
 			return true;
@@ -2386,14 +2386,14 @@ public class LsimulatorSkillUse {
 			if (_user.getId() == cha.getId()) {
 				return false;
 			}
-			if (cha instanceof LsimulatorSummonInstance) {
-				LsimulatorSummonInstance summon = (LsimulatorSummonInstance) cha;
+			if (cha instanceof SummonInstance) {
+				SummonInstance summon = (SummonInstance) cha;
 				if (_user.getId() == summon.getMaster().getId()) {
 					return false;
 				}
 			}
-			else if (cha instanceof LsimulatorPetInstance) {
-				LsimulatorPetInstance pet = (LsimulatorPetInstance) cha;
+			else if (cha instanceof PetInstance) {
+				PetInstance pet = (PetInstance) cha;
 				if (_user.getId() == pet.getMaster().getId()) {
 					return false;
 				}
@@ -2417,13 +2417,13 @@ public class LsimulatorSkillUse {
 		}
 
 		if (_calcType == PC_NPC) {
-			if (cha instanceof LsimulatorSummonInstance) { // 対象がサモン
-				LsimulatorSummonInstance summon = (LsimulatorSummonInstance) cha;
+			if (cha instanceof SummonInstance) { // 対象がサモン
+				SummonInstance summon = (SummonInstance) cha;
 				if (summon.isExsistMaster()) { // マスターが居る
 					return true;
 				}
 			}
-			if (cha instanceof LsimulatorPetInstance) { // 対象がペット
+			if (cha instanceof PetInstance) { // 対象がペット
 				return true;
 			}
 		}
@@ -2437,13 +2437,13 @@ public class LsimulatorSkillUse {
 		boolean isManaDrain = false;
 		int undeadType = 0;
 
-		if ((cha instanceof LsimulatorTowerInstance) || (cha instanceof LsimulatorDoorInstance)) { // ガーディアンタワー、ドアには確率系スキル無効
+		if ((cha instanceof TowerInstance) || (cha instanceof DoorInstance)) { // ガーディアンタワー、ドアには確率系スキル無効
 			return true;
 		}
 
-		if (cha instanceof LsimulatorPcInstance) { // 対PCの場合
+		if (cha instanceof PcInstance) { // 対PCの場合
 			if ((_calcType == PC_PC) && _player.checkNonPvP(_player, cha)) { // Non-PvP設定
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+				PcInstance pc = (PcInstance) cha;
 				if ((_player.getId() == pc.getId()) || ((pc.getClanid() != 0) && (_player.getClanid() == pc.getClanid()))) {
 					return false;
 				}
@@ -2452,20 +2452,20 @@ public class LsimulatorSkillUse {
 			return false;
 		}
 
-		if (cha instanceof LsimulatorMonsterInstance) { // ターンアンデット可能か判定
-			isTU = ((LsimulatorMonsterInstance) cha).getNpcTemplate().get_IsTU();
+		if (cha instanceof MonsterInstance) { // ターンアンデット可能か判定
+			isTU = ((MonsterInstance) cha).getNpcTemplate().get_IsTU();
 		}
 
-		if (cha instanceof LsimulatorMonsterInstance) { // イレースマジック可能か判定
-			isErase = ((LsimulatorMonsterInstance) cha).getNpcTemplate().get_IsErase();
+		if (cha instanceof MonsterInstance) { // イレースマジック可能か判定
+			isErase = ((MonsterInstance) cha).getNpcTemplate().get_IsErase();
 		}
 
-		if (cha instanceof LsimulatorMonsterInstance) { // アンデットの判定
-			undeadType = ((LsimulatorMonsterInstance) cha).getNpcTemplate().get_undead();
+		if (cha instanceof MonsterInstance) { // アンデットの判定
+			undeadType = ((MonsterInstance) cha).getNpcTemplate().get_undead();
 		}
 
 		// マナドレインが可能か？
-		if (cha instanceof LsimulatorMonsterInstance) {
+		if (cha instanceof MonsterInstance) {
 			isManaDrain = true;
 		}
 		/*
@@ -2488,8 +2488,8 @@ public class LsimulatorSkillUse {
 			cha.removeSkillEffect(COUNTER_MAGIC);
 			int castgfx = SkillsTable.getInstance().getTemplate(COUNTER_MAGIC).getCastGfx();
 			cha.broadcastPacket(new S_SkillSound(cha.getId(), castgfx));
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_SkillSound(pc.getId(), castgfx));
 			}
 			return true;

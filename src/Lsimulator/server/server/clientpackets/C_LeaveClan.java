@@ -25,7 +25,7 @@ import Lsimulator.server.server.datatables.ClanTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWar;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_CharReset;
 import Lsimulator.server.server.serverpackets.S_CharTitle;
 import Lsimulator.server.server.serverpackets.S_ClanAttention;
@@ -49,7 +49,7 @@ public class C_LeaveClan extends ClientBasePacket {
 		
 		String clan_name = readS();
 
-		LsimulatorPcInstance player = clientthread.getActiveChar();
+		PcInstance player = clientthread.getActiveChar();
 		if (player == null) {
 			return;
 		}
@@ -79,7 +79,7 @@ public class C_LeaveClan extends ClientBasePacket {
 				}
 
 				for (i = 0; i < clan_member_name.length; i++) { // 取得所有血盟成員
-					LsimulatorPcInstance online_pc = LsimulatorWorld.getInstance().getPlayer(clan_member_name[i]);
+					PcInstance online_pc = LsimulatorWorld.getInstance().getPlayer(clan_member_name[i]);
 					if (online_pc != null) { // 在線上的血盟成員
 						online_pc.sendPackets(new S_ClanAttention());
 						online_pc.sendPackets(new S_ServerMessage(269, player_name, clan_name)); // 血盟的盟主%0%s解散了血盟
@@ -99,7 +99,7 @@ public class C_LeaveClan extends ClientBasePacket {
 						online_pc.save(); // 儲存玩家資料到資料庫中
 					} else { // 非線上的血盟成員
 						try {
-							LsimulatorPcInstance offline_pc = CharacterTable.getInstance().restoreCharacter(clan_member_name[i]);
+							PcInstance offline_pc = CharacterTable.getInstance().restoreCharacter(clan_member_name[i]);
 							offline_pc.setClanid(0);
 							offline_pc.setClanname("");
 							offline_pc.setClanRank(0);
@@ -116,7 +116,7 @@ public class C_LeaveClan extends ClientBasePacket {
 				ClanTable.getInstance().deleteClan(clan_name);
 				ClanMembersTable.getInstance().deleteAllMember(clan.getClanId()); // 刪除所有成員資料
 			} else { // 除了聯盟王之外
-				LsimulatorPcInstance clanMember[] = clan.getOnlineClanMember();
+				PcInstance clanMember[] = clan.getOnlineClanMember();
 				for (i = 0; i < clanMember.length; i++) {
 					clanMember[i].sendPackets(new S_ServerMessage(178, player_name, clan_name)); // \f1%0が%1血盟を脱退しました。
 				}

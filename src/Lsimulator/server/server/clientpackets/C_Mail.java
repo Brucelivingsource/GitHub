@@ -23,7 +23,7 @@ import Lsimulator.server.server.datatables.CharacterTable;
 import Lsimulator.server.server.datatables.MailTable;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorSystemMessageId;
 import Lsimulator.server.server.serverpackets.S_Mail;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
@@ -52,7 +52,7 @@ public class C_Mail extends ClientBasePacket {
 	public C_Mail(byte abyte0[], ClientThread client) {
 		super(abyte0);
 		
-		LsimulatorPcInstance pc = client.getActiveChar();
+		PcInstance pc = client.getActiveChar();
 		if (pc == null) {
 			return;
 		}
@@ -81,7 +81,7 @@ public class C_Mail extends ClientBasePacket {
 			readH(); // 世界寄信次數紀錄
 			String receiverName = readS();
 			byte[] text = readByte();
-			LsimulatorPcInstance receiver = LsimulatorWorld.getInstance().getPlayer(receiverName);
+			PcInstance receiver = LsimulatorWorld.getInstance().getPlayer(receiverName);
 			
 			if (receiver != null) { // 對方在線上
 				if (getMailSizeByPc(receiver, TYPE_NORMAL_MAIL) >= 40) { 
@@ -101,7 +101,7 @@ public class C_Mail extends ClientBasePacket {
 				}
 			} else { // 對方離線中
 				try {
-					LsimulatorPcInstance restorePc = CharacterTable.getInstance().restoreCharacter(receiverName);
+					PcInstance restorePc = CharacterTable.getInstance().restoreCharacter(receiverName);
 					if (restorePc != null) {
 						if (getMailSizeByPc(restorePc, TYPE_NORMAL_MAIL) >= 40) {
 							pc.sendPackets(new S_Mail(type, false));
@@ -135,7 +135,7 @@ public class C_Mail extends ClientBasePacket {
 			LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(clanName);
 			if (clan != null) {
 				for (String name : clan.getAllMembers()) {
-					LsimulatorPcInstance clanPc = LsimulatorWorld.getInstance().getPlayer(name);
+					PcInstance clanPc = LsimulatorWorld.getInstance().getPlayer(name);
 					int size = getMailSizeByPc(clanPc, TYPE_CLAN_MAIL);
 					if (size >= 50) {
 						continue;
@@ -165,7 +165,7 @@ public class C_Mail extends ClientBasePacket {
 		}
 	}
 
-	private int getMailSizeByPc(LsimulatorPcInstance pc, int type) {
+	private int getMailSizeByPc(PcInstance pc, int type) {
 		List<LsimulatorMail> mails = Lists.newList();
 		MailTable.getInstance();
 		for (LsimulatorMail mail : MailTable.getAllMail()) {

@@ -28,11 +28,11 @@ import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorTeleport;
 import Lsimulator.server.server.model.LsimulatorWarSpawn;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorCrownInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorDoorInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorFieldObjectInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorTowerInstance;
+import Lsimulator.server.server.model.Instance.CrownInstance;
+import Lsimulator.server.server.model.Instance.DoorInstance;
+import Lsimulator.server.server.model.Instance.FieldObjectInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.TowerInstance;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 import Lsimulator.server.server.templates.LsimulatorCastle;
 
@@ -85,7 +85,7 @@ public class WarTimeController implements Runnable {
 	}
 
 	// TODO 
-	public void checkCastleWar(LsimulatorPcInstance player) {
+	public void checkCastleWar(PcInstance player) {
 		List<String> castle = new ArrayList<String>();
 		for (int i = 0; i < 8; i++) {
 			if (_is_now_war[i]) {
@@ -106,7 +106,7 @@ public class WarTimeController implements Runnable {
 					LsimulatorWarSpawn warspawn = new LsimulatorWarSpawn();
 					warspawn.SpawnFlag(i + 1);
 					// 修理城門並設定為關閉
-					for (LsimulatorDoorInstance door : DoorTable.getInstance().getDoorList()) {
+					for (DoorInstance door : DoorTable.getInstance().getDoorList()) {
 						if (LsimulatorCastleLocation.checkInWarArea(i + 1, door)) {
 							door.repairGate();
 						}
@@ -114,7 +114,7 @@ public class WarTimeController implements Runnable {
 
 					LsimulatorWorld.getInstance().broadcastPacketToAll(new S_PacketBox(S_PacketBox.MSG_WAR_BEGIN, i + 1)); // %sの攻城戦が始まりました。
 					int[] loc = new int[3];
-					for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
+					for (PcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
 						int castleId = i + 1;
 						if (LsimulatorCastleLocation.checkInWarArea(castleId, pc)&& !pc.isGm()) { // 剛好在攻城範圍內
 							LsimulatorClan clan = LsimulatorWorld.getInstance().getClan(pc.getClanname());
@@ -139,23 +139,23 @@ public class WarTimeController implements Runnable {
 					int castle_id = i + 1;
 					for (LsimulatorObject l1object : LsimulatorWorld.getInstance().getObject()) {
 						// 取消攻城的旗子
-						if (l1object instanceof LsimulatorFieldObjectInstance) {
-							LsimulatorFieldObjectInstance flag = (LsimulatorFieldObjectInstance) l1object;
+						if (l1object instanceof FieldObjectInstance) {
+							FieldObjectInstance flag = (FieldObjectInstance) l1object;
 							if (LsimulatorCastleLocation.checkInWarArea(castle_id, flag)) {
 								flag.deleteMe();
 							}
 						}
 						// 移除皇冠
-						if (l1object instanceof LsimulatorCrownInstance) {
-							LsimulatorCrownInstance crown = (LsimulatorCrownInstance) l1object;
+						if (l1object instanceof CrownInstance) {
+							CrownInstance crown = (CrownInstance) l1object;
 							if (LsimulatorCastleLocation.checkInWarArea(castle_id,
 									crown)) {
 								crown.deleteMe();
 							}
 						}
 						// 移除守護塔
-						if (l1object instanceof LsimulatorTowerInstance) {
-							LsimulatorTowerInstance tower = (LsimulatorTowerInstance) l1object;
+						if (l1object instanceof TowerInstance) {
+							TowerInstance tower = (TowerInstance) l1object;
 							if (LsimulatorCastleLocation.checkInWarArea(castle_id,tower)) {
 								tower.deleteMe();
 							}
@@ -166,7 +166,7 @@ public class WarTimeController implements Runnable {
 					warspawn.SpawnTower(castle_id);
 
 					// 移除城門
-					for (LsimulatorDoorInstance door : DoorTable.getInstance().getDoorList()) {
+					for (DoorInstance door : DoorTable.getInstance().getDoorList()) {
 						if (LsimulatorCastleLocation.checkInWarArea(castle_id, door)) {
 							door.repairGate();
 						}

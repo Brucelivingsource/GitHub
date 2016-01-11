@@ -17,8 +17,8 @@ package Lsimulator.server.server.model;
 import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.datatables.NpcTable;
 import Lsimulator.server.server.datatables.UBTable;
-import Lsimulator.server.server.model.Instance.LsimulatorMonsterInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.MonsterInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_NPCPack;
 
 public class LsimulatorUbSpawn implements Comparable<LsimulatorUbSpawn> {
@@ -117,8 +117,8 @@ public class LsimulatorUbSpawn implements Comparable<LsimulatorUbSpawn> {
 
 	public void spawnOne() {
 		LsimulatorUltimateBattle ub = UBTable.getInstance().getUb(_ubId);
-		LsimulatorLocation loc = ub.getLocation().randomLocation((ub.getLocX2() - ub.getLocX1()) / 2, false);
-		LsimulatorMonsterInstance mob = new LsimulatorMonsterInstance(NpcTable.getInstance().getTemplate(getNpcTemplateId()));
+		LsimulatorLocation loc = ub.getLocation().randomLocation(   (ub.getLocX2() - ub.getLocX1()) >> 1 , false);
+		MonsterInstance mob = new MonsterInstance(NpcTable.getInstance().getTemplate(getNpcTemplateId()));
 
 		mob.setId(IdFactory.getInstance().nextId());
 		mob.setHeading(5);
@@ -135,7 +135,7 @@ public class LsimulatorUbSpawn implements Comparable<LsimulatorUbSpawn> {
 		LsimulatorWorld.getInstance().addVisibleObject(mob);
 
 		S_NPCPack s_npcPack = new S_NPCPack(mob);
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(mob)) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(mob)) {
 			pc.addKnownObject(mob);
 			mob.addKnownObject(pc);
 			pc.sendPackets(s_npcPack);

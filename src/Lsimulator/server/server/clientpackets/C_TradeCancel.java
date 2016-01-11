@@ -16,7 +16,7 @@ package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.model.LsimulatorTrade;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
 // ClientBasePacket
@@ -31,7 +31,7 @@ public class C_TradeCancel extends ClientBasePacket {
 	public C_TradeCancel(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance player = clientthread.getActiveChar();
+		PcInstance player = clientthread.getActiveChar();
 		if (player == null) {
 			return;
 		}

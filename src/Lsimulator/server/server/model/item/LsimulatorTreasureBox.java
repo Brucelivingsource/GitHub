@@ -34,8 +34,8 @@ import Lsimulator.server.server.datatables.ItemTable;
 import Lsimulator.server.server.model.LsimulatorInventory;
 import Lsimulator.server.server.model.LsimulatorPcInventory;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 import Lsimulator.server.server.utils.PerformanceTimer;
 import Lsimulator.server.server.utils.Random;
@@ -184,8 +184,8 @@ public class LsimulatorTreasureBox {
 	 *            - TreasureBoxを開けるPC
 	 * @return 開封した結果何らかのアイテムが出てきた場合はtrueを返す。 持ちきれず地面に落ちた場合もtrueになる。
 	 */
-	public boolean open(LsimulatorPcInstance pc) {
-		LsimulatorItemInstance item = null;
+	public boolean open(PcInstance pc) {
+		ItemInstance item = null;
 
 		if (getType().equals(TYPE.SPECIFIC)) {
 			// 出るアイテムが決まっているもの
@@ -232,7 +232,7 @@ public class LsimulatorTreasureBox {
 
 			// 多魯嘉之袋
 			if ((itemId == 46000)) {
-				LsimulatorItemInstance box = pc.getInventory().findItemId(itemId);
+				ItemInstance box = pc.getInventory().findItemId(itemId);
 				box.setChargeCount(box.getChargeCount() - 1);
 				pc.getInventory().updateItem(box, LsimulatorPcInventory.COL_CHARGE_COUNT);
 				if (box.getChargeCount() < 1) {
@@ -244,7 +244,7 @@ public class LsimulatorTreasureBox {
 		}
 	}
 
-	private static void storeItem(LsimulatorPcInstance pc, LsimulatorItemInstance item) {
+	private static void storeItem(PcInstance pc, ItemInstance item) {
 		LsimulatorInventory inventory;
 
 		if (pc.getInventory().checkAddItem(item, item.getCount()) == LsimulatorInventory.OK) {

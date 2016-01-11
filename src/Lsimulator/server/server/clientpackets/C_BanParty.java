@@ -15,7 +15,7 @@
 package Lsimulator.server.server.clientpackets;
 
 import Lsimulator.server.server.ClientThread;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_ServerMessage;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -31,7 +31,7 @@ public class C_BanParty extends ClientBasePacket {
 	public C_BanParty(byte decrypt[], ClientThread client) throws Exception {
 		super(decrypt);
 		
-		LsimulatorPcInstance player = client.getActiveChar();
+		PcInstance player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}
@@ -44,7 +44,7 @@ public class C_BanParty extends ClientBasePacket {
 			return;
 		}
 
-		for (LsimulatorPcInstance member : player.getParty().getMembers()) {
+		for (PcInstance member : player.getParty().getMembers()) {
 			if (member.getName().toLowerCase().equals(s.toLowerCase())) {
 				player.getParty().kickMember(member);
 				return;

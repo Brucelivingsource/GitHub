@@ -19,8 +19,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.identity.LsimulatorItemId;
 import Lsimulator.server.server.utils.SQLUtil;
 
@@ -31,7 +31,7 @@ public class LsimulatorItemCheck {
 	private int itemId;
 	private boolean isStackable = false;
 
-	public boolean ItemCheck(LsimulatorItemInstance item, LsimulatorPcInstance pc) {
+	public boolean ItemCheck(ItemInstance item, PcInstance pc) {
 		itemId = item.getItem().getItemId();
 		int itemCount = item.getCount();
 		boolean isCheat = false;

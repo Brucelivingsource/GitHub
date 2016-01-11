@@ -29,7 +29,7 @@ import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.model.LsimulatorClan;
 import Lsimulator.server.server.model.LsimulatorQuest;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_PacketBox;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Maps;
@@ -124,7 +124,7 @@ public class ClanTable {
 		}
 	}
 
-	public LsimulatorClan createClan(LsimulatorPcInstance player, String clan_name) {
+	public LsimulatorClan createClan(PcInstance player, String clan_name) {
 		for (LsimulatorClan oldClans : LsimulatorWorld.getInstance().getAllClans()) {
 			if (oldClans.getClanName().equalsIgnoreCase(clan_name)) {
 				return null;

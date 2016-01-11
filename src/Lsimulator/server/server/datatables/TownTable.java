@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.templates.LsimulatorTown;
 import Lsimulator.server.server.utils.SQLUtil;
 import Lsimulator.server.server.utils.collections.Maps;
@@ -100,7 +100,7 @@ public class TownTable {
 		return _towns.get(id);
 	}
 
-	public boolean isLeader(LsimulatorPcInstance pc, int town_id) {
+	public boolean isLeader(PcInstance pc, int town_id) {
 		LsimulatorTown town = getTownTable(town_id);
 		return (town.get_leader_id() == pc.getId());
 	}
@@ -113,7 +113,7 @@ public class TownTable {
 		int townTaxRate = town.get_tax_rate();
 
 		int townTax = salesMoney / 100 * townTaxRate;
-		int townFixTax = salesMoney / 100 * 2;
+		int townFixTax = (salesMoney / 100) << 1;
 
 		if ((townTax <= 0) && (townTaxRate > 0)) {
 			townTax = 1;

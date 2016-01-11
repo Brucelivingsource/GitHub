@@ -15,7 +15,7 @@
 package Lsimulator.server.server.model.monitor;
 
 import Lsimulator.server.Config;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_Karma;
 import Lsimulator.server.server.serverpackets.S_Lawful;
 
@@ -35,7 +35,7 @@ public class LsimulatorPcExpMonitor extends LsimulatorPcMonitor {
 	}
 
 	@Override
-	public void execTask(LsimulatorPcInstance pc) {
+	public void execTask(PcInstance pc) {
 
 		// ロウフルが変わった場合はS_Lawfulを送信
 		// // ただし色が変わらない場合は送信しない

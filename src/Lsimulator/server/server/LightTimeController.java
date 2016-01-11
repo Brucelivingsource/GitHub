@@ -17,7 +17,7 @@ package Lsimulator.server.server;
 import Lsimulator.server.server.datatables.LightSpawnTable;
 import Lsimulator.server.server.model.LsimulatorObject;
 import Lsimulator.server.server.model.LsimulatorWorld;
-import Lsimulator.server.server.model.Instance.LsimulatorFieldObjectInstance;
+import Lsimulator.server.server.model.Instance.FieldObjectInstance;
 import Lsimulator.server.server.model.gametime.LsimulatorGameTimeClock;
 
 public class LightTimeController implements Runnable {
@@ -52,8 +52,8 @@ public class LightTimeController implements Runnable {
 			if (isSpawn) {
 				isSpawn = false;
 				for (LsimulatorObject object : LsimulatorWorld.getInstance().getObject()) {
-					if (object instanceof LsimulatorFieldObjectInstance) {
-						LsimulatorFieldObjectInstance npc = (LsimulatorFieldObjectInstance) object;
+					if (object instanceof FieldObjectInstance) {
+						FieldObjectInstance npc = (FieldObjectInstance) object;
 						if (((npc.getNpcTemplate().get_npcId() == 81177)
 								|| (npc.getNpcTemplate().get_npcId() == 81178)
 								|| (npc.getNpcTemplate().get_npcId() == 81179)

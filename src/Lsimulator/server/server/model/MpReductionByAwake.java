@@ -19,15 +19,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.server.model.LsimulatorAwake;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class MpReductionByAwake extends TimerTask {
 	private static Logger _log = Logger.getLogger(MpReductionByAwake.class
 			.getName());
 
-	private final LsimulatorPcInstance _pc;
+	private final PcInstance _pc;
 
-	public MpReductionByAwake(LsimulatorPcInstance pc) {
+	public MpReductionByAwake(PcInstance pc) {
 		_pc = pc;
 	}
 

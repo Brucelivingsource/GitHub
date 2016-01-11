@@ -17,7 +17,7 @@ package Lsimulator.server.server.model;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class LsimulatorBuddy {
 	private final int _charId;
@@ -62,7 +62,7 @@ public class LsimulatorBuddy {
 
 	public String getOnlineBuddyListString() {
 		String result = new String("");
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getAllPlayers()) {
 			if (_buddys.containsKey(pc.getId())) {
 				result += pc.getName() + " ";
 			}

@@ -28,13 +28,13 @@ import static Lsimulator.server.server.model.skill.LsimulatorSkillId.SECRET_MEDI
 import java.util.List;
 import java.util.Map;
 
-import Lsimulator.server.server.model.Instance.LsimulatorDollInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorFollowerInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorItemInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorNpcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorPetInstance;
-import Lsimulator.server.server.model.Instance.LsimulatorSummonInstance;
+import Lsimulator.server.server.model.Instance.DollInstance;
+import Lsimulator.server.server.model.Instance.FollowerInstance;
+import Lsimulator.server.server.model.Instance.ItemInstance;
+import Lsimulator.server.server.model.Instance.NpcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
+import Lsimulator.server.server.model.Instance.PetInstance;
+import Lsimulator.server.server.model.Instance.SummonInstance;
 import Lsimulator.server.server.model.poison.LsimulatorPoison;
 import Lsimulator.server.server.model.skill.LsimulatorSkillTimer;
 import Lsimulator.server.server.model.skill.LsimulatorSkillTimerCreator;
@@ -50,7 +50,7 @@ import Lsimulator.server.server.utils.collections.Lists;
 import Lsimulator.server.server.utils.collections.Maps;
 
 // Referenced classes of package Lsimulator.server.server.model:
-// LsimulatorObject, Die, LsimulatorPcInstance, LsimulatorMonsterInstance,
+// LsimulatorObject, Die, PcInstance, LsimulatorMonsterInstance,
 // LsimulatorWorld, ActionFailed
 
 public class LsimulatorCharacter extends LsimulatorObject {
@@ -63,15 +63,15 @@ public class LsimulatorCharacter extends LsimulatorObject {
 
 	private boolean _sleeped;
 
-	private final Map<Integer, LsimulatorNpcInstance> _petlist = Maps.newMap();
+	private final Map<Integer, NpcInstance> _petlist = Maps.newMap();
 
-	private final Map<Integer, LsimulatorDollInstance> _dolllist = Maps.newMap();
+	private final Map<Integer, DollInstance> _dolllist = Maps.newMap();
 
 	private final Map<Integer, LsimulatorSkillTimer> _skillEffect = Maps.newMap();
 
 	private final Map<Integer, LsimulatorItemDelay.ItemDelayTimer> _itemdelay = Maps.newMap();
 
-	private final Map<Integer, LsimulatorFollowerInstance> _followerlist = Maps.newMap();
+	private final Map<Integer, FollowerInstance> _followerlist = Maps.newMap();
 
 	public LsimulatorCharacter() {
 		_level = 1;
@@ -94,7 +94,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 		setDead(false);
 		setStatus(0);
 		LsimulatorPolyMorph.undoPoly(this);
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(this)) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getRecognizePlayer(this)) {
 			pc.sendPackets(new S_RemoveObject(this));
 			pc.removeKnownObject(this);
 			pc.updateObject();
@@ -232,7 +232,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 *            送信するパケットを表すServerBasePacketオブジェクト。
 	 */
 	public void broadcastPacket(ServerBasePacket packet) {
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(this)) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(this)) {
 			// 旅館內判斷
 			if (pc.getMapId() < 16384 || pc.getMapId() > 25088 || pc.getInnKeyId() == getInnKeyId()) 
 				pc.sendPackets(packet);			
@@ -247,7 +247,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 */
 	public void broadcastPacketExceptTargetSight(ServerBasePacket packet,
 			LsimulatorCharacter target) {
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayerExceptTargetSight(this, target)) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayerExceptTargetSight(this, target)) {
 			pc.sendPackets(packet);
 		}
 	}
@@ -262,7 +262,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 */
 	public void broadcastPacketForFindInvis(ServerBasePacket packet,
 			boolean isFindInvis) {
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(this)) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(this)) {
 			if (isFindInvis) {
 				if (pc.hasSkillEffect(GMSTATUS_FINDINVIS)) {
 					pc.sendPackets(packet);
@@ -282,7 +282,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 *            送信するパケットを表すServerBasePacketオブジェクト。
 	 */
 	public void wideBroadcastPacket(ServerBasePacket packet) {
-		for (LsimulatorPcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(this, 50)) {
+		for (PcInstance pc : LsimulatorWorld.getInstance().getVisiblePlayer(this, 50)) {
 			pc.sendPackets(packet);
 		}
 	}
@@ -632,7 +632,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * @param npc
 	 *            追加するNpcを表す、LsimulatorNpcInstanceオブジェクト。
 	 */
-	public void addPet(LsimulatorNpcInstance npc) {
+	public void addPet(NpcInstance npc) {
 		_petlist.put(npc.getId(), npc);
 		sendPetCtrlMenu(npc, true);// 顯示寵物控制圖形介面
 	}
@@ -643,7 +643,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * @param npc
 	 *            削除するNpcを表す、LsimulatorNpcInstanceオブジェクト。
 	 */
-	public void removePet(LsimulatorNpcInstance npc) {
+	public void removePet(NpcInstance npc) {
 		_petlist.remove(npc.getId());
 		sendPetCtrlMenu(npc, false);// 關閉寵物控制圖形介面
 	}
@@ -655,20 +655,20 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * @param type
 	 *            1:顯示 0:關閉
 	 */
-	public void sendPetCtrlMenu(LsimulatorNpcInstance npc, boolean type) {
-		if (npc instanceof LsimulatorPetInstance) {
-			LsimulatorPetInstance pet = (LsimulatorPetInstance) npc;
+	public void sendPetCtrlMenu(NpcInstance npc, boolean type) {
+		if (npc instanceof PetInstance) {
+			PetInstance pet = (PetInstance) npc;
 			LsimulatorCharacter cha = pet.getMaster();
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PetCtrlMenu(cha, npc, type));
 				// 處理寵物控制圖形介面
 			}
-		} else if (npc instanceof LsimulatorSummonInstance) {
-			LsimulatorSummonInstance summon = (LsimulatorSummonInstance) npc;
+		} else if (npc instanceof SummonInstance) {
+			SummonInstance summon = (SummonInstance) npc;
 			LsimulatorCharacter cha = summon.getMaster();
-			if (cha instanceof LsimulatorPcInstance) {
-				LsimulatorPcInstance pc = (LsimulatorPcInstance) cha;
+			if (cha instanceof PcInstance) {
+				PcInstance pc = (PcInstance) cha;
 				pc.sendPackets(new S_PetCtrlMenu(cha, npc, type));
 			}
 		}
@@ -681,7 +681,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 *         キャラクターのペットリストを表す、HashMapオブジェクト。このオブジェクトのKeyはオブジェクトID、ValueはLsimulatorNpcInstance
 	 *         。
 	 */
-	public Map<Integer, LsimulatorNpcInstance> getPetList() {
+	public Map<Integer, NpcInstance> getPetList() {
 		return _petlist;
 	}
 
@@ -691,7 +691,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * @param doll
 	 *            追加するdollを表す、LsimulatorDollInstanceオブジェクト。
 	 */
-	public void addDoll(LsimulatorDollInstance doll) {
+	public void addDoll(DollInstance doll) {
 		_dolllist.put(doll.getId(), doll);
 	}
 
@@ -701,7 +701,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * @param doll
 	 *            削除するdollを表す、LsimulatorDollInstanceオブジェクト。
 	 */
-	public void removeDoll(LsimulatorDollInstance doll) {
+	public void removeDoll(DollInstance doll) {
 		_dolllist.remove(doll.getId());
 	}
 
@@ -711,7 +711,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * @return キャラクターの魔法人形リストを表す、HashMapオブジェクト。このオブジェクトのKeyはオブジェクトID、
 	 *         ValueはLsimulatorDollInstance。
 	 */
-	public Map<Integer, LsimulatorDollInstance> getDollList() {
+	public Map<Integer, DollInstance> getDollList() {
 		return _dolllist;
 	}
 
@@ -721,7 +721,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * @param follower
 	 *            追加するfollowerを表す、LsimulatorFollowerInstanceオブジェクト。
 	 */
-	public void addFollower(LsimulatorFollowerInstance follower) {
+	public void addFollower(FollowerInstance follower) {
 		_followerlist.put(follower.getId(), follower);
 	}
 
@@ -731,7 +731,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * @param follower
 	 *            削除するfollowerを表す、LsimulatorFollowerInstanceオブジェクト。
 	 */
-	public void removeFollower(LsimulatorFollowerInstance follower) {
+	public void removeFollower(FollowerInstance follower) {
 		_followerlist.remove(follower.getId());
 	}
 
@@ -741,7 +741,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * @return キャラクターの従者リストを表す、HashMapオブジェクト。このオブジェクトのKeyはオブジェクトID、
 	 *         ValueはLsimulatorFollowerInstance。
 	 */
-	public Map<Integer, LsimulatorFollowerInstance> getFollowerList() {
+	public Map<Integer, FollowerInstance> getFollowerList() {
 		return _followerlist;
 	}
 
@@ -823,7 +823,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	// ■■■■■■■■■■ LsimulatorPcInstanceへ移動するプロパティ ■■■■■■■■■■
 	private final List<LsimulatorObject> _knownObjects = Lists.newConcurrentList();
 
-	private final List<LsimulatorPcInstance> _knownPlayer = Lists.newConcurrentList();
+	private final List<PcInstance> _knownPlayer = Lists.newConcurrentList();
 
 	/**
 	 * 指定されたオブジェクトを、キャラクターが認識しているかを返す。
@@ -850,7 +850,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 * 
 	 * @return キャラクターが認識しているオブジェクトを表すLsimulatorPcInstanceが格納されたArrayList。
 	 */
-	public List<LsimulatorPcInstance> getKnownPlayers() {
+	public List<PcInstance> getKnownPlayers() {
 		return _knownPlayer;
 	}
 
@@ -863,8 +863,8 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	public void addKnownObject(LsimulatorObject obj) {
 		if (!_knownObjects.contains(obj)) {
 			_knownObjects.add(obj);
-			if (obj instanceof LsimulatorPcInstance) {
-				_knownPlayer.add((LsimulatorPcInstance) obj);
+			if (obj instanceof PcInstance) {
+				_knownPlayer.add((PcInstance) obj);
 			}
 		}
 	}
@@ -877,7 +877,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	 */
 	public void removeKnownObject(LsimulatorObject obj) {
 		_knownObjects.remove(obj);
-		if (obj instanceof LsimulatorPcInstance) {
+		if (obj instanceof PcInstance) {
 			_knownPlayer.remove(obj);
 		}
 	}
@@ -1358,7 +1358,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 
 	public int getMr() {
 		if ( hasSkillEffect(153) ) {
-			return _mr / 4;
+			return _mr >> 2;
 		} else {
 			return _mr;
 		}
@@ -1491,7 +1491,7 @@ public class LsimulatorCharacter extends LsimulatorObject {
 	}
 
 	public int getMagicLevel() {
-		return getLevel() / 4;
+		return getLevel() >> 2 ;
 	}
 
 	public int getMagicBonus() {
@@ -1561,15 +1561,15 @@ public class LsimulatorCharacter extends LsimulatorObject {
 
 	public void turnOnOffLight() {
 		int lightSize = 0;
-		if (this instanceof LsimulatorNpcInstance) {
-			LsimulatorNpcInstance npc = (LsimulatorNpcInstance) this;
+		if (this instanceof NpcInstance) {
+			NpcInstance npc = (NpcInstance) this;
 			lightSize = npc.getLightSize(); // npc.sqlのライトサイズ
 		}
 		if (hasSkillEffect(LIGHT)) {
 			lightSize = 14;
 		}
 
-		for (LsimulatorItemInstance item : getInventory().getItems()) {
+		for (ItemInstance item : getInventory().getItems()) {
 			if ((item.getItem().getType2() == 0)
 					&& (item.getItem().getType() == 2)) { // light系アイテム
 				int itemlightSize = item.getItem().getLightRange();
@@ -1581,8 +1581,8 @@ public class LsimulatorCharacter extends LsimulatorObject {
 			}
 		}
 
-		if (this instanceof LsimulatorPcInstance) {
-			LsimulatorPcInstance pc = (LsimulatorPcInstance) this;
+		if (this instanceof PcInstance) {
+			PcInstance pc = (PcInstance) this;
 			pc.sendPackets(new S_Light(pc.getId(), lightSize));
 		}
 		if (!isInvisble()) {

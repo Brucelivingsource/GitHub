@@ -22,7 +22,7 @@ import Lsimulator.server.server.ClientThread;
 import Lsimulator.server.server.IdFactory;
 import Lsimulator.server.server.datatables.ClanTable;
 import Lsimulator.server.server.model.LsimulatorClan;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.serverpackets.S_CharReset;
 
 // Referenced classes of package Lsimulator.server.server.clientpackets:
@@ -39,7 +39,7 @@ public class C_EmblemUpload extends ClientBasePacket {
 	public C_EmblemUpload(byte abyte0[], ClientThread clientthread)throws Exception {
 		super(abyte0);
 
-		LsimulatorPcInstance player = clientthread.getActiveChar();
+		PcInstance player = clientthread.getActiveChar();
 		if (player == null) {
 			return;
 		} else if(player.getClanRank() != 4 && player.getClanRank() != 10){
@@ -70,7 +70,7 @@ public class C_EmblemUpload extends ClientBasePacket {
 			ClanTable.getInstance().updateClan(clan);
 			
 			/** 廣播封包 */
-			for(LsimulatorPcInstance pc : clan.getOnlineClanMember()){
+			for(PcInstance pc : clan.getOnlineClanMember()){
 				pc.sendPackets(new S_CharReset(pc.getId(), newEmblemdId));
 				pc.broadcastPacket(new S_CharReset(pc.getId(), newEmblemdId));
 			}

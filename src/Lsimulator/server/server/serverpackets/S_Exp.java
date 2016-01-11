@@ -15,7 +15,7 @@
 package Lsimulator.server.server.serverpackets;
 
 import Lsimulator.server.server.Opcodes;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 
 public class S_Exp extends ServerBasePacket {
 
@@ -27,7 +27,7 @@ public class S_Exp extends ServerBasePacket {
 	 * @param pc
 	 *            - PC
 	 */
-	public S_Exp(LsimulatorPcInstance pc) {
+	public S_Exp(PcInstance pc) {
 		writeC(Opcodes.S_OPCODE_EXP);
 		writeC(pc.getLevel());
 		writeD(pc.getExp());

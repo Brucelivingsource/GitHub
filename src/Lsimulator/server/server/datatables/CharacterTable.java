@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Lsimulator.server.LsimulatorDatabaseFactory;
-import Lsimulator.server.server.model.Instance.LsimulatorPcInstance;
+import Lsimulator.server.server.model.Instance.PcInstance;
 import Lsimulator.server.server.model.map.LsimulatorMap;
 import Lsimulator.server.server.model.map.LsimulatorWorldMap;
 import Lsimulator.server.server.storage.CharacterStorage;
@@ -52,7 +52,7 @@ public class CharacterTable {
 		return _instance;
 	}
 
-	public void storeNewCharacter(LsimulatorPcInstance pc) throws Exception {
+	public void storeNewCharacter(PcInstance pc) throws Exception {
 		synchronized (pc) {
 			_charStorage.createCharacter(pc);
 			String name = pc.getName();
@@ -66,7 +66,7 @@ public class CharacterTable {
 		}
 	}
 
-	public void storeCharacter(LsimulatorPcInstance pc) throws Exception {
+	public void storeCharacter(PcInstance pc) throws Exception {
 		synchronized (pc) {
 			_charStorage.storeCharacter(pc);
 			_log.finest("storeCharacter: " + pc.getName());
@@ -82,13 +82,13 @@ public class CharacterTable {
 		_log.finest("deleteCharacter");
 	}
 
-	public LsimulatorPcInstance restoreCharacter(String charName) throws Exception {
-		LsimulatorPcInstance pc = _charStorage.loadCharacter(charName);
+	public PcInstance restoreCharacter(String charName) throws Exception {
+		PcInstance pc = _charStorage.loadCharacter(charName);
 		return pc;
 	}
 
-	public LsimulatorPcInstance loadCharacter(String charName) throws Exception {
-		LsimulatorPcInstance pc = null;
+	public PcInstance loadCharacter(String charName) throws Exception {
+		PcInstance pc = null;
 		try {
 			pc = restoreCharacter(charName);
 
@@ -133,7 +133,7 @@ public class CharacterTable {
 		}
 	}
 
-	public static void updateOnlineStatus(LsimulatorPcInstance pc) {
+	public static void updateOnlineStatus(PcInstance pc) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -175,7 +175,7 @@ public class CharacterTable {
 		}
 	}
 
-	public static void saveCharStatus(LsimulatorPcInstance pc) {
+	public static void saveCharStatus(PcInstance pc) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -200,7 +200,7 @@ public class CharacterTable {
 		}
 	}
 
-	public void restoreInventory(LsimulatorPcInstance pc) {
+	public void restoreInventory(PcInstance pc) {
 		pc.getInventory().loadItems();
 		pc.getDwarfInventory().loadItems();
 		pc.getDwarfForElfInventory().loadItems();
